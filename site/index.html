@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KK Create — Coming soon</title>
+<meta name="description" content="Something new from KK Create is on the way." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<!-- The headline and body faces, preloaded so they start with the CSS
+     rather than after it parses. Everything else loads on demand. -->
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="assets/fonts/space-grotesk-700-latin.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="assets/fonts/manrope-400-latin.woff2" />
+<link rel="stylesheet" href="base.css" />
+<link rel="stylesheet" href="home.css" />
+</head>
+<body>
+
+<main class="hm-wrap">
+  <div class="hm-card">
+
+    <span class="brand hm-brand">
+      <span class="brand-mark"><img src="assets/logo-mark-light.webp" width="1048" height="678" alt="" /></span>
+      <span class="brand-text">
+        <span class="brand-name">KK Create</span>
+        <span class="brand-kicker">CONTENT CREATION FOR BEGINNERS</span>
+      </span>
+    </span>
+
+    <span class="hm-flag">COMING SOON</span>
+
+    <h1 class="hm-title">Something new is<br /><span class="hm-nb">on the way.</span></h1>
+
+    <p class="hm-sub">We are putting the finishing touches on it. If you are already registered for the live workshop, nothing here changes that &mdash; your confirmation and joining details have gone to your email and WhatsApp.</p>
+
+    <p class="hm-meta">Questions in the meantime? Message us on WhatsApp at <a href="https://wa.me/918700105418">+91 8700105418</a>.</p>
+
+  </div>
+
+  <!-- ============================================================
+       REVIEW ONLY — delete this whole <nav> before the page goes
+       public. It exists so the funnel can be walked end to end for
+       design sign-off without knowing the URLs, which are otherwise
+       reachable only through TagMango's post-purchase redirects.
+
+       The pages themselves carry `noindex, nofollow`, and every route
+       on this deployment is served with an X-Robots-Tag header saying
+       the same (see vercel.json), so linking them here does not put
+       them in front of search engines.
+       ============================================================ -->
+  <nav class="hm-review" aria-label="Funnel pages for review">
+    <p class="hm-review-head">Funnel pages <span>for design review</span></p>
+    <ul>
+      <li>
+        <a href="/ccboto">
+          <span class="hm-route">/ccboto</span>
+          <span class="hm-what">The one-time offer &mdash; where the workshop checkout lands</span>
+        </a>
+      </li>
+      <li>
+        <a href="/tycontent101">
+          <span class="hm-route">/tycontent101</span>
+          <span class="hm-what">Seat confirmed &mdash; where declining the offer lands</span>
+        </a>
+      </li>
+      <li>
+        <a href="/tybundle">
+          <span class="hm-route">/tybundle</span>
+          <span class="hm-what">Seat and bundle confirmed &mdash; after the bundle checkout</span>
+        </a>
+      </li>
+      <li>
+        <a href="/livelink">
+          <span class="hm-route">/livelink</span>
+          <span class="hm-what">The join page for the day &mdash; the venue in the calendar invite</span>
+        </a>
+      </li>
+    </ul>
+    <p class="hm-review-note">Checkout links are not wired yet, so the buy buttons stay on the page. The countdown is shared across the offer and the thank-you strip &mdash; clear site data to reset it.</p>
+  </nav>
+
+</main>
+
+</body>
+</html>

@@ -61,13 +61,18 @@ day, and it is the venue in the calendar invite, the target of the QR code
 and of any short link — so it is reached from someone's calendar or phone,
 never by clicking through these pages.
 
-All four pages are noindexed and listed in `site/robots.txt`; nothing on the
-landing page should link to them.
+`/` is a **coming-soon holding page**. The real landing page is hosted
+elsewhere, so nothing else answers the root of this deployment; it exists so
+the domain does not 404 while the funnel is being reviewed.
+
+Every page is noindexed — see Deploying below.
 
 ## Layout
 
 ```
+vercel.json               static deploy config — serves site/
 site/
+  index.html / home.css   the coming-soon root, plus the review nav
   base.css                self-hosted type, the KK palette, shared primitives
   ty.css / ty.js          both thank-you pages
   oto.css / oto.js        the offer page
@@ -83,6 +88,36 @@ tools/
   make-ics.py             regenerate the calendar file
   make-qr.py              QR code for the Zoom join link
 ```
+
+## Deploying
+
+Vercel, static, no build step. `vercel.json` sets `outputDirectory` to `site`,
+so the repo root is not what gets served — `CCB Structure/` and `tools/` stay
+out of the deployment.
+
+`cleanUrls` plus `trailingSlash: false` make `/ccboto` the canonical URL for
+`site/ccboto/index.html`, which is exactly the form every link in the code
+already uses (`OTO.declineUrl`, `TY.otoUrl`, the review nav). Nothing needs
+rewriting to match the host.
+
+**Nothing here is indexable.** Each page carries a `noindex, nofollow` meta
+tag and `vercel.json` adds an `X-Robots-Tag` header saying the same on every
+route. `site/robots.txt` deliberately **allows** crawling: a crawler has to
+fetch a page to see either of those, so disallowing the paths would hide the
+noindex while leaving the URLs indexable from any external link — the
+opposite of what it looks like it does.
+
+Two things to change before this is a real launch rather than a review link:
+
+- **Delete the review nav.** It is the `<nav class="hm-review">` block in
+  `site/index.html`, marked with a `REVIEW ONLY` comment. It lists the funnel
+  routes so the flow can be walked without going through checkout.
+- **Revisit the asset cache headers.** `/assets/*` is currently served
+  `max-age=0, must-revalidate` so a redeployed image is picked up
+  immediately, which is what an in-progress design review wants and not what
+  a live page wants. Fonts are already `immutable` for a year, since those
+  never change. Note that the cover filenames do not carry a hash, so
+  lengthening that cache means a changed cover can go stale — see Assets.
 
 ## Editing content
 

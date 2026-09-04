@@ -66,7 +66,7 @@ never by clicking through these pages.
 `/` is the **landing page**. Every Enroll button on it — hero, bonuses,
 certificate, the closing card and the sticky bar — goes to the same TagMango
 workshop checkout, which is the only link on the page:
-`https://learn.kkcreate.in/web/checkout/69e0756c8bbbb4097a59d0d3`. Change it
+`https://learn.kkcreate.in/web/checkout/6a99159a9cbde21f8b847e6b`. Change it
 in `site/index.html`; it is written out at each button rather than injected,
 so the page needs no script to be clickable.
 
@@ -460,9 +460,6 @@ alone rather than pointing it at a dead page:
 - `TY.referralUrl` (`site/ty.js`) — the public landing page URL, with its own
   UTMs and `ref=student`. Until it is set the whole referral card is hidden,
   rather than showing a heading above a dead button.
-- `OTO.checkoutUrl` (`site/oto.js`) — the TagMango checkout for the Complete
-  Creator Bundle. Until it is set the three "Yes, add it to my order" buttons
-  scroll to the offer card instead.
 - `LIVE.joinUrl` (`site/livelink.js`) — the Zoom join link, plus `hasQr` and
   the QR asset. See above.
 

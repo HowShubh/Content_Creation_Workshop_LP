@@ -8,10 +8,10 @@ const OTO = {
   /* TagMango checkout for the Complete Creator Bundle. A different product
      from the workshop seat, so this is not the landing page's link.
 
-     While it is empty every [data-buy] keeps its authored `#get` href and
-     simply scrolls to the offer card, rather than sending anyone to a dead
-     page. */
-  checkoutUrl: '',
+     If it is ever emptied again, every [data-buy] keeps its authored
+     `#get` href and simply scrolls to the offer card, rather than sending
+     anyone to a dead page. */
+  checkoutUrl: 'https://learn.kkcreate.in/web/checkout/6a9943a01481b84eed49d575',
 
   /* Where "I'll figure it out myself" goes: the plain thank-you page. This
      page is where the workshop checkout lands, so declining is the only way

@@ -3,9 +3,11 @@
 The post-checkout pages for the KK Create *Content Creation for Beginners*
 workshop, built from the Claude Design handoff bundle in `CCB Structure/`.
 
-**The landing page is not in this repo** — it is hosted elsewhere. What lives
-here is everything after the payment: two thank-you pages and the one-time
-offer between them.
+**The whole funnel now lives here**: the landing page at `/`, the one-time
+offer, the two thank-you pages, and the join page for the day. The landing
+page used to be a TagMango page-builder site at
+`lp.kkcreate.in/content-creation`; it has been rebuilt here as hand-written
+HTML at the same design, so there is one place to change a price or a date.
 
 The workshop is **live on Sunday 20 September 2026, 12:00–4:00 PM IST, on
 Zoom**. These pages are date-dependent: the date appears in the boarding pass,
@@ -21,12 +23,12 @@ Static HTML/CSS/JS — no build step, no dependencies.
 python3 -m http.server 4321 --directory site
 ```
 
-Then open http://localhost:4321/tycontent101/
+Then open http://localhost:4321/
 
 ## The funnel
 
 ```
-  landing page (hosted elsewhere)
+  /  ──────────────────── the landing page
      │  TagMango workshop checkout
      ▼
   /ccboto ─────────────── the Complete Creator Bundle offer
@@ -61,9 +63,12 @@ day, and it is the venue in the calendar invite, the target of the QR code
 and of any short link — so it is reached from someone's calendar or phone,
 never by clicking through these pages.
 
-`/` is a **coming-soon holding page**. The real landing page is hosted
-elsewhere, so nothing else answers the root of this deployment; it exists so
-the domain does not 404 while the funnel is being reviewed.
+`/` is the **landing page**. Every Enroll button on it — hero, bonuses,
+certificate, the closing card and the sticky bar — goes to the same TagMango
+workshop checkout, which is the only link on the page:
+`https://learn.kkcreate.in/web/checkout/69e0756c8bbbb4097a59d0d3`. Change it
+in `site/index.html`; it is written out at each button rather than injected,
+so the page needs no script to be clickable.
 
 Every page is noindexed — see Deploying below.
 
@@ -72,7 +77,8 @@ Every page is noindexed — see Deploying below.
 ```
 vercel.json               static deploy config — serves site/
 site/
-  index.html / home.css   the coming-soon root, plus the review nav
+  index.html              the landing page
+  home.css / home.js      the landing page's styles and its three behaviours
   base.css                self-hosted type, the KK palette, shared primitives
   ty.css / ty.js          both thank-you pages
   oto.css / oto.js        the offer page
@@ -82,6 +88,7 @@ site/
   ccboto/                 the one-time offer
   livelink/               the join-link page for the day
   assets/                 fonts, logo, bundle covers, the .ics
+  assets/home/            everything the landing page draws
 tools/
   make-webp.py            PNG/JPG in site/assets -> WebP
   make-covers.py          normalise + convert the four bundle covers
@@ -109,9 +116,12 @@ opposite of what it looks like it does.
 
 Two things to change before this is a real launch rather than a review link:
 
-- **Delete the review nav.** It is the `<nav class="hm-review">` block in
-  `site/index.html`, marked with a `REVIEW ONLY` comment. It lists the funnel
-  routes so the flow can be walked without going through checkout.
+- **Drop the `noindex`.** The landing page is now the public front of the
+  funnel and wants to be crawlable, unlike the four post-checkout pages. That
+  means removing the meta tag from `site/index.html` *and* narrowing the
+  `X-Robots-Tag` rule in `vercel.json`, which currently applies to `/(.*)`.
+  The review nav that used to sit on the holding page is gone with it; the
+  funnel routes are `/ccboto`, `/tycontent101`, `/tybundle` and `/livelink`.
 - **Revisit the asset cache headers.** `/assets/*` is currently served
   `max-age=0, must-revalidate` so a redeployed image is picked up
   immediately, which is what an in-progress design review wants and not what
@@ -131,6 +141,51 @@ itself (`learn.kkcreate.in` + SIGN IN), and the support button shows the
 WhatsApp number rather than hiding it behind "Contact support" — `ty.js`
 writes that number from `TY.supportNumber`, so the markup and the link
 cannot drift apart.
+
+## The landing page (/)
+
+A rebuild of `lp.kkcreate.in/content-creation`, which was assembled in
+TagMango's page builder. The design is unchanged and was matched against the
+live page section by section; what changed is that it is hand-written, so it
+sits in this repo with the rest of the funnel.
+
+**One DOM, not two.** The builder shipped a desktop and a mobile copy of
+every section, each hidden at the other width — which is why the exported
+HTML contains every testimonial and every FAQ answer twice. Here the layout
+changes at 900px and the copy exists once, so the two cannot drift apart.
+
+**Three behaviours, in `site/home.js`.** The modules and the FAQ open one row
+at a time; the testimonial strip scrolls by its arrows as well as by finger;
+and the sticky enrol bar arrives once the hero's own button has scrolled
+away, so there are never two of the same button on screen. None of the three
+is load-bearing: with scripting off every panel is shut but every word is in
+the markup, the strip still scrolls, and the bar reveals itself below.
+
+Two things the original loaded from third parties are gone. Swiper drove the
+testimonial carousel; it is now a `scroll-snap` strip, which is the same
+gesture with no library. Material Icons supplied the accordion chevrons and
+Font Awesome the check marks; those are inline SVG now. What is still
+third-party is the nine testimonial `<iframe>`s on Vimeo — they are
+`loading="lazy"`, so nothing loads until the strip is nearly in view.
+
+### Its assets
+
+`site/assets/home/` holds everything the page draws, pulled from
+`tagmango.com/staticassets` and converted. The photographs were 1MB–3MB PNGs
+at up to 3037px for a box a third that wide; they are WebP at 2x their
+largest rendered size, which took the page's images from ~11MB to ~700KB.
+
+Seven of the logos and social icons were Figma SVG exports that only wrapped
+a full-size PNG in a `<pattern>`. Those are plain `.webp` now — the Instagram
+one alone was 457KB for a 42px icon. `brand-itc.svg` is the exception and is
+still an SVG, because it crops one sprite twice (the mark and the wordmark)
+and the two rects are what compose the logo; its embedded raster was
+re-encoded small in place.
+
+**The rupee sign matters for the fonts.** ₹ (U+20B9) is in the latin-ext
+subset, not latin, and this page sets prices in both Manrope and Poppins —
+see the note at the top of `base.css`. Manrope 800 and Poppins 700 were added
+to `base.css` for this page; every other weight it uses was already there.
 
 ## Attribution
 

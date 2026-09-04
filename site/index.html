@@ -3,86 +3,634 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>KK Create — Coming soon</title>
-<meta name="description" content="Something new from KK Create is on the way." />
+<title>Content Creation Workshop | KK Create</title>
+<meta name="description" content="Content Creation for Beginners with Kavya Karnatac — a recorded 3+ hour workshop in Hinglish. Find your niche, create your first viral post, and make money from your videos." />
 <meta name="robots" content="noindex, nofollow" />
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <!-- The headline and body faces, preloaded so they start with the CSS
      rather than after it parses. Everything else loads on demand. -->
 <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="assets/fonts/space-grotesk-700-latin.woff2" />
+      href="assets/fonts/manrope-800-latin.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="assets/fonts/manrope-400-latin.woff2" />
+      href="assets/fonts/poppins-400-latin.woff2" />
+<!-- The hero cut-out is the largest paint on the page and sits above
+     the fold on every width. -->
+<link rel="preload" as="image" href="assets/home/hero-duo.webp" fetchpriority="high" />
 <link rel="stylesheet" href="base.css" />
 <link rel="stylesheet" href="home.css" />
 </head>
-<body>
+<body class="lp-body">
 
-<main class="hm-wrap">
-  <div class="hm-card">
+<main>
 
-    <span class="brand hm-brand">
-      <span class="brand-mark"><img src="assets/logo-mark-light.webp" width="1048" height="678" alt="" /></span>
-      <span class="brand-text">
-        <span class="brand-name">KK Create</span>
-        <span class="brand-kicker">CONTENT CREATION FOR BEGINNERS</span>
-      </span>
-    </span>
+  <!-- =========================================================
+       Hero
+       ========================================================= -->
+  <section class="lp-hero">
+    <div class="lp-wrap">
+      <div class="lp-hero-card">
 
-    <span class="hm-flag">COMING SOON</span>
+        <div class="lp-hero-copy">
 
-    <h1 class="hm-title">Something new is<br /><span class="hm-nb">on the way.</span></h1>
+          <h1><b>Content Creation</b>For Beginners</h1>
 
-    <p class="hm-sub">We are putting the finishing touches on it. If you are already registered for the live workshop, nothing here changes that &mdash; your confirmation and joining details have gone to your email and WhatsApp.</p>
+          <ul class="lp-points">
+            <li>
+              <img src="assets/home/icon-path.svg" width="24" height="24" alt="" />
+              <span>Find your path, without the confusion</span>
+            </li>
+            <li>
+              <img src="assets/home/icon-viral.svg" width="24" height="24" alt="" />
+              <span>Create your first viral post</span>
+            </li>
+            <li>
+              <img src="assets/home/icon-money.svg" width="24" height="24" alt="" />
+              <span>Make money from your videos</span>
+            </li>
+          </ul>
 
-    <p class="hm-meta">Questions in the meantime? Message us on WhatsApp at <a href="https://wa.me/918700105418">+91 8700105418</a>.</p>
+          <div class="lp-facts">
+            <div class="lp-fact">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+              </svg>
+              <div>
+                <span>Available in</span>
+                <b>Hinglish</b>
+              </div>
+            </div>
+            <div class="lp-fact">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm-2 14.5v-9l7 4.5-7 4.5z" />
+              </svg>
+              <div>
+                <span>Recorded Workshop</span>
+                <b>3+ Hrs Learning</b>
+              </div>
+            </div>
+          </div>
 
-  </div>
+          <a class="lp-cta" href="https://learn.kkcreate.in/web/checkout/69e0756c8bbbb4097a59d0d3">Enroll Now</a>
 
-  <!-- ============================================================
-       REVIEW ONLY — delete this whole <nav> before the page goes
-       public. It exists so the funnel can be walked end to end for
-       design sign-off without knowing the URLs, which are otherwise
-       reachable only through TagMango's post-purchase redirects.
+        </div>
 
-       The pages themselves carry `noindex, nofollow`, and every route
-       on this deployment is served with an X-Robots-Tag header saying
-       the same (see vercel.json), so linking them here does not put
-       them in front of search engines.
-       ============================================================ -->
-  <nav class="hm-review" aria-label="Funnel pages for review">
-    <p class="hm-review-head">Funnel pages <span>for design review</span></p>
-    <ul>
-      <li>
-        <a href="/ccboto">
-          <span class="hm-route">/ccboto</span>
-          <span class="hm-what">The one-time offer &mdash; where the workshop checkout lands</span>
+        <div class="lp-hero-media">
+          <img src="assets/home/hero-duo.webp" width="960" height="957" fetchpriority="high"
+               alt="Kavya Karnatac and Varun Pandey" />
+          <span class="lp-flag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4.5" width="18" height="16" rx="2.5" />
+              <path d="M3 9.5h18M8 2.5v4M16 2.5v4" />
+              <path d="M12.4 12.2l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7z" fill="currentColor" stroke="none" />
+            </svg>
+            Recording Now Available
+          </span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       The three things that stall a beginner
+       ========================================================= -->
+  <section class="lp-pain">
+    <div class="lp-wrap lp-pain-inner">
+
+      <h2 class="lp-head">
+        STOP Consuming, START Creating
+        <img src="assets/home/underline-red.svg" width="258" height="9" alt="" />
+      </h2>
+
+      <ul class="lp-pain-list">
+        <li>
+          <img src="assets/home/icon-question.svg" width="50" height="50" alt="" />
+          <span>You love doing many things<br />but can't pick a niche?</span>
+        </li>
+        <li>
+          <img src="assets/home/icon-question.svg" width="50" height="50" alt="" />
+          <span>You have been posting but aren't<br />seeing any followers or engagement</span>
+        </li>
+        <li>
+          <img src="assets/home/icon-question.svg" width="50" height="50" alt="" />
+          <span>You don't know how to approach<br />brands or work with them?</span>
+        </li>
+      </ul>
+
+    </div>
+  </section>
+
+  <!-- =========================================================
+       Bonuses
+       ========================================================= -->
+  <section class="lp-bonus">
+    <div class="lp-wrap">
+      <div class="lp-bonus-inner">
+
+        <h2 class="lp-head">
+          Unlock Bonuses worth &#8377;9,500
+          <img src="assets/home/underline-red.svg" width="258" height="9" alt="" />
+        </h2>
+
+        <div class="lp-bonus-grid">
+
+          <article class="lp-bonus-card">
+            <img src="assets/home/bonus-ideation.webp" width="720" height="720"
+                 loading="lazy" alt="Locked bonus: our topic ideation process" />
+            <div class="lp-bonus-body">
+              <h3>Our Topic<br />Ideation Process</h3>
+              <p>How we pick topics for short-form videos</p>
+              <p class="lp-price"><s>&#8377;4000</s> <b>FREE</b></p>
+            </div>
+          </article>
+
+          <article class="lp-bonus-card">
+            <img src="assets/home/bonus-books.webp" width="720" height="720"
+                 loading="lazy" alt="Locked bonus: the books and media we follow" />
+            <div class="lp-bonus-body">
+              <h3>Books and<br />Media We follow</h3>
+              <p>Books and videos that inspire our content</p>
+              <p class="lp-price"><s>&#8377;2500</s> <b>FREE</b></p>
+            </div>
+          </article>
+
+          <article class="lp-bonus-card">
+            <img src="assets/home/bonus-thumbnail.webp" width="720" height="720"
+                 loading="lazy" alt="Locked bonus: our Instagram reel thumbnail template" />
+            <div class="lp-bonus-body">
+              <h3>Our Instagram reel<br />Thumbnail Template</h3>
+              <p>Our go to template for creating reel thumbnails</p>
+              <p class="lp-price"><s>&#8377;3000</s> <b>FREE</b></p>
+            </div>
+          </article>
+
+        </div>
+
+        <a class="lp-cta lp-cta-sm" href="https://learn.kkcreate.in/web/checkout/69e0756c8bbbb4097a59d0d3">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="10.5" width="16" height="10" rx="2" />
+            <path d="M8 10.5V7a4 4 0 017.5-1.9" />
+            <circle cx="12" cy="15.5" r="1.2" fill="currentColor" stroke="none" />
+          </svg>
+          Enroll Now to Unlock
         </a>
-      </li>
-      <li>
-        <a href="/tycontent101">
-          <span class="hm-route">/tycontent101</span>
-          <span class="hm-what">Seat confirmed &mdash; where declining the offer lands</span>
-        </a>
-      </li>
-      <li>
-        <a href="/tybundle">
-          <span class="hm-route">/tybundle</span>
-          <span class="hm-what">Seat and bundle confirmed &mdash; after the bundle checkout</span>
-        </a>
-      </li>
-      <li>
-        <a href="/livelink">
-          <span class="hm-route">/livelink</span>
-          <span class="hm-what">The join page for the day &mdash; the venue in the calendar invite</span>
-        </a>
-      </li>
-    </ul>
-    <p class="hm-review-note">Checkout links are not wired yet, so the buy buttons stay on the page. The countdown is shared across the offer and the thank-you strip &mdash; clear site data to reset it.</p>
-  </nav>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       What you'll actually learn — the six modules
+
+       <details>/<summary> would be the shorter markup, but the open
+       panel has to animate and Safari still paints a closing <details>
+       instantly. So these are buttons with aria-expanded, and home.js
+       moves the [open] attribute the CSS transition hangs off.
+       ========================================================= -->
+  <section class="lp-learn">
+    <div class="lp-wrap">
+      <div class="lp-learn-inner">
+
+        <h2 class="lp-head">
+          What you'll actually learn?
+          <img src="assets/home/underline-lime.svg" width="294" height="12" alt="" />
+        </h2>
+
+        <div class="lp-learn-cols">
+
+          <div class="lp-learn-shot">
+            <img src="assets/home/learn-modules.webp" width="1120" height="854"
+                 loading="lazy" alt="Kavya with boxes labelled Make Viral videos, Find your Niche, How to Script, GenAI Tools and Data Secrets" />
+          </div>
+
+          <div class="lp-learn-col">
+            <div class="lp-modules" data-accordion>
+
+              <div class="lp-module lp-module-mint">
+                <button type="button" aria-expanded="false" aria-controls="m1">
+                  <h3>Find Your Niche</h3>
+                  <svg class="lp-module-plus" width="20" height="20" viewBox="0 0 20 20"
+                       fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M10 3v14M3 10h14" />
+                  </svg>
+                </button>
+                <div class="lp-module-body" id="m1">
+                  <ul>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Identify the content that suits you</li>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Understand your target audience</li>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Use AI to study top creators and see what works</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="lp-module lp-module-red">
+                <button type="button" aria-expanded="false" aria-controls="m2">
+                  <h3>Generate Ideas Like a Pro</h3>
+                  <svg class="lp-module-plus" width="20" height="20" viewBox="0 0 20 20"
+                       fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M10 3v14M3 10h14" />
+                  </svg>
+                </button>
+                <div class="lp-module-body" id="m2">
+                  <ul>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Master techniques to come up with viral ideas</li>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Stay ahead with a constant flow of new content</li>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Use AI to quickly generate fresh video concepts</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="lp-module lp-module-mint">
+                <button type="button" aria-expanded="false" aria-controls="m3">
+                  <h3>Write Kickass Scripts</h3>
+                  <svg class="lp-module-plus" width="20" height="20" viewBox="0 0 20 20"
+                       fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M10 3v14M3 10h14" />
+                  </svg>
+                </button>
+                <div class="lp-module-body" id="m3">
+                  <ul>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Create hooks that grab attention instantly</li>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Write concise, engaging scripts for short-form content</li>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Let AI help you speed up scriptwriting</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="lp-module lp-module-red">
+                <button type="button" aria-expanded="false" aria-controls="m4">
+                  <h3>Shoot &amp; Edit Like a Rockstar</h3>
+                  <svg class="lp-module-plus" width="20" height="20" viewBox="0 0 20 20"
+                       fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M10 3v14M3 10h14" />
+                  </svg>
+                </button>
+                <div class="lp-module-body" id="m4">
+                  <ul>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Shoot professional videos with basic equipment</li>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Learn simple editing tricks for better results</li>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Enhance your edits with AI-powered tools</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="lp-module lp-module-mint">
+                <button type="button" aria-expanded="false" aria-controls="m5">
+                  <h3>Mastering Data Insights</h3>
+                  <svg class="lp-module-plus" width="20" height="20" viewBox="0 0 20 20"
+                       fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M10 3v14M3 10h14" />
+                  </svg>
+                </button>
+                <div class="lp-module-body" id="m5">
+                  <ul>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Analyze data to understand what works</li>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Identify trends and patterns in your performance</li>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Automate data analysis with AI for quicker insights</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="lp-module lp-module-red">
+                <button type="button" aria-expanded="false" aria-controls="m6">
+                  <h3>Turning Content Into Income</h3>
+                  <svg class="lp-module-plus" width="20" height="20" viewBox="0 0 20 20"
+                       fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M10 3v14M3 10h14" />
+                  </svg>
+                </button>
+                <div class="lp-module-body" id="m6">
+                  <ul>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Build strong brand partnerships and collaborations</li>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Learn how to pitch your content for monetization</li>
+                    <li><svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zM227.3 387.3l184-184c6.2-6.2 6.2-16.4 0-22.6l-22.6-22.6c-6.2-6.2-16.4-6.2-22.6 0L216 308.1l-70.1-70.1c-6.2-6.2-16.4-6.2-22.6 0l-22.6 22.6c-6.2 6.2-6.2 16.4 0 22.6l104 104c6.2 6.3 16.4 6.3 22.6.1z"/></svg>Create pitch decks and send cold emails with AI help</li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+
+            <p class="lp-more">&hellip;and a LOT more!</p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       Get Certified
+       ========================================================= -->
+  <section class="lp-cert">
+    <div class="lp-wrap">
+      <div class="lp-cert-card">
+
+        <img class="lp-blob lp-blob-1" src="assets/home/blob-cert-1.svg" alt="" aria-hidden="true" />
+        <img class="lp-blob lp-blob-2" src="assets/home/blob-cert-2.svg" alt="" aria-hidden="true" />
+        <img class="lp-blob lp-blob-3" src="assets/home/blob-cert-3.svg" alt="" aria-hidden="true" />
+
+        <div class="lp-cert-cols">
+
+          <div class="lp-cert-copy">
+            <h2 class="lp-head">Get Certified</h2>
+
+            <ul class="lp-checks">
+              <li>
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm3.9 6.1l-4.6 4.6a.8.8 0 01-1.1 0L4.1 8.6a.8.8 0 011.1-1.1l1.6 1.5 4-4a.8.8 0 011.1 1.1z"/></svg>
+                Get a certificate that adds real value
+              </li>
+              <li>
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm3.9 6.1l-4.6 4.6a.8.8 0 01-1.1 0L4.1 8.6a.8.8 0 011.1-1.1l1.6 1.5 4-4a.8.8 0 011.1 1.1z"/></svg>
+                Share it on your profiles
+              </li>
+              <li>
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm3.9 6.1l-4.6 4.6a.8.8 0 01-1.1 0L4.1 8.6a.8.8 0 011.1-1.1l1.6 1.5 4-4a.8.8 0 011.1 1.1z"/></svg>
+                Add it to your resume and portfolio
+              </li>
+            </ul>
+
+            <a class="lp-cta" href="https://learn.kkcreate.in/web/checkout/69e0756c8bbbb4097a59d0d3">Enroll Now</a>
+          </div>
+
+          <div class="lp-cert-shot">
+            <img src="assets/home/certificate.webp" width="900" height="636" loading="lazy"
+                 alt="KK Create certificate of registration for Content Creation for Beginners" />
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       Testimonials
+
+       Nine Vimeo players. They are lazy iframes rather than a poster
+       image the visitor has to click twice: the strip sits far enough
+       down the page that nothing loads until it is nearly in view.
+       ========================================================= -->
+  <section class="lp-tst">
+    <div class="lp-wrap">
+      <div class="lp-tst-inner">
+
+        <h2 class="lp-head">
+          Testimonials
+          <img src="assets/home/underline-gold.svg" width="223" height="9" alt="" />
+        </h2>
+
+        <div class="lp-rail" data-rail>
+          <button class="lp-arrow" type="button" data-rail-prev aria-label="Previous testimonials">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+          </button>
+
+          <div class="lp-track" data-rail-track>
+            <div class="lp-slide"><iframe src="https://player.vimeo.com/video/1176806368?title=0&amp;portrait=0&amp;badge=0" title="Student testimonial" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+            <div class="lp-slide"><iframe src="https://player.vimeo.com/video/1176806411?title=0&amp;portrait=0&amp;badge=0" title="Student testimonial" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+            <div class="lp-slide"><iframe src="https://player.vimeo.com/video/1176806554?title=0&amp;portrait=0&amp;badge=0" title="Student testimonial" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+            <div class="lp-slide"><iframe src="https://player.vimeo.com/video/1176806488?title=0&amp;portrait=0&amp;badge=0" title="Student testimonial" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+            <div class="lp-slide"><iframe src="https://player.vimeo.com/video/1176806523?title=0&amp;portrait=0&amp;badge=0" title="Student testimonial" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+            <div class="lp-slide"><iframe src="https://player.vimeo.com/video/1176806436?title=0&amp;portrait=0&amp;badge=0" title="Student testimonial" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+            <div class="lp-slide"><iframe src="https://player.vimeo.com/video/1176806613?title=0&amp;portrait=0&amp;badge=0" title="Student testimonial" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+            <div class="lp-slide"><iframe src="https://player.vimeo.com/video/1176806641?title=0&amp;portrait=0&amp;badge=0" title="Student testimonial" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+            <div class="lp-slide"><iframe src="https://player.vimeo.com/video/1176806676?title=0&amp;portrait=0&amp;badge=0" title="Student testimonial" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+          </div>
+
+          <button class="lp-arrow" type="button" data-rail-next aria-label="More testimonials">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       Brands
+
+       The logo run appears twice in the markup. The keyframe travels
+       exactly one run's width, so the second copy is what is on screen
+       when the first wraps back — that is the whole trick, and it is
+       why the duplicate is not a copy-paste mistake. The second copy
+       is hidden from assistive tech.
+       ========================================================= -->
+  <section class="lp-brands">
+    <div class="lp-wrap lp-brands-inner">
+
+      <p class="lp-chip">Brands we have worked with</p>
+
+      <div class="lp-marquee">
+        <div class="lp-marquee-track">
+
+          <div class="lp-logo"><img src="assets/home/brand-hotstar.svg" width="140" height="41" loading="lazy" alt="Disney+ Hotstar" /></div>
+          <div class="lp-logo"><img src="assets/home/brand-netflix.svg" width="120" height="33" loading="lazy" alt="Netflix" /></div>
+          <div class="lp-logo"><img src="assets/home/brand-npci.webp" width="135" height="37" loading="lazy" alt="NPCI" /></div>
+          <div class="lp-logo"><img src="assets/home/brand-boat.webp" width="79" height="42" loading="lazy" alt="boAt" /></div>
+          <div class="lp-logo"><img src="assets/home/brand-cocacola.svg" width="106" height="35" loading="lazy" alt="Coca-Cola" /></div>
+          <div class="lp-logo"><img src="assets/home/brand-perplexity.webp" width="146" height="37" loading="lazy" alt="Perplexity" /></div>
+          <div class="lp-logo"><img src="assets/home/brand-google.svg" width="125" height="39" loading="lazy" alt="Google" /></div>
+          <div class="lp-logo"><img src="assets/home/brand-swiggy.svg" width="130" height="40" loading="lazy" alt="Swiggy" /></div>
+          <div class="lp-logo"><img src="assets/home/brand-microsoft.svg" width="146" height="32" loading="lazy" alt="Microsoft" /></div>
+          <div class="lp-logo"><img src="assets/home/brand-itc.svg" width="146" height="32" loading="lazy" alt="ITC Limited" /></div>
+          <div class="lp-logo">
+            <img src="assets/home/brand-openai-mark.svg" width="45" height="45" loading="lazy" alt="" />
+            <img src="assets/home/brand-openai-word.svg" width="101" height="28" loading="lazy" alt="OpenAI" />
+          </div>
+
+          <div class="lp-logo" aria-hidden="true"><img src="assets/home/brand-hotstar.svg" width="140" height="41" loading="lazy" alt="" /></div>
+          <div class="lp-logo" aria-hidden="true"><img src="assets/home/brand-netflix.svg" width="120" height="33" loading="lazy" alt="" /></div>
+          <div class="lp-logo" aria-hidden="true"><img src="assets/home/brand-npci.webp" width="135" height="37" loading="lazy" alt="" /></div>
+          <div class="lp-logo" aria-hidden="true"><img src="assets/home/brand-boat.webp" width="79" height="42" loading="lazy" alt="" /></div>
+          <div class="lp-logo" aria-hidden="true"><img src="assets/home/brand-cocacola.svg" width="106" height="35" loading="lazy" alt="" /></div>
+          <div class="lp-logo" aria-hidden="true"><img src="assets/home/brand-perplexity.webp" width="146" height="37" loading="lazy" alt="" /></div>
+          <div class="lp-logo" aria-hidden="true"><img src="assets/home/brand-google.svg" width="125" height="39" loading="lazy" alt="" /></div>
+          <div class="lp-logo" aria-hidden="true"><img src="assets/home/brand-swiggy.svg" width="130" height="40" loading="lazy" alt="" /></div>
+          <div class="lp-logo" aria-hidden="true"><img src="assets/home/brand-microsoft.svg" width="146" height="32" loading="lazy" alt="" /></div>
+          <div class="lp-logo" aria-hidden="true"><img src="assets/home/brand-itc.svg" width="146" height="32" loading="lazy" alt="" /></div>
+          <div class="lp-logo" aria-hidden="true">
+            <img src="assets/home/brand-openai-mark.svg" width="45" height="45" loading="lazy" alt="" />
+            <img src="assets/home/brand-openai-word.svg" width="101" height="28" loading="lazy" alt="" />
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================
+       Meet your Mentor
+       ========================================================= -->
+  <section class="lp-mentor">
+    <div class="lp-wrap">
+      <div class="lp-mentor-inner">
+
+        <figure class="lp-mentor-card">
+          <img src="assets/home/mentor-varun.webp" width="760" height="1362" loading="lazy"
+               alt="Varun Pandey in a YouTube jacket" />
+          <figcaption class="lp-mentor-name">
+            <i>The Versatile Guy</i>
+            <b>Varun Pandey</b>
+            <span>Course Lead, KK Create</span>
+          </figcaption>
+        </figure>
+
+        <div class="lp-mentor-copy">
+          <h2 class="lp-head">Meet your Mentor</h2>
+
+          <div class="lp-bio">
+            <p>Varun has over six years of experience in content creation. He helped grow <b>Civic Studios'</b> social media to <b>100k+ followers</b> and co-created <b>Pop Culture Patrol</b> with Sucharita Tyagi, reaching millions of views and receiving praise from the likes of <b>Karan Johar and Anurag Kashyap</b>.</p>
+            <p>At KK Create, he established the long-form video vertical with Kavya and played a key role in growing the team from 7 to 40+ members. Now, he leads the <b>course vertical</b>, mentoring new creators.</p>
+            <p>When he's not creating content, Varun can be found walking a 10K, shooting hoops, or getting into heated debates about politics with people who definitely don't agree with him.</p>
+          </div>
+
+          <div class="lp-stats">
+            <div class="lp-stat">
+              <img src="assets/home/social-youtube.webp" width="45" height="45" loading="lazy" alt="YouTube" />
+              <b>4.7M+</b>
+              <span>subscribers</span>
+            </div>
+            <div class="lp-stat">
+              <img src="assets/home/social-facebook.webp" width="45" height="45" loading="lazy" alt="Facebook" />
+              <b>564K+</b>
+              <span>followers</span>
+            </div>
+            <div class="lp-stat">
+              <img src="assets/home/social-instagram.webp" width="42" height="42" loading="lazy" alt="Instagram" />
+              <b>4.1M+</b>
+              <span>followers</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       FAQ
+       ========================================================= -->
+  <section class="lp-faq">
+    <div class="lp-wrap">
+      <div class="lp-faq-inner">
+
+        <h2 class="lp-head">
+          Frequently Asked Questions
+          <img src="assets/home/underline-red.svg" width="258" height="9" alt="" />
+        </h2>
+
+        <div class="lp-faq-list" data-accordion>
+
+          <div class="lp-q">
+            <button type="button" aria-expanded="false" aria-controls="q1">
+              <h3>Is this workshop the right fit for me?</h3>
+              <svg class="lp-q-chev" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+            </button>
+            <div class="lp-q-body" id="q1"><div><p>If you're just starting out with content creation or struggling to grow, this workshop is perfect for you! Whether you're a student, freelancer, or entrepreneur, we'll guide you through the essentials and help you take your first steps.</p></div></div>
+          </div>
+
+          <div class="lp-q">
+            <button type="button" aria-expanded="false" aria-controls="q2">
+              <h3>Will I get the recording of the workshop?</h3>
+              <svg class="lp-q-chev" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+            </button>
+            <div class="lp-q-body" id="q2"><div><p>Yes dost, the recording will be sent to you within 24-48 hours after the workshop. Don't worry if you miss anything, we've got you covered!</p></div></div>
+          </div>
+
+          <div class="lp-q">
+            <button type="button" aria-expanded="false" aria-controls="q3">
+              <h3>When will I get the addons and bonuses?</h3>
+              <svg class="lp-q-chev" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+            </button>
+            <div class="lp-q-body" id="q3"><div><p>You'll get all the addons (if purchased) and bonuses within 24 hours after the workshop.</p></div></div>
+          </div>
+
+          <div class="lp-q">
+            <button type="button" aria-expanded="false" aria-controls="q4">
+              <h3>Will I receive a certificate after completing the workshop?</h3>
+              <svg class="lp-q-chev" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+            </button>
+            <div class="lp-q-body" id="q4"><div><p>Absolutely! You'll receive a certificate to mark your achievement once you complete the workshop.</p></div></div>
+          </div>
+
+          <div class="lp-q">
+            <button type="button" aria-expanded="false" aria-controls="q5">
+              <h3>Do I need a laptop to attend this workshop?</h3>
+              <svg class="lp-q-chev" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+            </button>
+            <div class="lp-q-body" id="q5"><div><p>Nahi dost, you can attend the workshop on any device with internet access. Even your phone works!</p></div></div>
+          </div>
+
+          <div class="lp-q">
+            <button type="button" aria-expanded="false" aria-controls="q6">
+              <h3>What language will the course be taught in?</h3>
+              <svg class="lp-q-chev" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+            </button>
+            <div class="lp-q-body" id="q6"><div><p>The course will be taught in Hinglish (a mix of Hindi and a little bit of English).</p></div></div>
+          </div>
+
+          <div class="lp-q">
+            <button type="button" aria-expanded="false" aria-controls="q7">
+              <h3>What if I have more questions?</h3>
+              <svg class="lp-q-chev" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+            </button>
+            <div class="lp-q-body" id="q7"><div><p>Koi baat nahi, we're here to help! Reach out to us at <a href="mailto:support@kkcreate.in">support@kkcreate.in</a>, and we'll answer all your questions.</p></div></div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       Final CTA
+       ========================================================= -->
+  <section class="lp-final">
+    <div class="lp-wrap">
+      <div class="lp-final-frame">
+        <div class="lp-final-card">
+          <img class="lp-blob" src="assets/home/blob-cta.svg" alt="" aria-hidden="true" />
+          <h2>
+            Start your content creation journey today.
+            <span>Stop waiting for the "perfect moment" - it's never coming.</span>
+          </h2>
+          <a class="lp-cta" href="https://learn.kkcreate.in/web/checkout/69e0756c8bbbb4097a59d0d3">Enroll Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
 </main>
+
+<footer class="lp-foot">
+  <div class="lp-foot-inner">
+    <img src="assets/home/kk-logo-white.avif" width="66" height="66" loading="lazy" alt="KK Create" />
+    <p>Got a question? Please reach us at <a href="mailto:support@kkcreate.in">support@kkcreate.in</a></p>
+    <small>Copyright &copy; 2026 KK Create.</small>
+  </div>
+</footer>
+
+<div class="lp-sticky" data-sticky>
+  <span class="lp-sticky-thumb"><img src="assets/home/sticky-thumb.avif" width="142" height="134" alt="" /></span>
+  <p>Content Creation for Beginners</p>
+  <a class="lp-cta" href="https://learn.kkcreate.in/web/checkout/69e0756c8bbbb4097a59d0d3">Enroll Now</a>
+</div>
+
+<script src="home.js"></script>
 
 </body>
 </html>

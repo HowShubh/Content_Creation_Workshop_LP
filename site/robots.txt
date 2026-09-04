@@ -1,0 +1,6 @@
+# The funnel pages are reachable only through checkout, never search.
+User-agent: *
+Disallow: /tycontent101
+Disallow: /tybundle
+Disallow: /ccboto
+Disallow: /livelink

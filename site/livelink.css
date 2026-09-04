@@ -1,0 +1,226 @@
+/* ===========================================================
+   Live-link page (/livelink) — the address the calendar invite, the QR
+   code and the short link all point at. Loads on top of base.css and
+   reuses its tokens.
+
+   The URL never changes, which is the whole point of the page: it can be
+   printed, shared and saved weeks early, and on the day it turns into the
+   join button without anyone having to send a new link.
+   =========================================================== */
+
+.ll-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-inline: clamp(14px, 4vw, 24px);
+}
+
+.ll-header { padding-block: 14px; border-bottom: 1px solid rgba(var(--line-rgb), 0.08); }
+
+/* Centred in the viewport, less the header, so the card sits in the middle
+   of the screen on a phone rather than clinging to the top. */
+.ll-main {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding-block: 32px 40px;
+}
+
+.ll-card {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-radius: 22px;
+  padding: clamp(28px, 6vw, 44px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: #fff;
+  background-color: var(--panel);
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.028) 0 2px, transparent 2px 7px),
+    radial-gradient(120% 90% at 50% 0%, var(--panel-hover) 0%, var(--panel) 55%, var(--panel-2) 100%);
+  box-shadow: 0 22px 50px rgba(var(--line-rgb), 0.16);
+}
+.ll-card > * { position: relative; }
+
+.ll-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 7px 15px 7px 9px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+}
+.ll-zoom {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  background: #2d8cff;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+}
+
+.ll-title {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(25px, 6vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+/* The date and the time each break as a unit, never mid-phrase. */
+.ll-nb { white-space: nowrap; }
+
+.ll-sub {
+  margin: 0;
+  font-size: clamp(14.5px, 3.6vw, 16px);
+  line-height: 1.65;
+  color: var(--on-panel-muted);
+  max-width: 48ch;
+  text-wrap: pretty;
+}
+
+/* ---------- Countdown ---------- */
+
+.ll-count { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.ll-unit {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 9px 14px;
+  min-width: 66px;
+}
+.ll-unit b {
+  display: block;
+  font-family: var(--display);
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+.ll-unit span {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--on-panel-muted-2);
+}
+
+/* ---------- The link itself ---------- */
+
+.ll-join {
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  margin-top: 4px;
+  background: var(--lime);
+  color: var(--panel);
+  padding: 16px 26px;
+  border-radius: 12px;
+  font-family: var(--ui);
+  font-weight: 700;
+  font-size: 16.5px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+  transition: background 0.15s ease, transform 0.18s ease;
+}
+.ll-join:hover { background: #b8ef3a; color: var(--panel); transform: scale(1.03); }
+.ll-join:active { transform: scale(0.985); }
+
+/* Shown until the join URL is set. A live-link page with a dead button is
+   worse than one that says plainly where the link will be. */
+.ll-wait {
+  margin: 0;
+  width: 100%;
+  max-width: 420px;
+  border: 1px dashed rgba(255, 255, 255, 0.28);
+  border-radius: 12px;
+  padding: 16px 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--on-panel-muted);
+}
+.ll-wait b { color: #fff; }
+
+/* The WhatsApp group, on the dark card. Outlined rather than solid green:
+   it sits under the join button once the room opens, and two filled buttons
+   competing for the same glance is one too many. */
+.ll-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(37, 211, 102, 0.55);
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-family: var(--ui);
+  font-size: 14px;
+  font-weight: 600;
+  color: #4ee88a;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.ll-wa:hover { background: rgba(37, 211, 102, 0.12); border-color: #25d366; color: #6cf0a1; }
+
+/* ---------- QR ---------- */
+
+.ll-qr-block { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.ll-qr { background: #fff; border-radius: 14px; padding: 14px; line-height: 0; }
+/* Sized generously: a Zoom URL is long, so the code is dense and each
+   module needs enough pixels for a phone to lock onto it. */
+.ll-qr img { width: 200px; height: 200px; display: block; }
+.ll-qr-note { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--on-panel-muted-2); }
+
+/* ---------- Meta ---------- */
+
+.ll-meta {
+  width: 100%;
+  margin-top: 10px;
+  padding-top: 20px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.ll-cell { display: flex; flex-direction: column; gap: 5px; }
+.ll-cell-k {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--on-panel-muted-2);
+}
+.ll-cell-v {
+  font-family: var(--display);
+  font-size: clamp(14px, 3.6vw, 16px);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.ll-foot {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--text-4);
+  text-align: center;
+  line-height: 1.7;
+}
+.ll-foot a { color: var(--accent-text); text-decoration: underline; }
+
+@media (max-width: 420px) {
+  .ll-meta { gap: 10px; }
+  .ll-qr img { width: 176px; height: 176px; }
+  .ll-unit { min-width: 58px; padding: 8px 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ll-join:hover, .ll-join:active { transform: none; }
+}

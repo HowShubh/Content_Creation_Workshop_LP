@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Join the live workshop — Content Creation for Beginners | KK Create</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="../assets/favicon.png" />
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+<!-- The headline and body faces, preloaded so they start with the CSS
+     rather than after it parses. Everything else loads on demand. -->
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../assets/fonts/space-grotesk-700-latin.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../assets/fonts/manrope-400-latin.woff2" />
+<link rel="stylesheet" href="../base.css" />
+<link rel="stylesheet" href="../livelink.css" />
+</head>
+<body>
+
+<header class="ll-header">
+  <div class="ll-wrap">
+    <span class="brand">
+      <span class="brand-mark"><img src="../assets/logo-mark-light.webp" width="1048" height="678" alt="" /></span>
+      <span class="brand-text">
+        <span class="brand-name">KK Create</span>
+        <span class="brand-kicker">CONTENT CREATION FOR BEGINNERS</span>
+      </span>
+    </span>
+  </div>
+</header>
+
+<main class="ll-wrap ll-main">
+  <div class="ll-card">
+
+    <span class="ll-flag">
+      <span class="ll-zoom" aria-hidden="true">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M4 8.2A1.2 1.2 0 0 1 5.2 7h7.3a1.2 1.2 0 0 1 1.2 1.2v7.6a1.2 1.2 0 0 1-1.2 1.2H5.2A1.2 1.2 0 0 1 4 15.8zM15 11.2l4.3-2.7a.6.6 0 0 1 .95.5v6a.6.6 0 0 1-.95.5L15 12.8z"/></svg>
+      </span>
+      JOIN THE LIVE WORKSHOP
+    </span>
+
+    <h1 class="ll-title">Content Creation for Beginners goes live on<br /><span class="ll-nb">Sunday, 20 September</span> at <span class="ll-nb">12 PM IST</span></h1>
+
+    <p class="ll-sub" data-live-note>Bookmark this page. The join button appears right here when we open the room on Sunday, 20 September &mdash; and this address never changes, so it is the only link you need to keep.</p>
+
+    <div class="ll-count" data-countdown>
+      <div class="ll-unit"><b data-d>0</b><span>Days</span></div>
+      <div class="ll-unit"><b data-h>00</b><span>Hrs</span></div>
+      <div class="ll-unit"><b data-m>00</b><span>Mins</span></div>
+      <div class="ll-unit"><b data-s>00</b><span>Secs</span></div>
+    </div>
+
+    <a class="ll-join" href="#" target="_blank" rel="noopener" data-join hidden>Join the live workshop</a>
+
+    <p class="ll-wait" data-wait>
+      <b>Your join link arrives here on Sunday, 20 September.</b><br />
+      We also send it in the WhatsApp group and to the email you registered with, shortly before we start &mdash; so you have it three ways. Until then there is nothing to do but keep this page.
+    </p>
+
+    <!-- Outside [data-wait] on purpose: the group is worth joining before
+         the day and worth having during it, so it stays put when the join
+         button replaces the waiting panel. livelink.js hides it while
+         LIVE.whatsappUrl is unset. -->
+    <a class="ll-wa" href="#" data-wa hidden>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m0 1.67c2.2 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.25 8.24a8.24 8.24 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.26-8.24m-3.1 4.1c-.15 0-.39.06-.6.28-.2.22-.79.77-.79 1.88s.81 2.18.92 2.33c.12.15 1.57 2.4 3.81 3.36.53.23.95.37 1.27.47.53.17 1.02.15 1.4.09.43-.06 1.32-.54 1.5-1.06.19-.52.19-.97.13-1.06-.05-.09-.2-.15-.42-.26-.22-.11-1.32-.65-1.52-.72-.2-.08-.35-.11-.5.11-.15.22-.57.72-.7.87-.13.15-.26.17-.48.06-.22-.11-.94-.35-1.79-1.11-.66-.59-1.1-1.32-1.23-1.54-.13-.22-.02-.34.1-.45.1-.1.22-.26.33-.39.11-.13.15-.22.22-.37.07-.15.04-.28-.02-.39-.06-.11-.5-1.21-.68-1.65-.18-.43-.36-.37-.5-.38h-.42Z"/></svg>
+      Join the WhatsApp group
+    </a>
+
+    <div class="ll-qr-block" data-qr hidden>
+      <p class="ll-qr-note">Or scan this with your phone camera</p>
+      <!-- No src until livelink.js sets it: a hidden parent does not stop
+           the fetch, so an authored src is a 404 on every load of this
+           page until make-qr.py has actually written the file. -->
+      <div class="ll-qr"><img data-qr-src="../assets/live-qr.svg" width="200" height="200" alt="QR code linking to the live workshop join link" /></div>
+    </div>
+
+    <div class="ll-meta">
+      <div class="ll-cell"><span class="ll-cell-k">DATE</span><span class="ll-cell-v">Sun, 20 Sept</span></div>
+      <div class="ll-cell"><span class="ll-cell-k">STARTS</span><span class="ll-cell-v">12:00 PM IST</span></div>
+      <div class="ll-cell"><span class="ll-cell-k">DURATION</span><span class="ll-cell-v">4 hrs +</span></div>
+    </div>
+
+  </div>
+
+  <p class="ll-foot">
+    Can't get in on the day? Message us on WhatsApp at <a href="https://wa.me/918700105418">+91 8700105418</a>.<br />
+    Add it to your calendar: <a href="../assets/content-creation-101.ics">download the .ics</a>
+  </p>
+</main>
+
+<script src="../livelink.js"></script>
+</body>
+</html>

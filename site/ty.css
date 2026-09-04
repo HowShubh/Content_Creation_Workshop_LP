@@ -1,0 +1,712 @@
+/* ===========================================================
+   The two thank-you pages: /tycontent101 (seat only) and /tybundle
+   (seat plus the Complete Creator Bundle).
+
+   They are the same page. Everything here is shared; the handful of
+   blocks only one of them uses are marked.
+   =========================================================== */
+
+/* ---------- Header ---------- */
+
+.ty-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--header-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(var(--line-rgb), 0.08);
+}
+.ty-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-block: 14px;
+}
+
+/* ---------- Confirmation pill ---------- */
+
+.ty-badge-row { padding-top: 34px; text-align: center; }
+
+.ty-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border-radius: 999px;
+  padding: 8px 17px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+/* ---------- Boarding pass ---------- */
+
+.pass-band { padding-top: 30px; }
+
+.pass {
+  max-width: 860px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 236px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 22px 50px rgba(var(--line-rgb), 0.14);
+}
+
+.pass-main {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(20px, 4vw, 30px) clamp(18px, 4vw, 34px);
+  background-color: var(--surface);
+  background-image: radial-gradient(420px 240px at 8% -10%, rgba(var(--accent-rgb), 0.12), transparent 70%);
+}
+
+/* Ticket-stock hatch. */
+.pass-main::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(var(--line-rgb), 0.035) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(-45deg, rgba(var(--line-rgb), 0.025) 0 1px, transparent 1px 6px);
+}
+
+/* The KK lockup, tilted into the bottom corner as a watermark. The asset is
+   a white-on-black lockup baked into an alpha channel, so a plain alpha mask
+   does the job — no luminance-mask support needed. */
+.pass-main::after {
+  content: '';
+  position: absolute;
+  right: -6%;
+  bottom: -14%;
+  width: min(360px, 62%);
+  aspect-ratio: 363 / 179;
+  background: var(--text);
+  opacity: 0.06;
+  transform: rotate(-8deg);
+  pointer-events: none;
+  -webkit-mask: url('assets/logo-watermark.webp') center / contain no-repeat;
+  mask: url('assets/logo-watermark.webp') center / contain no-repeat;
+}
+
+.pass-main > * { position: relative; }
+
+.pass-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed rgba(var(--line-rgb), 0.22);
+}
+
+.pass-tag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pass-tag-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--accent);
+  color: var(--on-accent);
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 12px;
+  flex: none;
+}
+.pass-tag-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--text-3);
+}
+
+.pass-live {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--accent-text);
+}
+.pass-live-icon {
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+  background: #2d8cff;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+}
+.pass-live-word {
+  font-family: var(--display);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.pass-body {
+  padding: 22px 0 20px;
+  border-bottom: 1px dashed rgba(var(--line-rgb), 0.22);
+}
+.pass-hello {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--text-4);
+}
+.pass-title {
+  margin: 7px 0 0;
+  font-family: var(--display);
+  font-size: clamp(21px, 5vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.pass-sub {
+  margin: 5px 0 0;
+  font-size: 13.5px;
+  color: var(--text-3);
+}
+
+.pass-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 18px;
+  padding-top: 20px;
+}
+.pass-field { display: flex; flex-direction: column; gap: 5px; }
+.pass-field dt {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--text-4);
+}
+.pass-field dd {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+/* The tear-off. Two circles punched out of the seam sell the perforation;
+   they are painted in the page background, so they only work over --bg. */
+.pass-stub {
+  position: relative;
+  background: var(--surface-2);
+  padding: 26px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  border-left: 2px dashed rgba(var(--line-rgb), 0.24);
+}
+.pass-stub::before,
+.pass-stub::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--bg);
+  left: -11px;
+}
+.pass-stub::before { top: -11px; }
+.pass-stub::after { bottom: -11px; }
+
+.pass-stub-label {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--text-4);
+}
+.pass-stub-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.pass-stub-note {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ---------- WhatsApp / calendar buttons ---------- */
+
+.btn-wa {
+  background: var(--whatsapp);
+  color: var(--whatsapp-ink);
+  padding: 11px 14px;
+  font-size: 13px;
+  box-shadow: 0 1px 3px rgba(37, 211, 102, 0.3);
+}
+.btn-wa:hover { background: var(--whatsapp-hover); color: var(--whatsapp-ink); }
+
+.btn-cal {
+  background: var(--gcal);
+  color: #fff;
+  padding: 11px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.35);
+}
+.btn-cal:hover { background: var(--gcal-hover); color: #fff; }
+
+.btn-pill { border-radius: 999px; padding: 8px 16px; font-size: 12.5px; flex: none; }
+
+/* The calendar card offers both: the Google template link, and the file
+   Apple Calendar and Outlook actually want. */
+.quick-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+
+.btn-ics {
+  border: 1px solid rgba(var(--line-rgb), 0.2);
+  background: var(--surface);
+  color: var(--text-2);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 8px 12px;
+}
+.btn-ics:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- Quick actions ---------- */
+
+.quick {
+  padding-top: 34px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 14px;
+}
+.quick-card {
+  border: 1px solid rgba(var(--line-rgb), 0.12);
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 1px 2px rgba(var(--line-rgb), 0.06);
+}
+.quick-lead { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.quick-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--whatsapp);
+  flex: none;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 1px 3px rgba(37, 211, 102, 0.35);
+}
+.quick-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.quick-text p {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+.quick-text span { font-size: 11.5px; color: var(--text-3); }
+
+/* Torn-off desk-calendar tile: blue header bar over the date. */
+.cal-tile {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid rgba(20, 19, 16, 0.12);
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(20, 19, 16, 0.12);
+}
+.cal-tile-bar { height: 8px; background: var(--gcal); }
+.cal-tile-day {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+/* ---------- One-time-offer strip (/tycontent101 only) ---------- */
+
+.oto-strip-band { padding-top: 16px; }
+
+.oto-strip {
+  position: relative;
+  overflow: hidden;
+  border: 2px dashed var(--accent);
+  border-radius: 18px;
+  background: var(--accent-wash);
+  padding: clamp(18px, 4vw, 22px) clamp(16px, 4vw, 26px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.oto-strip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(520px 220px at 20% 0%, rgba(var(--accent-rgb), 0.1), transparent 70%);
+}
+.oto-strip > * { position: relative; }
+
+.oto-strip-copy { max-width: 46ch; }
+.oto-strip-kicker {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--accent-text);
+}
+.oto-strip-title {
+  margin: 8px 0 4px;
+  font-family: var(--display);
+  font-size: clamp(18px, 4.4vw, 22px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+.oto-strip-body {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--text-3);
+  line-height: 1.55;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 7px; list-style: none; margin: 0; padding: 0; }
+.chips li {
+  border: 1px solid rgba(var(--line-rgb), 0.16);
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.oto-strip-buy { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.oto-clock { display: flex; flex-direction: column; gap: 7px; align-items: center; }
+.oto-clock-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--text-4);
+}
+.oto-clock-units { display: flex; gap: 6px; }
+.oto-unit {
+  min-width: 52px;
+  border: 1px solid rgba(var(--line-rgb), 0.14);
+  background: var(--surface);
+  border-radius: 9px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+}
+.oto-unit b {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.oto-unit span {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: var(--text-4);
+}
+
+.oto-price { display: flex; flex-direction: column; gap: 7px; align-items: center; }
+.oto-mrp {
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-3);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+/* ---------- Also unlocked (/tybundle only) ---------- */
+
+.unlocked-band { padding-top: 26px; }
+
+.unlocked {
+  border: 1px solid rgba(var(--line-rgb), 0.14);
+  border-radius: 18px;
+  background: var(--accent-wash);
+  padding: clamp(18px, 4vw, 24px) clamp(16px, 4vw, 26px);
+}
+.unlocked-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.unlocked-kicker {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--accent-text);
+}
+.unlocked-title {
+  margin: 8px 0 0;
+  font-family: var(--display);
+  font-size: clamp(19px, 4.4vw, 24px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+.unlocked-note {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--text-3);
+  max-width: 40ch;
+  line-height: 1.55;
+}
+.unlocked-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
+  gap: 12px;
+}
+.unlocked-list li {
+  border: 1px solid rgba(var(--line-rgb), 0.12);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.unlocked-num {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent-text);
+  background: var(--accent-soft);
+  border-radius: 9px;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: grid;
+  place-items: center;
+}
+.unlocked-item { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.unlocked-item p {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+.unlocked-item span {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--text-4);
+}
+
+/* ---------- Learning portal ---------- */
+
+.portal-band { padding-top: 34px; }
+.portal-head {
+  margin: 10px 0 18px;
+  font-family: var(--display);
+  font-size: clamp(21px, 5vw, 28px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+.portal-card {
+  border: 1px solid rgba(var(--line-rgb), 0.12);
+  border-radius: 18px;
+  background: var(--surface);
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+.portal-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--accent-soft);
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+}
+.portal-card h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.portal-card p { margin: 0; font-size: 14.5px; color: var(--text-3); line-height: 1.6; }
+.portal-fine {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--text-4);
+  line-height: 1.6;
+}
+
+/* What is actually waiting in the portal. The Zoom link is first because on
+   the day it is the only line that matters. */
+.portal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.portal-list li {
+  display: flex;
+  gap: 11px;
+  font-size: 14.5px;
+  color: var(--text-3);
+  line-height: 1.6;
+}
+.portal-list li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  flex: none;
+}
+.portal-list b { color: var(--text); font-weight: 700; }
+
+.portal-card .btn { margin-top: 4px; }
+.portal-card strong { color: var(--text); font-weight: 700; }
+
+/* Sign-in pill: the portal address shown as an address, with the action
+   attached. Reads as somewhere to go rather than a generic button. */
+.portal-btn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 2px;
+  border: 1px solid rgba(var(--line-rgb), 0.18);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 11px 18px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 14.5px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.portal-btn:hover { border-color: var(--accent); background: var(--surface); color: var(--text); }
+.portal-btn svg { flex: none; color: var(--accent-text); }
+
+/* Solid rather than tinted: the portal is open, so this reads as a state the
+   reader can act on rather than another date to wait out. */
+.portal-btn-tag {
+  margin-left: 2px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--on-panel);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+}
+
+/* ---------- Support + referral ---------- */
+
+.strip-band { padding-top: 34px; }
+.strip-band:last-of-type { padding-bottom: 80px; }
+
+.strip {
+  border: 1px solid rgba(var(--line-rgb), 0.14);
+  border-radius: 16px;
+  background: var(--surface-2);
+  padding: clamp(18px, 4vw, 22px) clamp(18px, 4vw, 26px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.strip p { margin: 0; font-size: 15px; color: var(--text-2); line-height: 1.6; max-width: 62ch; }
+
+/* The WhatsApp mark stays brand-green on the outline button, so the number
+   is recognisably a WhatsApp number and not a phone line. */
+.btn-outline--wa { gap: 10px; font-variant-numeric: tabular-nums; }
+.btn-outline--wa svg { flex: none; color: var(--whatsapp); }
+
+.strip-card {
+  border: 1px solid rgba(var(--line-rgb), 0.12);
+  border-radius: 18px;
+  background: var(--surface);
+  padding: clamp(18px, 4vw, 26px) clamp(18px, 4vw, 30px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.strip-card h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.strip-card p { margin: 6px 0 0; font-size: 14.5px; color: var(--text-3); line-height: 1.6; max-width: 48ch; }
+
+/* ---------- Narrow ---------- */
+
+@media (max-width: 640px) {
+  /* The stub drops below the pass, so the perforation and its punched
+     circles rotate with it. */
+  .pass { grid-template-columns: 1fr; }
+  .pass-stub { border-left: none; border-top: 2px dashed rgba(var(--line-rgb), 0.24); }
+  .pass-stub::before { top: -11px; }
+  .pass-stub::after { top: -11px; bottom: auto; left: auto; right: -11px; }
+
+  .oto-strip-buy { width: 100%; justify-content: space-between; }
+  .quick-card { flex-wrap: wrap; }
+  .quick-actions { width: 100%; }
+  .quick-actions .btn-cal { flex: 1; }
+  .strip .btn, .strip-card .btn { width: 100%; }
+}

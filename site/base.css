@@ -1,0 +1,487 @@
+/* ===========================================================
+   Shared foundation for the Content Creation for Beginners funnel:
+   self-hosted type, the KK palette, and the few primitives both the
+   thank-you pages and the one-time-offer page use.
+
+   Self-hosted type was two hops to two third parties: a render-blocking
+   stylesheet on fonts.googleapis.com, and only then the woff2 files on
+   fonts.gstatic.com. Served from here they are same-origin and
+   discoverable immediately.
+
+   Both subsets are declared per weight; the browser fetches only the ones
+   a page actually needs. latin-ext matters because the rupee sign
+   (U+20B9) is not in the latin subset.
+
+   The Claude Design bundle set the offer page in Outfit. It is served
+   here in Space Grotesk and Manrope instead — the faces the rest of KK
+   Create already ships — so the funnel reads as one brand and no page
+   pays for a fifth family.
+   =========================================================== */
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-400-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-500-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-500-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-700-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('assets/fonts/jetbrains-mono-700-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/manrope-400-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/manrope-400-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/manrope-500-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/manrope-500-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/manrope-600-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/manrope-600-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('assets/fonts/manrope-700-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('assets/fonts/manrope-700-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/poppins-400-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/poppins-400-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/poppins-500-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/poppins-500-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/poppins-600-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/poppins-600-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/space-grotesk-500-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/space-grotesk-500-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/space-grotesk-600-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/space-grotesk-600-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('assets/fonts/space-grotesk-700-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('assets/fonts/space-grotesk-700-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ===========================================================
+   Palette — the "KK" light theme from the design bundle.
+
+   The bundle carried nine themes and a dark mode behind a swatch row in
+   its header. That row is canvas chrome for picking a look, not part of
+   the page, so only the chosen theme ships.
+   =========================================================== */
+
+:root {
+  color-scheme: light;
+
+  --bg: #faf8f3;
+  --surface: #fff;
+  --surface-2: #f4f8f6;
+  --header-bg: rgba(250, 248, 243, 0.92);
+
+  --text: #12222e;
+  --text-2: #3f5361;
+  --text-3: #63757f;
+  --text-4: #8a969d;
+
+  /* Hairlines and shadows are all rgba() off this one navy, so borders
+     stay in the same family as the panels rather than going grey. */
+  --line-rgb: 13, 69, 110;
+
+  --accent: #cc2229;
+  --accent-hover: #e03a41;
+  --accent-text: #0d456e;
+  --accent-soft: #d9f7ea;
+  --accent-wash: #fdf2f1;
+  --accent-rgb: 204, 34, 41;
+  --on-accent: #fff;
+
+  --panel: #0d456e;
+  --panel-2: #0a3557;
+  --panel-hover: #145a8c;
+  --on-panel: #eef6fb;
+  --on-panel-muted: #cfe2ee;
+  --on-panel-muted-2: #8fb0c7;
+
+  /* The action colour on navy. Red on navy is unreadable, so every CTA
+     sitting on a panel is lime instead. */
+  --lime: #a8e02a;
+  --lime-soft: #c8ef7e;
+
+  --whatsapp: #25d366;
+  --whatsapp-hover: #1fbb59;
+  --whatsapp-ink: #0a2e18;
+  --gcal: #1a73e8;
+  --gcal-hover: #1765cc;
+
+  --sans: Manrope, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --display: 'Space Grotesk', Manrope, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ui: Poppins, Manrope, system-ui, sans-serif;
+
+  --wrap: 1020px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Every element these pages hide at runtime — the spent countdown, the
+   hours unit at under an hour, the join button before its link exists — is
+   also given `display: flex` or `block` by a class. A bare [hidden] loses
+   that specificity fight and the element stays visible, so it is forced
+   here once rather than guarded at each call site. */
+[hidden] { display: none !important; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent-text); text-decoration: none; }
+a:hover { color: var(--accent-hover); }
+
+img { max-width: 100%; }
+
+/* Every page is a stack of centred bands, so the width and the gutter are
+   set once here rather than on each section. */
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding-inline: clamp(14px, 4vw, 24px);
+}
+
+.kicker {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--text-4);
+  text-transform: uppercase;
+}
+
+/* Brand tile. The mark is cropped above the "create" wordmark — at 28-30px
+   the wordmark is unreadable and "KK Create" is already set beside it. */
+.brand { display: flex; align-items: center; gap: 10px; }
+
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--panel);
+  display: grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+}
+.brand-mark img { width: 19px; height: auto; display: block; }
+
+.brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+.brand-name {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.brand-kicker {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--text-4);
+}
+
+/* Buttons are shared because the same three shapes appear on all three
+   pages: the red primary, the lime one for navy panels, and the outline. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  font-family: var(--ui);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--on-accent);
+  padding: 13px 26px;
+  font-weight: 700;
+  font-size: 15.5px;
+}
+.btn-accent:hover { background: var(--accent-hover); color: var(--on-accent); }
+
+.btn-lime {
+  background: var(--lime);
+  color: var(--panel);
+  padding: 17px 42px;
+  font-weight: 700;
+  font-size: 17px;
+  border-radius: 14px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+}
+.btn-lime:hover { background: #b8ef3a; color: var(--panel); transform: translateY(-2px); }
+
+.btn-outline {
+  border: 1px solid rgba(var(--line-rgb), 0.2);
+  color: var(--text);
+  padding: 13px 24px;
+  font-size: 15px;
+  background: transparent;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ===========================================================
+   Action-button light sweep
+
+   A highlight that travels across the button face on a loop. Lives here
+   rather than per page because the same effect covers buttons declared in
+   ty.css, oto.css and livelink.css — those selectors simply do not match
+   on the pages that lack them.
+
+   The sweep is a background-position animation on ::after rather than a
+   child element that slides, so it is clipped by `border-radius: inherit`
+   and works on the pill, rounded and square buttons alike without
+   `overflow: hidden`. Nothing here touches box-shadow, so each button keeps
+   whatever resting shadow it declares for itself.
+   =========================================================== */
+
+.btn-accent,
+.btn-lime,
+.btn-wa,
+.btn-cal,
+.btn-outline,
+.ll-join {
+  --sheen: rgba(255, 255, 255, 0.85);
+  position: relative;
+}
+.btn-accent::after,
+.btn-lime::after,
+.btn-wa::after,
+.btn-cal::after,
+.btn-outline::after,
+.ll-join::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: linear-gradient(105deg, transparent 42%, var(--sheen) 50%, transparent 58%);
+  /* The streak is 16% of the image wide, so at 260% it spans ~42% of the
+     button and both keyframe endpoints park it a clear ~9% beyond the edge.
+     Narrower than this and a sliver is still showing when the loop
+     restarts, which reads as the streak teleporting back across. */
+  background-size: 260% 100%;
+  background-repeat: no-repeat;
+  animation: btn-light-sweep 2.8s ease-in-out infinite;
+}
+
+/* Outline button on cream: a white streak would be invisible. */
+.btn-outline { --sheen: rgba(var(--line-rgb), 0.07); }
+
+/* The quiet buttons hold still. One shining thing per row is the point —
+   the .ics link and the portal sign-in pill are alternatives to the main
+   action, not the action. Removing the pseudo rather than hiding it also
+   stops the animation running. */
+.btn-ics::after,
+.portal-btn::after { content: none; }
+
+/* The streak crosses in the first 85% of the loop, then waits — a
+   continuous sweep with no beat between passes reads as a flicker rather
+   than a shine. The ease-in-out also lands the streak at a standstill
+   before the hold, so nothing stops abruptly. */
+@keyframes btn-light-sweep {
+  0%        { background-position: 100% 0; }
+  85%, 100% { background-position: 0% 0; }
+}
+
+/* Keyboard focus has to survive on cream, white and navy alike. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.on-panel :focus-visible { outline-color: var(--lime); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  /* The sweep is decoration — remove it rather than freezing it mid-pass. */
+  .btn-accent::after,
+  .btn-lime::after,
+  .btn-wa::after,
+  .btn-cal::after,
+  .btn-outline::after,
+  .ll-join::after { content: none; }
+}

@@ -1,0 +1,550 @@
+/* ===========================================================
+   The one-time offer page (/ccboto): the Complete Creator Bundle,
+   reached from the offer strip on /tycontent101.
+
+   Written for someone who has just paid for a seat, so it opens by
+   confirming that rather than selling it again.
+   =========================================================== */
+
+.oto-body {
+  /* Clears the fixed offer bar so the footer is never trapped behind it.
+     oto.js measures the bar and tightens this; the value here is the
+     no-JS floor, so it errs on the generous side. */
+  padding-bottom: 100px;
+}
+
+/* Body copy on navy sits between --on-panel and --on-panel-muted-2: light
+   enough to read at 15.5px, quiet enough that the lime CTA still leads. */
+:root { --panel-body: #a8c4d8; }
+
+.oto-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-inline: clamp(16px, 4vw, 28px);
+}
+
+/* ---------- Header ---------- */
+
+.oto-header { padding-block: 18px; border-bottom: 1px solid #e7eef0; }
+.oto-header .brand-mark { width: 36px; height: 36px; border-radius: 10px; background: var(--text); }
+.oto-header .brand-mark img { width: 23px; }
+.oto-header .brand-kicker { letter-spacing: 0.16em; font-size: 9.5px; text-transform: uppercase; color: var(--text-3); }
+
+/* ---------- Shared navy panel ---------- */
+
+.panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 26px;
+  color: #fff;
+  background-color: var(--panel);
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.028) 0 2px, transparent 2px 7px),
+    radial-gradient(120% 90% at 50% 0%, var(--panel-hover) 0%, var(--panel) 55%, var(--panel-2) 100%);
+}
+
+/* ---------- Hero ---------- */
+
+.hero-band { padding-top: 26px; }
+.hero { padding: clamp(30px, 5vw, 44px) clamp(20px, 4vw, 40px) clamp(34px, 5vw, 48px); text-align: center; }
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-soft);
+  color: var(--panel);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.hero-badge i {
+  display: inline-grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--panel);
+  color: var(--accent-soft);
+  font-size: 9px;
+  font-weight: 700;
+  font-style: normal;
+  flex: none;
+}
+
+.hero h1 {
+  margin: 20px auto 14px;
+  max-width: 900px;
+  font-family: var(--display);
+  font-size: clamp(30px, 6vw, 48px);
+  line-height: 1.12;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-wrap: balance;
+}
+.hero-lead {
+  margin: 0 auto 12px;
+  max-width: 680px;
+  font-size: clamp(16px, 2.4vw, 19px);
+  font-weight: 500;
+  color: var(--lime-soft);
+}
+/* The detail, below the CTAs rather than above them. Someone still reading
+   at this point has already met the offer and wants the specifics, so it is
+   set as fine print — big body copy between the headline and the buy button
+   just pushes the decision further down the page. The rule marks it off as a
+   footnote to the panel rather than another thing to read first. */
+.hero-body {
+  margin: 26px auto 0;
+  max-width: 560px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--on-panel-muted-2);
+  text-wrap: pretty;
+}
+
+/* The four covers, fanned. Each is nudged off true so the row reads as a
+   stack of physical things rather than four pasted rectangles. */
+.covers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  align-items: end;
+  justify-items: center;
+  max-width: 940px;
+  margin: 6px auto 34px;
+}
+.covers img {
+  height: clamp(140px, 20vw, 250px);
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 26px 30px rgba(0, 0, 0, 0.42));
+  transition: transform 0.25s ease;
+}
+.covers img:nth-child(1) { transform: rotate(-2.5deg); }
+.covers img:nth-child(2) { transform: rotate(1.5deg) translateY(10px); }
+.covers img:nth-child(3) { transform: rotate(-1.5deg) translateY(10px); }
+.covers img:nth-child(4) { transform: rotate(2.5deg); }
+.covers img:hover { transform: rotate(0deg) translateY(-6px); }
+
+.hero-clock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+}
+.hero-clock-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--on-panel-muted-2);
+}
+.hero-clock-units { display: flex; gap: 8px; }
+.hero-unit {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 8px 14px;
+  min-width: 60px;
+  text-align: center;
+}
+.hero-unit b {
+  display: block;
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.05;
+  color: #fff;
+}
+.hero-unit span {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--on-panel-muted-2);
+}
+
+/* The way out. Quiet, but never hidden — a one-time offer with no visible
+   decline reads as a trap. */
+.decline {
+  display: block;
+  font-size: 14px;
+  color: var(--panel-body);
+  text-decoration: underline;
+  margin-top: 18px;
+}
+.decline:hover { color: #fff; }
+
+/* ---------- Section headings ---------- */
+
+.sec { padding-top: clamp(40px, 6vw, 64px); }
+.sec-kicker {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.sec h2 {
+  margin: 10px 0 26px;
+  font-family: var(--display);
+  font-size: clamp(26px, 4.6vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.sec-intro {
+  margin: 0 0 28px;
+  font-size: 16px;
+  color: var(--text-3);
+  max-width: 640px;
+  line-height: 1.7;
+}
+
+/* ---------- What you get ---------- */
+
+.learn {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.learn li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--surface);
+  border: 1px solid #e7eef0;
+  border-radius: 16px;
+  padding: 20px 22px;
+}
+.learn-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  flex: none;
+}
+.learn b { display: block; font-size: 16px; font-weight: 600; color: var(--text); }
+.learn span { display: block; font-size: 13.5px; color: var(--text-3); margin-top: 3px; }
+
+.learn-close {
+  margin: 26px 0 0;
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 600;
+}
+
+/* ---------- Trust bar ---------- */
+
+.trust-band { padding-top: 44px; }
+.trust {
+  background: var(--surface);
+  border: 1px solid #e7eef0;
+  border-radius: 20px;
+  padding: 32px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.trust > div { padding-inline: 28px; }
+.trust > div:first-child { padding-left: 0; }
+.trust > div:last-child { padding-right: 0; }
+.trust > div + div { border-left: 1px solid #e7eef0; }
+.trust h3 {
+  margin: 0 0 8px;
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 700;
+}
+.trust p { margin: 0; font-size: 14px; color: var(--text-3); line-height: 1.65; }
+
+/* ---------- FAQ ---------- */
+
+.faq { display: flex; flex-direction: column; gap: 12px; }
+.faq details {
+  background: var(--surface);
+  border: 1px solid #e7eef0;
+  border-radius: 16px;
+  padding: 20px 24px;
+}
+.faq summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--display);
+  font-size: 16.5px;
+  font-weight: 600;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: '+';
+  font-family: var(--mono);
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 700;
+  flex: none;
+}
+.faq details[open] summary::after { content: '\2212'; }
+.faq p {
+  margin: 12px 0 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--text-3);
+  max-width: 760px;
+}
+
+/* ---------- Offer card ---------- */
+
+.offer-band { padding-top: 44px; }
+.offer {
+  padding: clamp(30px, 5vw, 48px) clamp(20px, 4vw, 44px);
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  align-items: center;
+}
+.offer h2 {
+  margin: 0 0 14px;
+  font-family: var(--display);
+  font-size: clamp(25px, 4.4vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #fff;
+}
+.offer > div:first-child p { margin: 0; font-size: 15.5px; color: var(--panel-body); line-height: 1.7; }
+
+.offer-card {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  padding: 28px;
+}
+.offer-list {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.offer-list li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14.5px;
+  color: var(--on-panel);
+}
+.offer-list li::before { content: '\2713'; color: var(--lime); font-weight: 700; flex: none; }
+.offer-card .btn-lime { width: 100%; font-size: 16px; padding: 17px 28px; }
+.offer-card .decline { text-align: center; font-size: 13.5px; margin-top: 14px; }
+
+/* ---------- The four sessions ---------- */
+
+.sessions { display: flex; flex-direction: column; gap: 18px; }
+.session {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(20px, 3vw, 36px);
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid #e7eef0;
+  border-radius: 22px;
+  padding: 28px clamp(20px, 3vw, 32px);
+}
+/* Alternate which side the cover sits on, so four near-identical rows do
+   not read as one repeating block. */
+.session:nth-child(even) { grid-template-columns: 1.15fr 0.85fr; }
+.session:nth-child(even) figure { order: 2; }
+
+.session figure {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+.session figure img {
+  height: clamp(200px, 26vw, 290px);
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 22px 28px rgba(21, 32, 43, 0.22));
+}
+
+.session-chip {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-wash);
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+.session h3 {
+  margin: 14px 0 8px;
+  font-family: var(--display);
+  font-size: clamp(22px, 3.4vw, 27px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.session-lead {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+.session ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+.session ul li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14.5px;
+  color: var(--text-3);
+  line-height: 1.6;
+}
+.session ul li::before { content: '+'; color: var(--accent); font-weight: 700; flex: none; }
+
+/* ---------- Footer ---------- */
+
+.oto-footer { padding: 38px 0 26px; }
+.oto-footer .brand-mark { width: 28px; height: 28px; background: var(--text); }
+.oto-footer .brand-mark img { width: 18px; }
+.oto-footer .brand-name { font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--text-3); }
+
+/* ---------- Fixed offer bar ---------- */
+
+/* Tucked away until the hero's own CTA has been scrolled past. Note the
+   default here is visible and JS does the hiding: if the script never runs
+   the bar behaves exactly as it always did, because a one-time offer whose
+   only persistent CTA fails closed is worse than one that shows too eagerly.
+
+   visibility rather than display, so the bar keeps its box and
+   trackBarHeight() can still measure it while it is out of sight — and so
+   it leaves the tab order while it is hidden. */
+.bar.is-tucked {
+  transform: translateY(110%);
+  visibility: hidden;
+}
+
+.bar {
+  position: fixed;
+  transition: transform 0.3s ease, visibility 0.3s;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  background: var(--panel-2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px clamp(16px, 4vw, 28px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.bar-copy {
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--on-panel-muted);
+}
+.bar-clock { font-family: var(--mono); color: var(--lime); font-weight: 700; }
+.bar-actions { display: flex; align-items: center; gap: 18px; }
+.bar .btn-lime {
+  padding: 10px 24px;
+  font-size: 14.5px;
+  font-weight: 600;
+  border-radius: 12px;
+  box-shadow: none;
+}
+.bar .decline { margin-top: 0; font-size: 13px; white-space: nowrap; }
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .learn { grid-template-columns: 1fr; }
+  .offer { grid-template-columns: 1fr; gap: 28px; }
+  .trust { grid-template-columns: 1fr; padding: 24px; }
+  .trust > div { padding: 0; }
+  .trust > div + div { border-left: none; border-top: 1px solid #e7eef0; padding-top: 20px; margin-top: 20px; }
+
+  /* Stacked, the cover always leads — a heading with no picture above it
+     loses the thing being sold. */
+  .session,
+  .session:nth-child(even) { grid-template-columns: 1fr; }
+  .session:nth-child(even) figure { order: 0; }
+}
+
+@media (max-width: 620px) {
+  /* Four across on a phone too, scaled down rather than wrapped. A 2x2 grid
+     costs roughly a full screen of height and pushes the CTA below the fold;
+     the covers are here to be recognised at a glance, not read, so the row
+     is the thing worth keeping and the size is what gives. The breakdown
+     further down the page is where they get shown properly.
+
+     Pulled out past the panel padding, because at this width every pixel
+     between the boxes is the difference between four covers and four
+     stamps. */
+  .covers {
+    gap: 5px;
+    margin: 2px -6px 22px;
+  }
+  /* Sized by the cell rather than by a shared height: at four across on a
+     narrow screen the height has to follow whatever width is left over, and
+     the covers' four different aspect ratios then give four slightly
+     different heights, which align-items: end stands on one baseline. */
+  .covers img {
+    height: auto;
+    width: 100%;
+    filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.4));
+  }
+  /* The fan, scaled to the smaller boxes. A 10px nudge reads as a stack at
+     250px tall and as a misalignment at 90px. */
+  .covers img:nth-child(2) { transform: rotate(1.5deg) translateY(4px); }
+  .covers img:nth-child(3) { transform: rotate(-1.5deg) translateY(4px); }
+  /* Stacked, the bar is three rows deep, so its padding and gaps are what
+     decide how much of the page it eats. Tightened here rather than in the
+     base rule, where the row is single-line and the breathing room reads as
+     deliberate. */
+  .bar {
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    padding-top: 8px;
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  .bar-copy { justify-content: center; font-size: 13px; }
+  .bar-actions { width: 100%; flex-direction: column; gap: 6px; }
+  .bar .btn-lime { width: 100%; }
+  .bar .decline { font-size: 12.5px; }
+  /* Tall enough for the stacked bar on its own, because JS only ever
+     tightens this — if the script never runs, nothing is clipped. */
+  .oto-body { padding-bottom: 190px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar { transition: none; }
+}

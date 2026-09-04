@@ -1,0 +1,15 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ccb-site",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-c",
+        "import os; os.chdir('/Users/shubhamsinha/Documents/GitHub/Content_Creation_Workshop_LP/site'); import http.server as h, socketserver as s; s.TCPServer.allow_reuse_address = True; s.TCPServer(('', int(os.environ.get('PORT', '4322'))), h.SimpleHTTPRequestHandler).serve_forever()"
+      ],
+      "autoPort": true,
+      "port": 4322
+    }
+  ]
+}

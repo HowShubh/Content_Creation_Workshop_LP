@@ -10,10 +10,10 @@ page used to be a TagMango page-builder site at
 HTML at the same design, so there is one place to change a price or a date.
 
 The workshop is **live on Sunday 20 September 2026, 12:00–4:00 PM IST, on
-Zoom**. These pages are date-dependent: the date appears in the boarding pass,
-the calendar card and the stub note in both thank-you pages' markup, and as
-the calendar event in `site/ty.js`. Grep for `20 Sept` and `20260920` to find
-all of it.
+Zoom**. These pages are date-dependent: the date appears in the landing page's
+hero badge, in the boarding pass, the calendar card and the stub note in both
+thank-you pages' markup, and as the calendar event in `site/ty.js`. Grep for
+`20 Sept` and `20260920` to find all of it.
 
 Static HTML/CSS/JS — no build step, no dependencies.
 
@@ -69,6 +69,11 @@ workshop checkout, which is the only link on the page:
 `https://learn.kkcreate.in/web/checkout/69e0756c8bbbb4097a59d0d3`. Change it
 in `site/index.html`; it is written out at each button rather than injected,
 so the page needs no script to be clickable.
+
+**The date is on it twice over.** The hero badge reads `12:00PM | 20 Sept
+(Sunday)` and the three facts beside it say the workshop is live, 3+ hours,
+on Zoom. That is the same session `ty.js`, the boarding pass and the .ics
+describe, so all of it moves together — grep for `20 Sept` and `20260920`.
 
 Every page is noindexed — see Deploying below.
 
@@ -154,33 +159,57 @@ every section, each hidden at the other width — which is why the exported
 HTML contains every testimonial and every FAQ answer twice. Here the layout
 changes at 900px and the copy exists once, so the two cannot drift apart.
 
-**Three behaviours, in `site/home.js`.** The modules and the FAQ open one row
+**Four behaviours, in `site/home.js`.** The modules and the FAQ open one row
 at a time; the testimonial strip scrolls by its arrows as well as by finger;
-and the sticky enrol bar arrives once the hero's own button has scrolled
-away, so there are never two of the same button on screen. None of the three
-is load-bearing: with scripting off every panel is shut but every word is in
-the markup, the strip still scrolls, and the bar reveals itself below.
+a poster becomes a player on click; and the sticky enrol bar arrives once the
+hero's own button has scrolled away, so there are never two of the same
+button on screen. With scripting off every panel is shut but every word is in
+the markup, the strip still scrolls, and the bar reveals itself below — the
+one thing that needs script is playing a clip, which is the trade that keeps
+Vimeo off the page until someone wants it.
 
-Two things the original loaded from third parties are gone. Swiper drove the
-testimonial carousel; it is now a `scroll-snap` strip, which is the same
-gesture with no library. Material Icons supplied the accordion chevrons and
-Font Awesome the check marks; those are inline SVG now. What is still
-third-party is the nine testimonial `<iframe>`s on Vimeo — they are
-`loading="lazy"`, so nothing loads until the strip is nearly in view.
+**Nothing on the page is third-party.** Swiper drove the testimonial
+carousel; it is a `scroll-snap` strip now, the same gesture with no library.
+Material Icons supplied the accordion chevrons and Font Awesome the check
+marks; those are inline SVG.
+
+The nine Vimeo clips are the interesting one. `loading="lazy"` does not save
+this page: all nine slides sit at the same height, so the moment the strip
+scrolls into view the browser loads every player — several hundred KB apiece
+before one of them paints a frame. Each clip sits behind its own poster
+instead (Vimeo's own thumbnail, served from here), and `home.js` swaps in the
+real player, already playing, on the first click. Until someone presses one,
+the page makes no request off this origin at all.
+
+The five bands below the certificate carry `content-visibility: auto`, so
+they are laid out and painted only as they come near the viewport. Each has a
+`contain-intrinsic-size: auto <height>px` placeholder for the first pass;
+`auto` makes the browser remember the real height afterwards, so scrolling
+back up does not jump. `.lp-learn` and `.lp-cert` are deliberately left out —
+the modules image is `position: sticky`, and containment would strand it.
 
 ### Its assets
 
 `site/assets/home/` holds everything the page draws, pulled from
 `tagmango.com/staticassets` and converted. The photographs were 1MB–3MB PNGs
 at up to 3037px for a box a third that wide; they are WebP at 2x their
-largest rendered size, which took the page's images from ~11MB to ~700KB.
+largest rendered size. The whole page — every image, font and stylesheet,
+above the fold and below — is under 600KB and makes no third-party request.
 
-Seven of the logos and social icons were Figma SVG exports that only wrapped
-a full-size PNG in a `<pattern>`. Those are plain `.webp` now — the Instagram
-one alone was 457KB for a 42px icon. `brand-itc.svg` is the exception and is
-still an SVG, because it crops one sprite twice (the mark and the wordmark)
-and the two rects are what compose the logo; its embedded raster was
-re-encoded small in place.
+Eight of the logos and social icons were Figma SVG exports that only wrapped
+a full-size PNG in a `<pattern>`, which is a slow way to ship a raster. Those
+are plain `.webp`: the Instagram one alone was 457KB for a 42px icon, and ITC
+was 30KB for one sprite the SVG cropped twice, which is now the two `.webp`
+files the tile actually shows.
+
+The three hand-drawn heading rules were 36KB apiece of path data at full
+float precision. `svgo --precision=1` takes each to ~2.5KB, which is more
+than enough for a 258x9 squiggle.
+
+The nine `tst-*.webp` are Vimeo's thumbnails for the testimonial clips,
+fetched through its oEmbed API and re-encoded at 440px. They sit behind a
+play button, so they are sized for that rather than for a full-quality
+photograph.
 
 **The rupee sign matters for the fonts.** ₹ (U+20B9) is in the latin-ext
 subset, not latin, and this page sets prices in both Manrope and Poppins —

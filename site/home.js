@@ -1,11 +1,15 @@
 /* Home page (/) — Content Creation for Beginners.
 
-   Three small behaviours, none of which the page depends on to be
+   Four small behaviours, none of which the page depends on to be
    readable: the modules and FAQ open, the testimonial strip scrolls by
-   the arrows as well as by finger, and the sticky enrol bar arrives
-   once the hero has been passed. With scripting off every panel is
-   still shut but every word is in the markup, the strip still scrolls
-   horizontally, and the bar reveals itself below. */
+   the arrows as well as by finger, a poster becomes a player on click,
+   and the sticky enrol bar arrives once the hero has been passed.
+
+   With scripting off every panel is shut but every word is in the
+   markup, the strip still scrolls horizontally, and the bar reveals
+   itself below. The one thing that needs script is playing a clip —
+   which is the trade that keeps Vimeo's player off the page until
+   someone wants it. */
 
 /* ---------- Accordions ----------
 
@@ -78,6 +82,32 @@ document.querySelectorAll('[data-rail]').forEach((rail) => {
   track.addEventListener('scroll', sync, { passive: true });
   window.addEventListener('resize', sync);
   sync();
+});
+
+/* ---------- Testimonial posters ----------
+
+   Each clip sits behind its own poster until someone asks for it.
+   Vimeo's player is several hundred KB of script and CSS before it
+   paints a frame, and `loading="lazy"` does not save the page here:
+   all nine slides share one vertical position, so the whole strip
+   would load the moment it scrolled into view.
+
+   The swap carries `autoplay=1`, because the press that replaced the
+   poster was already the press that meant "play". That counts as a
+   user gesture, so autoplay with sound is allowed. */
+document.querySelectorAll('[data-vimeo]').forEach((poster) => {
+  poster.addEventListener('click', () => {
+    const frame = document.createElement('iframe');
+    frame.src = 'https://player.vimeo.com/video/' + poster.dataset.vimeo +
+                '?title=0&portrait=0&badge=0&autoplay=1';
+    frame.title = poster.getAttribute('aria-label') || 'Student testimonial';
+    frame.allow = 'autoplay; fullscreen; picture-in-picture';
+    frame.allowFullscreen = true;
+    poster.replaceWith(frame);
+    /* The strip is still keyboard-navigable, so focus follows the
+       thing that replaced what was focused. */
+    frame.focus({ preventScroll: true });
+  });
 });
 
 /* ---------- Sticky enrol bar ----------

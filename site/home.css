@@ -63,7 +63,7 @@
   margin: 0;
   font-family: var(--lp-display);
   font-weight: 700;
-  font-size: clamp(28px, 4.4vw, 40px);
+  font-size: 40px;
   line-height: 1.5;
   color: var(--ink);
 }
@@ -185,13 +185,12 @@
 .lp-facts {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
   width: 100%;
-  max-width: 478px;
 }
 
 .lp-fact {
-  flex: 1 1 231px;
+  flex: 1 1 150px;
   min-width: 0;
   display: flex;
   align-items: center;
@@ -203,6 +202,7 @@
 }
 
 .lp-fact svg { width: 20px; height: 20px; margin: 4px; flex: none; color: var(--blue); }
+.lp-fact-live svg { color: var(--red); }
 .lp-fact span { display: block; font-size: 13px; line-height: 1.2; }
 .lp-fact b { display: block; font-size: 16px; font-weight: 700; line-height: 1.5; }
 
@@ -605,6 +605,54 @@
   border: 0;
 }
 
+/* ---------- The poster in front of each clip ----------
+
+   A button, not a div with a click handler, so it is reachable by tab
+   and announces itself. home.js swaps it for the real player on the
+   first press. */
+
+.lp-play {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 473px;
+  padding: 0;
+  border: 0;
+  background: #111;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.lp-play img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.lp-play-mark {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.62);
+  color: #fff;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.lp-play-mark svg { width: 26px; height: 26px; margin-left: 2px; }
+
+.lp-play:hover img { transform: scale(1.03); }
+.lp-play:hover .lp-play-mark,
+.lp-play:focus-visible .lp-play-mark {
+  background: var(--red);
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
 .lp-arrow {
   flex: none;
   display: grid;
@@ -873,6 +921,7 @@
   font-weight: 700;
   font-size: clamp(26px, 3.6vw, 40px);
   line-height: 1.3;
+  text-wrap: balance;
 }
 
 .lp-final-card h2 span {
@@ -966,6 +1015,25 @@
 }
 
 /* ===========================================================
+   Below the fold
+
+   These five bands are laid out and painted only once they are near
+   the viewport, which is most of the page's first-render cost. The
+   sizes are what each measures at 1440px and are only a placeholder
+   for the very first pass — `auto` makes the browser remember the real
+   height afterwards, so the scrollbar does not jump on the way back up.
+
+   Deliberately not on .lp-learn or .lp-cert: the modules image is
+   `position: sticky`, and containment would strand it.
+   =========================================================== */
+
+.lp-tst    { content-visibility: auto; contain-intrinsic-size: auto 675px; }
+.lp-brands { content-visibility: auto; contain-intrinsic-size: auto 217px; }
+.lp-mentor { content-visibility: auto; contain-intrinsic-size: auto 780px; }
+.lp-faq    { content-visibility: auto; contain-intrinsic-size: auto 786px; }
+.lp-foot   { content-visibility: auto; contain-intrinsic-size: auto 279px; }
+
+/* ===========================================================
    Wide-screen and tablet
    =========================================================== */
 
@@ -985,6 +1053,7 @@
 @media (max-width: 900px) {
   .lp-body { padding-bottom: 96px; }
   .lp-wrap { padding-inline: 18px; }
+  .lp-head { font-size: 32px; }
 
   .lp-hero { padding-top: 24px; }
   .lp-hero-card { flex-direction: column; gap: 8px; padding: 24px 16px; }
@@ -1012,8 +1081,8 @@
   .lp-flag svg { width: 26px; height: 26px; }
   .lp-cta { font-size: 20px; }
 
-  .lp-pain-list { flex-direction: column; gap: 4px; }
-  .lp-pain-list li { flex: none; width: 100%; }
+  .lp-pain-list { flex-wrap: wrap; gap: 4px 0; }
+  .lp-pain-list li { flex: 1 1 46%; }
 
   /* Bonus cards turn on their side: art left, copy and price right. */
   .lp-bonus-grid { flex-direction: column; }
@@ -1049,7 +1118,10 @@
   .lp-arrow { width: 44px; height: 44px; }
   .lp-arrow svg { width: 22px; height: 22px; }
   .lp-slide { flex-basis: 200px; }
-  .lp-slide iframe { height: 353px; }
+  .lp-slide iframe,
+  .lp-play { height: 353px; }
+  .lp-play-mark { width: 46px; height: 46px; }
+  .lp-play-mark svg { width: 21px; height: 21px; }
 
   .lp-mentor { padding-block: 24px; }
   .lp-mentor-inner { flex-direction: column; gap: 24px; }
@@ -1063,8 +1135,12 @@
   .lp-faq-list .lp-q > button { padding: 18px; }
   .lp-q-body p { padding: 0 18px 18px; }
 
-  .lp-final-card { gap: 28px; padding: 24px 18px; }
-  .lp-final-card .lp-blob { right: 8%; width: 110px; }
+  .lp-final-card { gap: 24px; padding: 26px 18px; }
+  /* Two lines, not three, and the blur sits in the corner behind them
+     rather than through the middle of the sentence. */
+  .lp-final-card h2 { font-size: 23px; line-height: 1.3; }
+  .lp-final-card h2 span { margin-top: 10px; font-size: 15px; line-height: 1.45; }
+  .lp-final-card .lp-blob { top: auto; bottom: -30px; right: -30px; width: 130px; opacity: 0.7; }
 
   /* The bar has three things and 358px. The cut-out's column is
      narrower than the cut-out, which overhangs it to the right as well
@@ -1084,6 +1160,17 @@
 }
 
 @media (max-width: 560px) {
+  /* 23px is the size at which both of the long headings — "What you'll
+     actually learn?" and "Unlock Bonuses worth ₹9,500" — still set on
+     one line inside a 390px screen's gutters. */
+  .lp-head { font-size: 23px; line-height: 1.25; }
+
+  /* Two-up needs room for three or four words a line. Under this the
+     cards go full width rather than becoming a column of single
+     words. */
+  .lp-pain-list { display: block; }
+  .lp-pain-list li { width: 100%; }
+
   .lp-hero h1 b { font-size: clamp(30px, 9vw, 40px); }
   .lp-facts { gap: 10px; }
   .lp-fact { flex: 1 1 145px; gap: 5px; padding: 6px; }
@@ -1099,6 +1186,7 @@
    flattens transitions and the button sweep. */
 @media (prefers-reduced-motion: reduce) {
   .lp-marquee-track { animation: none; }
+  .lp-play img { transition: none; }
   .lp-sticky { transform: translate(-50%, 0); }
   .lp-track { scroll-behavior: auto; }
 }

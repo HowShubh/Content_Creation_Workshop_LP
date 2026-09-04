@@ -84,6 +84,7 @@ vercel.json               static deploy config — serves site/
 site/
   index.html              the landing page
   home.css / home.js      the landing page's styles and its five behaviours
+  analytics.js            the tags, shared by all five pages
   base.css                self-hosted type, the KK palette, shared primitives
   ty.css / ty.js          both thank-you pages
   oto.css / oto.js        the offer page
@@ -469,6 +470,50 @@ It has three states, driven by `LIVE` at the top of `site/zoomlink.js`:
 
 `LIVE.startsAt` is the same instant as `TY.event.startUtc` in `ty.js`. Keep
 the two in step.
+
+## Analytics
+
+`site/analytics.js` is the one file all five pages share. Everything else in
+this funnel is duplicated per page on purpose — a shared file costs each page
+a request — but this code has to stay identical everywhere for the numbers to
+mean anything, and it is already about to fetch two much larger third-party
+scripts.
+
+Both tags are **injected, not pasted**, so an unset ID makes no request at
+all. That is why the landing page still touches no third party except Clarity:
+
+```js
+const ANALYTICS = {
+  ga4: '',                  // G-XXXXXXXXXX — not yet set
+  clarity: 'yd55hj8iln',
+  metaPixel: ''             // deliberately off
+};
+```
+
+**GA4 wants the measurement ID, not the stream ID.** `Admin > Data streams >`
+your web stream: the `G-XXXXXXXXXX` in the top right, not the numeric ID
+beside it.
+
+**One property for all of kkcreate.in, not a second one for this subdomain.**
+GA4 sets its cookie on the registrable domain, so someone who reads
+kkcreate.in and then lands here is one session and one journey. Two
+properties and that journey disappears — you would see a visit arriving from
+"kkcreate.in / referral" and never know it was the same person.
+
+**Where a Purchase event goes, when Meta goes in.** The payment happens on
+TagMango's domain, so nothing here can observe it directly — a pixel on the
+landing page can only ever fire PageView and InitiateCheckout, neither of
+which is a sale. But TagMango redirects back into this repo afterwards:
+`/ccboto` is where the workshop checkout lands and `/tybundle` is where the
+bundle checkout lands. Those two pages are the funnel's own receipt, so
+that is where Purchase belongs.
+
+Fire it in one place only. If TagMango's own pixel setting is also filled in,
+every sale is counted twice.
+
+No consent banner, matching the page this replaced. That is a decision about
+the business rather than the markup; if it changes, gate the two calls at the
+bottom of `analytics.js`.
 
 ## Still needs real links
 

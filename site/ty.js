@@ -20,9 +20,9 @@ const TY = {
   },
 
   /* ---- The calendar venue -------------------------------------------
-     /livelink, as an absolute URL. Both the Google Calendar link and the
+     /zoomlink, as an absolute URL. Both the Google Calendar link and the
      .ics use it as the venue: the Zoom link does not exist on the day
-     someone saves this event, and /livelink's address never changes, so it
+     someone saves this event, and /zoomlink's address never changes, so it
      is the one venue that is correct weeks early and still correct at noon
      on 20 Sept.
 
@@ -31,9 +31,9 @@ const TY = {
      from a preview host or from behind TagMango's redirect domain, where
      window.location.origin is not the public site.
 
-     KEEP IN STEP WITH tools/make-ics.py (LIVE_LINK_URL), and re-run it
+     KEEP IN STEP WITH tools/make-ics.py (ZOOM_LINK_URL), and re-run it
      after changing either — the .ics is a static file and cannot read this. */
-  liveLinkUrl: '',
+  zoomLinkUrl: 'https://contentcreation.kkcreate.in/zoomlink',
 
   // WhatsApp community. Reminders, the Zoom link on the day, and Q&A.
   whatsappUrl: '',
@@ -50,15 +50,16 @@ const TY = {
   supportNumber: '+91 8700105418',
   supportUrl: 'https://wa.me/918700105418',
 
-  // What the referral button copies. Hard-coded rather than derived from
-  // window.location, so it stays the public landing page even when this
-  // page is opened from a preview host or with tracking params on it.
+  // What the referral button copies: the landing page, plain. Hard-coded
+  // rather than derived from window.location, so it stays the public URL
+  // even when this page is opened from a preview host or with tracking
+  // params on it.
   //
-  // It carries its own UTMs plus ref=student rather than inheriting
-  // whatever brought the buyer here — passing their utm_source on would
-  // credit the referred signup to the referrer's ad, which is the opposite
-  // of the point.
-  referralUrl: '',
+  // It stays opted out of param forwarding (see wire() below). Inheriting
+  // whatever brought the buyer here would credit every referred signup to
+  // the referrer's ad, which is the opposite of the point — so a student
+  // sharing this passes on a clean link.
+  referralUrl: 'https://contentcreation.kkcreate.in',
 
   /* How long the offer stays open per visitor, from the moment they first
      see it — which is normally /ccboto, since that is the page checkout
@@ -108,18 +109,18 @@ function wire(selector, url, opts) {
   });
 }
 
-/* Until /livelink has a public URL the venue says where the link will land
+/* Until /zoomlink has a public URL the venue says where the link will land
    rather than pointing at nothing, so an invite saved today is still useful.
    tools/make-ics.py carries the same pair of strings. */
-const LIVE_LINK_NAME = 'the KK Create live link page';
+const ZOOM_LINK_NAME = 'the KK Create Zoom link page';
 
 function eventVenue() {
-  return TY.liveLinkUrl || 'Zoom — join link on ' + LIVE_LINK_NAME;
+  return TY.zoomLinkUrl || 'Zoom — join link on ' + ZOOM_LINK_NAME;
 }
 
 function eventDetails() {
   return 'Your seat is confirmed.\n\nOn 20 Sept the join button appears on '
-    + (TY.liveLinkUrl || LIVE_LINK_NAME) + '. We also send the link in the '
+    + (TY.zoomLinkUrl || ZOOM_LINK_NAME) + '. We also send the link in the '
     + 'WhatsApp group and to the email you registered with, shortly before '
     + 'we start.';
 }

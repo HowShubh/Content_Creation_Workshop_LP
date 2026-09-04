@@ -7,21 +7,21 @@ change both, then run:  python3 tools/make-ics.py
 """
 import os
 
-# The /livelink page, as an absolute URL: the venue of this event.
+# The /zoomlink page, as an absolute URL: the venue of this event.
 #
 # The Zoom link does not exist on the day this invite is saved, but
-# /livelink's address never changes and the join button appears there, so it
+# /zoomlink's address never changes and the join button appears there, so it
 # is the one venue that is correct weeks early and still correct on the day.
 #
-# KEEP IN STEP WITH TY.liveLinkUrl in site/ty.js, which is where the Google
+# KEEP IN STEP WITH TY.zoomLinkUrl in site/ty.js, which is where the Google
 # Calendar link reads the same value, then re-run this script.
-LIVE_LINK_URL = ''
+ZOOM_LINK_URL = 'https://contentcreation.kkcreate.in/zoomlink'
 
 # Until that URL exists the invite names the page instead of linking it,
 # rather than shipping a venue that points at nothing. Matches the fallback
 # in site/ty.js.
-LIVE_LINK_NAME = 'the KK Create live link page'
-VENUE = LIVE_LINK_URL or 'Zoom - join link on ' + LIVE_LINK_NAME
+ZOOM_LINK_NAME = 'the KK Create Zoom link page'
+VENUE = ZOOM_LINK_URL or 'Zoom - join link on ' + ZOOM_LINK_NAME
 
 EVENT = {
     'uid': 'content-creation-101-2026-09-20@kkcreate.in',
@@ -32,14 +32,14 @@ EVENT = {
     'summary': 'Content Creation for Beginners - Live Workshop (KK Create)',
     'description': (
         'Live on Zoom, 12:00-4:00 PM IST.\\n\\n'
-        'The join button appears on ' + (LIVE_LINK_URL or LIVE_LINK_NAME)
+        'The join button appears on ' + (ZOOM_LINK_URL or ZOOM_LINK_NAME)
         + ' on 20 Sept. We also send the link in the WhatsApp group and to '
         'the email you registered with, shortly before we start.'
     ),
     'location': VENUE,
     # URL: is what Apple Calendar and Outlook turn into the clickable line,
     # so it only carries a real link — never the fallback prose.
-    'url': LIVE_LINK_URL,
+    'url': ZOOM_LINK_URL,
 }
 
 def fold(line):
@@ -74,7 +74,7 @@ lines = [
     f"SUMMARY:{e['summary']}",
     f"DESCRIPTION:{e['description']}",
     f"LOCATION:{e['location']}",
-    # Omitted entirely while the live-link URL is unset: an empty URL: is a
+    # Omitted entirely while the Zoom-link URL is unset: an empty URL: is a
     # malformed property, and Outlook renders it as a dead "no location" row.
     *([f"URL:{e['url']}"] if e['url'] else []),
     'STATUS:CONFIRMED',

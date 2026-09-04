@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Write site/assets/live-qr.svg for the Zoom join link.
 
-Set LIVE.joinUrl in site/livelink.js first, put the same URL below, then:
+Set LIVE.joinUrl in site/zoomlink.js first, put the same URL below, then:
     pip3 install segno && python3 tools/make-qr.py
 and flip LIVE.hasQr to true. SVG rather than PNG so it stays sharp at any
 size, including on a slide.

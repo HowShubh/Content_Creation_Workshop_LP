@@ -58,7 +58,7 @@ thing they see after paying.
 Set TagMango's post-purchase redirects to `/ccboto` (workshop) and
 `/tybundle` (bundle).
 
-`/livelink` sits outside that flow. It is where the Zoom link appears on the
+`/zoomlink` sits outside that flow. It is where the Zoom link appears on the
 day, and it is the venue in the calendar invite, the target of the QR code
 and of any short link — so it is reached from someone's calendar or phone,
 never by clicking through these pages.
@@ -83,21 +83,23 @@ Every page is noindexed — see Deploying below.
 vercel.json               static deploy config — serves site/
 site/
   index.html              the landing page
-  home.css / home.js      the landing page's styles and its three behaviours
+  home.css / home.js      the landing page's styles and its five behaviours
   base.css                self-hosted type, the KK palette, shared primitives
   ty.css / ty.js          both thank-you pages
   oto.css / oto.js        the offer page
-  livelink.css / .js      the live-link page
+  zoomlink.css / .js      the Zoom-link page
   tycontent101/           thank-you — seat only
   tybundle/               thank-you — seat plus bundle
   ccboto/                 the one-time offer
-  livelink/               the join-link page for the day
+  zoomlink/               the join-link page for the day
+  robots.txt / sitemap.xml  crawler rules — see Deploying
   assets/                 fonts, logo, bundle covers, the .ics
   assets/home/            everything the landing page draws
 tools/
   make-webp.py            PNG/JPG in site/assets -> WebP
   make-covers.py          normalise + convert the four bundle covers
   make-ics.py             regenerate the calendar file
+  make-og.py              compose the landing page's share card
   make-qr.py              QR code for the Zoom join link
 ```
 
@@ -112,21 +114,27 @@ out of the deployment.
 already uses (`OTO.declineUrl`, `TY.otoUrl`, the review nav). Nothing needs
 rewriting to match the host.
 
-**Nothing here is indexable.** Each page carries a `noindex, nofollow` meta
-tag and `vercel.json` adds an `X-Robots-Tag` header saying the same on every
-route. `site/robots.txt` deliberately **allows** crawling: a crawler has to
-fetch a page to see either of those, so disallowing the paths would hide the
-noindex while leaving the URLs indexable from any external link — the
-opposite of what it looks like it does.
+The site is served at **contentcreation.kkcreate.in**. That hostname is
+written into `TY.zoomLinkUrl`, `TY.referralUrl`, `ZOOM_LINK_URL` in
+`tools/make-ics.py`, the canonical and `og:*` tags in `site/index.html`, and
+`site/sitemap.xml` — all absolute, because each of them is read somewhere the
+page's own origin is not available (a calendar entry, a share crawler, a
+pasted link). Grep for `contentcreation.kkcreate.in` if it ever moves.
 
-Two things to change before this is a real launch rather than a review link:
+**`/` is indexable; the other four are not.** The landing page is the public
+front of the funnel. Each post-checkout page carries a `noindex, nofollow`
+meta tag, and `vercel.json` adds an `X-Robots-Tag` header saying the same on
+those four routes only — `/ccboto`, `/tycontent101`, `/tybundle`,
+`/zoomlink`. `site/robots.txt` deliberately **allows** crawling all of it: a
+crawler has to fetch a page to see either of those signals, so disallowing
+the funnel paths would hide the noindex while leaving the URLs indexable from
+any external link — the opposite of what it looks like it does.
 
-- **Drop the `noindex`.** The landing page is now the public front of the
-  funnel and wants to be crawlable, unlike the four post-checkout pages. That
-  means removing the meta tag from `site/index.html` *and* narrowing the
-  `X-Robots-Tag` rule in `vercel.json`, which currently applies to `/(.*)`.
-  The review nav that used to sit on the holding page is gone with it; the
-  funnel routes are `/ccboto`, `/tycontent101`, `/tybundle` and `/livelink`.
+Two things still to do before this is a real launch:
+
+- **Redirect the old landing page.** `lp.kkcreate.in/content-creation` is
+  still the TagMango page this was rebuilt from. Anything already pointing at
+  it — an ad, a bio link, a WhatsApp broadcast — needs to land here instead.
 - **Revisit the asset cache headers.** `/assets/*` is currently served
   `max-age=0, must-revalidate` so a redeployed image is picked up
   immediately, which is what an in-progress design review wants and not what
@@ -159,14 +167,32 @@ every section, each hidden at the other width — which is why the exported
 HTML contains every testimonial and every FAQ answer twice. Here the layout
 changes at 900px and the copy exists once, so the two cannot drift apart.
 
-**Four behaviours, in `site/home.js`.** The modules and the FAQ open one row
-at a time; the testimonial strip scrolls by its arrows as well as by finger;
-a poster becomes a player on click; and the sticky enrol bar arrives once the
+**The share card.** `assets/home/og-share.jpg` is what WhatsApp, Instagram
+and Slack show when the link is pasted, which is how this page mostly travels
+— so it carries the date rather than being a bare photograph. It is composed
+by `tools/make-og.py` from the hero cut-out and the page's own Manrope, read
+straight out of the woff2 in `assets/fonts` so the card cannot drift to a
+different face than the page. **Re-run it when the date changes**, and keep
+`WHEN` in step with the hero badge:
+
+```bash
+python3 tools/make-og.py
+```
+
+Facebook and WhatsApp cache a preview hard. After changing the image, push
+the URL through Facebook's Sharing Debugger to force a re-scrape, or the old
+card keeps appearing for weeks.
+
+**Five behaviours, in `site/home.js`.** The Enroll buttons pick up the
+campaign params (see Attribution); the modules and the FAQ open one row at a
+time; the testimonial strip scrolls by its arrows as well as by finger; a
+poster becomes a player on click; and the sticky enrol bar arrives once the
 hero's own button has scrolled away, so there are never two of the same
 button on screen. With scripting off every panel is shut but every word is in
-the markup, the strip still scrolls, and the bar reveals itself below — the
-one thing that needs script is playing a clip, which is the trade that keeps
-Vimeo off the page until someone wants it.
+the markup, the strip still scrolls, the Enroll buttons still reach checkout
+(untracked), and the bar reveals itself below — the one thing that needs
+script outright is playing a clip, which is the trade that keeps Vimeo off
+the page until someone wants it.
 
 **Nothing on the page is third-party.** Swiper drove the testimonial
 carousel; it is a `scroll-snap` strip now, the same gesture with no library.
@@ -257,10 +283,11 @@ a UTM and appending one only makes the URL longer:
   title, dates, venue. Extra params get written into the URL and read by
   nobody.
 
-The referral link is a separate case and must stay opted out: it carries its
-own UTMs plus `ref=student` rather than inheriting the buyer's, because
-passing their `utm_source` on would credit the referred signup to the
-referrer's ad.
+The referral link is a separate case and must stay opted out. It is the
+landing page, plain — `https://contentcreation.kkcreate.in` — and inheriting
+whatever brought the buyer here would credit every referred signup to the
+referrer's ad, which is the opposite of the point. A student sharing it
+passes on a clean link.
 
 The `.ics` download and the in-page `#get` / `#calendar` / `#community` jumps
 take no params either — one is a static file, the others never leave the page.
@@ -400,8 +427,8 @@ cover everyone:
   Calendar and Outlook actually want. It carries two alarms — one the day
   before, one 30 minutes out.
 
-**The venue on both is `/livelink`**, not a Zoom URL. Nobody has the Zoom
-link on the day this invite is saved, and `/livelink`'s address never
+**The venue on both is `/zoomlink`**, not a Zoom URL. Nobody has the Zoom
+link on the day this invite is saved, and `/zoomlink`'s address never
 changes, so it is the one venue that is right the moment someone hits "add
 to calendar" and still right at noon on 20 Sept. The invite body names the
 other two routes — the WhatsApp group and the registered email.
@@ -409,24 +436,24 @@ other two routes — the WhatsApp group and the registered email.
 Until that page has a public URL, both fall back to naming it in prose
 rather than linking it, and the `.ics` omits its `URL:` property entirely —
 an empty one is malformed, and Outlook renders it as a dead location row.
-Set `TY.liveLinkUrl` and `LIVE_LINK_URL` together.
+Set `TY.zoomLinkUrl` and `ZOOM_LINK_URL` together.
 
 The two are generated from separate places and **must be changed together**:
-edit `TY.event` / `TY.liveLinkUrl` in `site/ty.js` and `EVENT` /
-`LIVE_LINK_URL` in `tools/make-ics.py`, then run:
+edit `TY.event` / `TY.zoomLinkUrl` in `site/ty.js` and `EVENT` /
+`ZOOM_LINK_URL` in `tools/make-ics.py`, then run:
 
 ```bash
 python3 tools/make-ics.py
 ```
 
-## The live-link page (/livelink)
+## The Zoom-link page (/zoomlink)
 
 The page the calendar invite, the QR code and any short link point at. Its
 address never changes, which is the whole point: it can be printed on a slide
 and shared weeks early, and on the day it becomes the join button without
 anyone having to send a new link.
 
-It has three states, driven by `LIVE` at the top of `site/livelink.js`:
+It has three states, driven by `LIVE` at the top of `site/zoomlink.js`:
 
 - **Before the day, no Zoom link yet** (where it is now) — the date in the
   headline, a live countdown, and a panel saying the join button lands on
@@ -448,19 +475,12 @@ the two in step.
 Each of these is empty in config, which leaves the button's authored href
 alone rather than pointing it at a dead page:
 
-- `TY.whatsappUrl` (`site/ty.js`) and `LIVE.whatsappUrl` (`site/livelink.js`)
+- `TY.whatsappUrl` (`site/ty.js`) and `LIVE.whatsappUrl` (`site/zoomlink.js`)
   — the same WhatsApp group invite, needed in both files. On the thank-you
   pages an unset value leaves both "Join WhatsApp" buttons jumping to the
-  community card; on `/livelink` the group button is hidden outright, since
+  community card; on `/zoomlink` the group button is hidden outright, since
   there is no card there for it to fall back to.
-- `TY.liveLinkUrl` (`site/ty.js`) and `LIVE_LINK_URL` (`tools/make-ics.py`)
-  — `/livelink` as an absolute URL, which is the venue in both calendar
-  routes. Set both, then re-run `python3 tools/make-ics.py`. See Calendar
-  below for what the unset state does.
-- `TY.referralUrl` (`site/ty.js`) — the public landing page URL, with its own
-  UTMs and `ref=student`. Until it is set the whole referral card is hidden,
-  rather than showing a heading above a dead button.
-- `LIVE.joinUrl` (`site/livelink.js`) — the Zoom join link, plus `hasQr` and
+- `LIVE.joinUrl` (`site/zoomlink.js`) — the Zoom join link, plus `hasQr` and
   the QR asset. See above.
 
 `TY.supportUrl` and `TY.lmsUrl` are carried over from the Editing 101 funnel

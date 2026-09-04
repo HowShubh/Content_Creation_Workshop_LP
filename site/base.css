@@ -440,7 +440,7 @@ img { max-width: 100%; }
 
    A highlight that travels across the button face on a loop. Lives here
    rather than per page because the same effect covers buttons declared in
-   ty.css, oto.css and livelink.css — those selectors simply do not match
+   ty.css, oto.css and zoomlink.css — those selectors simply do not match
    on the pages that lack them.
 
    The sweep is a background-position animation on ::after rather than a

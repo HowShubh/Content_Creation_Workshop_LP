@@ -247,16 +247,21 @@
   gap: 6px;
   width: max-content;
   max-width: 100%;
-  padding: 8px 26px;
+  padding: 8px clamp(10px, 3vw, 26px);
   border-radius: 99px;
   background: rgba(0, 255, 89, 0.3);
   font-weight: 700;
-  font-size: 19px;
+  font-size: clamp(12.5px, 3.9vw, 19px);
   line-height: 1.5;
   white-space: nowrap;
 }
 
-.lp-flag svg { width: 31px; height: 31px; margin: 4px; flex: none; }
+.lp-flag svg {
+  width: clamp(20px, 5.6vw, 31px);
+  height: clamp(20px, 5.6vw, 31px);
+  margin: clamp(2px, 0.8vw, 4px);
+  flex: none;
+}
 
 /* ===========================================================
    2. STOP Consuming, START Creating
@@ -1077,8 +1082,7 @@
   .lp-facts { order: 5; }
 
   .lp-points li { gap: 12px; font-size: 14px; line-height: 1.7; }
-  .lp-flag { bottom: 4px; padding: 8px 18px; font-size: 16px; }
-  .lp-flag svg { width: 26px; height: 26px; }
+  .lp-flag { bottom: 4px; }
   .lp-cta { font-size: 20px; }
 
   .lp-pain-list { flex-wrap: wrap; gap: 4px 0; }

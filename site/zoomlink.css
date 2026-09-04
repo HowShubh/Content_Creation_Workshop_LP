@@ -1,5 +1,5 @@
 /* ===========================================================
-   Live-link page (/livelink) — the address the calendar invite, the QR
+   Zoom-link page (/zoomlink) — the address the calendar invite, the QR
    code and the short link all point at. Loads on top of base.css and
    reuses its tokens.
 
@@ -137,7 +137,7 @@
 .ll-join:hover { background: #b8ef3a; color: var(--panel); transform: scale(1.03); }
 .ll-join:active { transform: scale(0.985); }
 
-/* Shown until the join URL is set. A live-link page with a dead button is
+/* Shown until the join URL is set. A Zoom-link page with a dead button is
    worse than one that says plainly where the link will be. */
 .ll-wait {
   margin: 0;

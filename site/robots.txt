@@ -1,12 +1,14 @@
-# Nothing on this deployment is meant for search results: the funnel pages
-# are reachable only through checkout, and the root is a holding page while
-# the real landing page lives elsewhere.
+# The landing page at / is public and wants to be found. The four
+# post-checkout pages are not: they are reachable only through checkout, and
+# each carries a noindex in its own meta tag and in the X-Robots-Tag header
+# vercel.json sets on those four routes.
 #
-# Crawling is ALLOWED on purpose. The noindex lives in each page's meta tag
-# and in the X-Robots-Tag header vercel.json sets on every route — and a
-# crawler has to be able to fetch a page to see either of those. Disallowing
-# the paths here would hide the noindex from the crawler while leaving the
-# URLs themselves indexable from any external link, which is the opposite of
-# what it looks like it does.
+# Crawling is ALLOWED on all of it, on purpose. A crawler has to be able to
+# fetch a page to see either of those noindex signals. Disallowing the funnel
+# paths here would hide the noindex from the crawler while leaving the URLs
+# themselves indexable from any external link, which is the opposite of what
+# it looks like it does.
 User-agent: *
 Allow: /
+
+Sitemap: https://contentcreation.kkcreate.in/sitemap.xml

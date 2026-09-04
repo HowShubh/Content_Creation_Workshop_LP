@@ -1,4 +1,4 @@
-/* Live-link page (/livelink): the countdown, and the swap from "the link
+/* Zoom-link page (/zoomlink): the countdown, and the swap from "the link
    lands here" to the actual join button.
 
    This page is meant to be shared early — on a slide, in the calendar

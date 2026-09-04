@@ -1,15 +1,48 @@
 /* Home page (/) — Content Creation for Beginners.
 
-   Four small behaviours, none of which the page depends on to be
-   readable: the modules and FAQ open, the testimonial strip scrolls by
-   the arrows as well as by finger, a poster becomes a player on click,
-   and the sticky enrol bar arrives once the hero has been passed.
+   Five small behaviours, none of which the page depends on to be
+   readable: the Enroll buttons pick up the campaign params, the modules
+   and FAQ open, the testimonial strip scrolls by the arrows as well as
+   by finger, a poster becomes a player on click, and the sticky enrol
+   bar arrives once the hero has been passed.
 
    With scripting off every panel is shut but every word is in the
-   markup, the strip still scrolls horizontally, and the bar reveals
-   itself below. The one thing that needs script is playing a clip —
-   which is the trade that keeps Vimeo's player off the page until
-   someone wants it. */
+   markup, the strip still scrolls horizontally, the Enroll buttons
+   still reach checkout (untracked), and the bar reveals itself below.
+   The one thing that needs script outright is playing a clip — which is
+   the trade that keeps Vimeo's player off the page until someone wants
+   it. */
+
+/* ---------- Checkout links ----------
+
+   This is the funnel's first hop, so it is where attribution is won or
+   lost: whatever brought someone here — utm_*, gclid, fbclid, a ref —
+   is carried through to TagMango, and a payment that arrives with no
+   params on it is recorded as direct traffic no matter what actually
+   earned it.
+
+   The checkout URL is authored on each button rather than injected, so
+   the page is still clickable with scripting off; this only decorates
+   hrefs that already work. A param the target already carries wins, so
+   a link that pins its own utm_content is never overwritten.
+
+   ty.js and oto.js carry their own copy of withPageParams for the same
+   reason the countdown is duplicated: a shared file would cost every
+   page in the funnel an extra request. Three copies, one behaviour —
+   change one, change all three. */
+function withPageParams(url) {
+  const page = new URLSearchParams(window.location.search);
+  if (![...page.keys()].length) return url;
+  const target = new URL(url, window.location.href);
+  page.forEach((value, key) => {
+    if (!target.searchParams.has(key)) target.searchParams.set(key, value);
+  });
+  return target.toString();
+}
+
+document.querySelectorAll('[data-buy]').forEach((link) => {
+  link.href = withPageParams(link.href);
+});
 
 /* ---------- Accordions ----------
 

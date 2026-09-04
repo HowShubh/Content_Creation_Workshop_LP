@@ -224,13 +224,28 @@ funnel is attributed to the source that paid for the original click.
 Forwarding is the **default** in `wire()` (`site/ty.js`) and in `applyConfig()`
 (`site/oto.js`), so a link added later is tracked unless someone opts it out.
 
+The landing page is where the chain starts, and it is the hop that decides
+whether any of the rest means anything: a payment that reaches TagMango with
+no params on it is booked as direct traffic whatever actually earned the
+click. All five Enroll buttons carry `[data-buy]`, and `site/home.js` rewrites
+their href on load.
+
 Carried end to end, the chain is:
 
 ```
-checkout → /ccboto?utm → decline → /tycontent101?utm → strip → /ccboto?utm
-                                 → buy → bundle checkout?utm → /tybundle?utm
-                                                             → portal?utm
+/?utm → workshop checkout?utm → /ccboto?utm → decline → /tycontent101?utm
+                                            │                    │ strip
+                                            │                    ▼
+                                            │              /ccboto?utm
+                                            └─ buy → bundle checkout?utm
+                                                          → /tybundle?utm
+                                                          → portal?utm
 ```
+
+Three copies of `withPageParams` exist — one each in `home.js`, `ty.js` and
+`oto.js` — for the same reason the countdown is duplicated: a shared file
+would cost every page in the funnel an extra request. One behaviour, three
+copies; change one, change all three.
 
 Three links deliberately opt out, because nothing on the other side can read
 a UTM and appending one only makes the URL longer:

@@ -36,7 +36,7 @@ const TY = {
   zoomLinkUrl: 'https://contentcreation.kkcreate.in/zoomlink',
 
   // WhatsApp community. Reminders, the Zoom link on the day, and Q&A.
-  whatsappUrl: '',
+  whatsappUrl: 'https://chat.whatsapp.com/B520exHpnr77q5Mx25x5Sk',
 
   // The Complete Creator Bundle offer page. Its own CTA goes to TagMango.
   otoUrl: '/ccboto',
@@ -119,10 +119,10 @@ function eventVenue() {
 }
 
 function eventDetails() {
-  return 'Your seat is confirmed.\n\nOn 20 Sept the join button appears on '
-    + (TY.zoomLinkUrl || ZOOM_LINK_NAME) + '. We also send the link in the '
-    + 'WhatsApp group and to the email you registered with, shortly before '
-    + 'we start.';
+  return 'Your seat is confirmed.\n\nThe join button appears on '
+    + (TY.zoomLinkUrl || ZOOM_LINK_NAME) + ' from 9 AM IST on 20 Sept, three '
+    + 'hours before we start. We also send the link in the WhatsApp group '
+    + 'and to the email you registered with.';
 }
 
 function googleCalendarUrl(e) {

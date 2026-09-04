@@ -33,8 +33,9 @@ EVENT = {
     'description': (
         'Live on Zoom, 12:00-4:00 PM IST.\\n\\n'
         'The join button appears on ' + (ZOOM_LINK_URL or ZOOM_LINK_NAME)
-        + ' on 20 Sept. We also send the link in the WhatsApp group and to '
-        'the email you registered with, shortly before we start.'
+        + ' from 9 AM IST on 20 Sept, three hours before we start. We '
+        'also send the link in the WhatsApp group and to the email you '
+        'registered with.'
     ),
     'location': VENUE,
     # URL: is what Apple Calendar and Outlook turn into the clickable line,

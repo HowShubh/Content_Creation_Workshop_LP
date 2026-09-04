@@ -22,7 +22,7 @@ const LIVE = {
      goes rather than sitting there pointing at nothing.
 
      Same group as TY.whatsappUrl in ty.js. Set both. */
-  whatsappUrl: '',
+  whatsappUrl: 'https://chat.whatsapp.com/B520exHpnr77q5Mx25x5Sk',
 
   // Session start, as UTC. Same instant as TY.event.startUtc in ty.js —
   // 20 Sept 2026, 12:00 PM IST. Keep the two in step.

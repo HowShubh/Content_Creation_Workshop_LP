@@ -472,16 +472,25 @@ the two in step.
 
 ## Still needs real links
 
-Each of these is empty in config, which leaves the button's authored href
+One thing is still empty in config, which leaves the button's authored href
 alone rather than pointing it at a dead page:
 
-- `TY.whatsappUrl` (`site/ty.js`) and `LIVE.whatsappUrl` (`site/zoomlink.js`)
-  — the same WhatsApp group invite, needed in both files. On the thank-you
-  pages an unset value leaves both "Join WhatsApp" buttons jumping to the
-  community card; on `/zoomlink` the group button is hidden outright, since
-  there is no card there for it to fall back to.
 - `LIVE.joinUrl` (`site/zoomlink.js`) — the Zoom join link, plus `hasQr` and
-  the QR asset. See above.
+  the QR asset. Zoom issues the link on the day. **Every page promises both
+  from 9 AM IST on 20 Sept**, three hours before the room opens, so that is
+  the deadline for setting it:
+
+  ```bash
+  # 1. set LIVE.joinUrl in site/zoomlink.js
+  # 2. put the same URL in tools/make-qr.py, then
+  python3 tools/make-qr.py
+  # 3. set LIVE.hasQr = true
+  ```
+
+  Until then `/zoomlink` shows where the link will be and hides the QR
+  block — a QR pointing at nothing is worse than no QR. Grep for `9 AM` to
+  find every place that promise is made: `/zoomlink`, both thank-you pages,
+  `ty.js`'s calendar description and `tools/make-ics.py`.
 
 `TY.supportUrl` and `TY.lmsUrl` are carried over from the Editing 101 funnel
 and should be correct, but are worth confirming.

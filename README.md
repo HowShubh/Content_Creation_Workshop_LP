@@ -471,6 +471,26 @@ It has three states, driven by `LIVE` at the top of `site/zoomlink.js`:
 `LIVE.startsAt` is the same instant as `TY.event.startUtc` in `ty.js`. Keep
 the two in step.
 
+## The instant-access banner (/tybundle)
+
+The bundle thank-you page is a receipt for two things bought together, and
+the boarding pass at the top only speaks to the workshop — which is still a
+month out. The bundle is watchable the moment it is paid for, so
+`.access-band` sits directly under the pass and above everything that asks
+the reader to wait: the WhatsApp card, the calendar card, the four titles.
+
+It is on `/tybundle` only. `/tycontent101` is the decline path — that reader
+did not buy the bundle, and telling them they have instant access to it
+would be wrong.
+
+The CTA carries `[data-lms]`, so it is wired by the same `wire()` call as
+the portal button further down and inherits the campaign params. One name to
+watch: the offer page calls this the Complete Creator **Package** and the
+two thank-you pages call it the Complete Creator **Bundle**. The banner says
+Package, matching what the buyer saw on the page they bought from — but the
+"Also unlocked" band below it on the same page says Bundle. Worth settling
+on one.
+
 ## Analytics
 
 `site/analytics.js` is the one file all five pages share. Everything else in

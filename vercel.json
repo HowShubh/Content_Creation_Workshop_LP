@@ -3,6 +3,13 @@
   "outputDirectory": "site",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/livelink",
+      "destination": "/zoomlink",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

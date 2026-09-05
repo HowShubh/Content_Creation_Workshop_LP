@@ -63,6 +63,13 @@ day, and it is the venue in the calendar invite, the target of the QR code
 and of any short link — so it is reached from someone's calendar or phone,
 never by clicking through these pages.
 
+**It was `/livelink` until 62a1fac**, and `vercel.json` redirects the old path
+permanently. That redirect is not optional housekeeping: this is the one page
+whose entire promise is that its address never changes — the page says so in
+its own copy — and it is handed out weeks early on a calendar entry, a QR
+code and a slide, where nobody can reissue it. Any future rename needs the
+same treatment, and it is worth not renaming it again.
+
 `/` is the **landing page**. Every Enroll button on it — hero, bonuses,
 certificate, the closing card and the sticky bar — goes to the same TagMango
 workshop checkout, which is the only link on the page:

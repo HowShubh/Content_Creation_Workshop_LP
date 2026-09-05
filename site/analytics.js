@@ -33,7 +33,15 @@ const ANALYTICS = {
      belongs on /ccboto and /tybundle — the two pages TagMango redirects to
      after payment — not here, and not on both this and TagMango's own
      pixel setting, or every sale is counted twice. */
-  metaPixel: ''
+  metaPixel: '',
+
+  /* Vercel Web Analytics. A flag rather than an ID, because there is no ID
+     to hold: the script is served by the deployment itself and Vercel knows
+     which project asked for it.
+
+     It still has to be switched on in the Vercel dashboard (Project >
+     Analytics). This flag only controls whether the page asks for it. */
+  vercel: true
 };
 
 /* Google Analytics 4. gtag.js is ~90KB, so it is async and arrives after
@@ -48,6 +56,33 @@ if (ANALYTICS.ga4) {
   const tag = document.createElement('script');
   tag.async = true;
   tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + ANALYTICS.ga4;
+  document.head.appendChild(tag);
+}
+
+/* Vercel Web Analytics.
+
+   Not the npm package: that is the React route, and it wants a build step
+   and an <Analytics/> component to render. These are five hand-written HTML
+   pages, so this is the plain-script route — Vercel serves the file from the
+   deployment's own origin, which is also why there is no ID and no
+   third-party domain in it.
+
+   Skipped on localhost. That path only exists on a Vercel deployment, so
+   running the site locally would 404 on it once per page load — the same
+   kind of avoidable dead request as an image with no file behind it.
+   Preview deployments are left switched on: they are real deployments and
+   serve the script, and their numbers are worth having while a change is
+   still being reviewed. */
+if (ANALYTICS.vercel && !/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) {
+  /* The queue stub goes in first so a custom va() call made before the
+     script lands is replayed rather than thrown away. Nothing here fires
+     one yet; it costs a line and removes the ordering trap. */
+  window.va = window.va || function () {
+    (window.vaq = window.vaq || []).push(arguments);
+  };
+  const tag = document.createElement('script');
+  tag.defer = true;
+  tag.src = '/_vercel/insights/script.js';
   document.head.appendChild(tag);
 }
 

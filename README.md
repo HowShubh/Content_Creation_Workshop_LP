@@ -91,7 +91,7 @@ vercel.json               static deploy config — serves site/
 site/
   index.html              the landing page
   home.css / home.js      the landing page's styles and its five behaviours
-  analytics.js            the tags, shared by all five pages
+  analytics.js            the tags, shared by all five pages (see Analytics)
   base.css                self-hosted type, the KK palette, shared primitives
   ty.css / ty.js          both thank-you pages
   oto.css / oto.js        the offer page
@@ -149,6 +149,41 @@ Two things still to do before this is a real launch:
   a live page wants. Fonts are already `immutable` for a year, since those
   never change. Note that the cover filenames do not carry a hash, so
   lengthening that cache means a changed cover can go stale — see Assets.
+
+## Analytics
+
+All tags live in `site/analytics.js`, which every page loads. Each one is
+injected rather than pasted in as a `<script>` tag, so a page with an unset
+ID makes no request at all.
+
+| Tag | State |
+| --- | --- |
+| Microsoft Clarity | on (`yd55hj8iln`) |
+| Vercel Web Analytics | on |
+| GA4 | off — set `ANALYTICS.ga4` to the `G-` id |
+| Meta Pixel | off — see the note in the file about double-counting |
+
+**Vercel Web Analytics is the plain-script route, not the npm package.**
+`@vercel/analytics` and `<Analytics/>` are the React route: they need a build
+step and a component to render, and this is five hand-written HTML pages with
+neither. The script instead comes from the deployment's own origin at
+`/_vercel/insights/script.js`, which is why it needs no ID and adds no
+third-party domain.
+
+It is skipped on `localhost`, since that path exists only on a Vercel
+deployment and would 404 once per page load otherwise. Preview deployments
+are left on — they serve the script, and their numbers are worth having
+during review.
+
+**It has to be enabled in the Vercel dashboard too** (Project > Analytics).
+Until it is, `/_vercel/insights/script.js` 404s and nothing is recorded no
+matter what the flag says. Check with:
+
+```bash
+curl -o /dev/null -w '%{http_code}\n' https://contentcreation.kkcreate.in/_vercel/insights/script.js
+```
+
+200 means it is live; 404 means the dashboard switch is still off.
 
 ## Editing content
 

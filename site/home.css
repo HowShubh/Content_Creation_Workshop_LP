@@ -766,7 +766,24 @@
   overflow: hidden;
 }
 
-.lp-mentor-card img { display: block; width: 100%; }
+/* The source is 760x1362 — a 0.56 ratio, so tall that any width the column
+   gives it comes back 1.8x that in height, and the card ends up the longest
+   thing in a section whose point is the copy beside it. Narrowing the column
+   does not help: it shortens and thins in the same proportion, so the shape
+   stays just as elongated.
+
+   So the height is cropped rather than the width scaled. 3:4 is a standard
+   portrait ratio and keeps 74% of the frame; at 10% down that window runs
+   from just above his hair to just below the crossed arms, which is the
+   part of the photo worth keeping — the empty jacket below the arms is what
+   was making it long. */
+.lp-mentor-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: 50% 10%;
+}
 
 .lp-mentor-name {
   display: flex;
@@ -1129,7 +1146,21 @@
 
   .lp-mentor { padding-block: 24px; }
   .lp-mentor-inner { flex-direction: column; gap: 24px; }
-  .lp-mentor-card, .lp-mentor-copy { flex: none; width: 100%; }
+  .lp-mentor-copy { flex: none; width: 100%; }
+  /* Stacked, a full-width portrait at this aspect ratio is ~575px tall on a
+     phone — most of a screen for one photo. Narrower and centred instead,
+     which is also why it needs the auto margins: at width:100% there was
+     nothing to centre. */
+  /* Full width is what a phone should give it. A tablet should not: at 760px
+     the column is ~720 wide, and an uncapped card came back over 950 tall
+     even cropped. The cap is above any phone width, so on a phone this is
+     still edge to edge and only the wider stacked layout is held back. */
+  .lp-mentor-card {
+    flex: none;
+    width: 100%;
+    max-width: 420px;
+    margin-inline: auto;
+  }
   .lp-mentor-copy { padding-bottom: 0; }
   .lp-mentor-copy .lp-head { order: -1; text-align: center; align-self: center; }
   .lp-stats { gap: 0; }

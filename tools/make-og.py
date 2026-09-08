@@ -12,10 +12,10 @@ badge in site/index.html.
 downscaled, because PIL has no antialiasing of its own — circles and text
 edges come out ragged at final size.
 
-The type is the page's own Manrope, read straight out of the woff2 files in
-site/assets/fonts and decompressed in memory, so the card cannot drift to a
-different face than the page it advertises. That needs fontTools + brotli;
-both come with the fonttools install.
+The type is the page's own Space Grotesk and JetBrains Mono, read straight
+out of the woff2 files in site/assets/fonts and decompressed in memory, so the
+card cannot drift to a different face than the page it advertises. That needs
+fontTools + brotli; both come with the fonttools install.
 """
 import io
 import os
@@ -31,14 +31,14 @@ OUT = os.path.join(HOME, 'og-share.jpg')
 HEADLINE = ('Content Creation', 'For Beginners')
 WHEN = '12:00PM IST  |  20 Sept (Sunday)'
 
-CREAM = (249, 248, 244)
-RED = (192, 43, 43)
-INK = (3, 66, 106)
-# rgba(0, 255, 89, 0.3) laid over the cream, which is what the hero badge
-# resolves to on the page.
-MINT = (174, 250, 197)
-# #a5e7ff at 24%, likewise.
-ARCH = (211, 242, 253)
+# The page's own tokens. Flat values rather than alpha, because PIL has no
+# compositing here: each is the page's rgba() already resolved over --night.
+NIGHT = (7, 26, 41)          # --night, the ground
+FG = (238, 246, 251)         # --fg, the headline
+VOLT = (182, 238, 60)        # --volt, the second line and the date pill
+INK = (8, 32, 47)            # the type on the pill, as on the button
+ARCH = (38, 64, 44)          # the lime arch: --volt at 18%
+RING = (39, 57, 70)          # the dashed ring: --fg at 14%
 
 S = 2                      # supersampling factor
 W, H = 1200 * S, 630 * S
@@ -66,7 +66,7 @@ def dashed_circle(draw, box, colour, width, dash=9, gap=9):
         a += step
 
 
-card = Image.new('RGB', (W, H), CREAM)
+card = Image.new('RGB', (W, H), NIGHT)
 draw = ImageDraw.Draw(card)
 
 # ---- Right: the cut-out, standing on its arch ------------------------
@@ -84,28 +84,28 @@ acx = px + photo.width // 2
 ar = min(int(photo.width * 0.44), (H - int(36 * S)) // 2)
 acy = max(py + int(photo.height * 0.44), ar + int(18 * S))
 draw.ellipse((acx - ar, acy - ar, acx + ar, acy + ar), fill=ARCH)
-dashed_circle(draw, (acx - ar, acy - ar, acx + ar, acy + ar), INK, max(1, S),
+dashed_circle(draw, (acx - ar, acy - ar, acx + ar, acy + ar), RING, max(1, S),
               dash=4 * S, gap=4 * S)
 card.paste(photo, (px, py), photo)
 
 # ---- Left: the headline and the date ---------------------------------
 x = int(72 * S)
-big = face('manrope-800-latin', 70 * S)
-mid = face('manrope-800-latin', 50 * S)
-pill = face('poppins-700-latin', 26 * S)
+big = face('space-grotesk-700-latin', 68 * S)
+mid = face('space-grotesk-700-latin', 54 * S)
+pill = face('jetbrains-mono-700-latin', 22 * S)
 
-y = int(168 * S)
-draw.text((x, y), HEADLINE[0], font=big, fill=RED)
-y += int(84 * S)
-draw.text((x, y), HEADLINE[1], font=mid, fill=INK)
+y = int(176 * S)
+draw.text((x, y), HEADLINE[0], font=big, fill=FG)
+y += int(76 * S)
+draw.text((x, y), HEADLINE[1], font=mid, fill=VOLT)
 
-y += int(104 * S)
+y += int(108 * S)
 tw = draw.textlength(WHEN, font=pill)
-pad_x, pad_y = int(30 * S), int(17 * S)
-ph2 = int(60 * S)
+pad_x, pad_y = int(28 * S), int(16 * S)
+ph2 = int(56 * S)
 draw.rounded_rectangle((x, y, x + tw + pad_x * 2, y + ph2),
-                       radius=ph2 // 2, fill=MINT)
-draw.text((x + pad_x, y + pad_y - int(3 * S)), WHEN, font=pill, fill=INK)
+                       radius=ph2 // 2, fill=VOLT)
+draw.text((x + pad_x, y + pad_y - int(2 * S)), WHEN, font=pill, fill=INK)
 
 # JPEG, not PNG: it is a photograph, and a 500KB share card is a slow
 # preview on the phone that is most likely to be shown it.

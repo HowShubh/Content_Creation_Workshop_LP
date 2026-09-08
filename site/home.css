@@ -1,445 +1,625 @@
 /* ===========================================================
    Home page (/) — Content Creation for Beginners.
 
-   A rebuild of the landing page that used to live on
-   lp.kkcreate.in/content-creation, which was assembled in TagMango's
-   page builder. The design is unchanged; what changed is that it is
-   now hand-written and served from this deployment, so the whole
-   funnel — landing, offer, thank-you, join — sits in one repo.
+   A redesign. The page used to be a like-for-like rebuild of the
+   TagMango page-builder site at lp.kkcreate.in/content-creation —
+   cream ground, centred headings with hand-drawn underlines, blue
+   pills, mint-and-red accordion rows. It read as the previous
+   workshop's landing page because it *was* the previous workshop's
+   landing page. The words are unchanged; everything about how they
+   are set is new.
 
-   The builder shipped two copies of every section (one desktop, one
-   mobile, each hidden at the other width). Here there is one DOM and
-   the layout changes at 900px, so the copy exists once and cannot
-   drift between the two.
+   THE IDEA. A creator studio, not a course brochure. A deep navy
+   ground carries most of the page, two paper-white bands break it up
+   where the reading is longest (the problem, the curriculum, the FAQ),
+   and one full-bleed lime band closes it. Headings are Space Grotesk,
+   set large, tight and ranged left; every small label is JetBrains
+   Mono in caps. Nothing is centred except the closing card, so the
+   page has a left edge to read down.
 
-   PALETTE. This page predates the funnel's palette and keeps its own:
-   a warmer cream, a navy that is the text colour rather than a panel
-   colour, and a red half a step browner than --accent. They are set
-   as page-local tokens rather than edited into base.css so the offer
-   and thank-you pages keep the colours they were designed in.
+   PALETTE. Page-local tokens, as before, so the offer and thank-you
+   pages keep the colours they were designed in. They are the funnel's
+   own colours rather than the old page's: base.css's --panel navy
+   taken darker for the ground, and its --lime as the one action
+   colour. Red survives as a signal — the live dot, the numerals on
+   paper — not as a second brand colour.
+
+   CONTRAST. Lime on navy and navy on lime are both well past 4.5:1.
+   The two body greys (--fg-2 on night, --ink-2 on paper) clear it
+   too; --fg-3 and --ink-3 are for mono labels at caps only, which is
+   the one place a dimmer grey is legible.
    =========================================================== */
 
 .lp-body {
-  --ink: #03426a;          /* headings and body copy */
-  --red: #c02b2b;          /* the accent: rules, prices, alternating rows */
-  --blue: #006097;         /* every Enroll button */
-  --mint: #e4fff7;         /* alternating module rows */
-  --maroon: #440003;       /* text on the mint rows */
-  --cream: #f9f8f4;        /* page ground */
-  --hair: rgba(203, 203, 203, 0.52);
+  /* Night — the page ground and everything raised off it. */
+  --night: #071a29;
+  --night-2: #0d2739;
+  --night-3: #143349;
+  --rule: rgba(197, 232, 255, 0.15);
+  --rule-2: rgba(197, 232, 255, 0.08);
+  --fg: #eef6fb;
+  --fg-2: #adc7d8;
+  --fg-3: #7b9ab0;
 
-  --lp-display: Manrope, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --lp-ui: Poppins, Manrope, system-ui, sans-serif;
+  /* Paper — the two light bands. */
+  --paper: #f6f2e9;
+  --ink: #0a2033;
+  --ink-2: #48606f;
+  --ink-3: #7d8f9b;
+  --pr: rgba(10, 32, 51, 0.14);
 
-  background: var(--cream);
-  color: var(--ink);
-  font-family: var(--lp-ui);
+  /* The one action colour, and the signals. */
+  --volt: #b6ee3c;
+  --volt-2: #cdf76a;
+  --leaf: #628f10;        /* the lime, dark enough to read on paper */
+  --red: #ff5a52;         /* the live dot, on night */
+  --red-ink: #c02b2b;     /* the same signal, on paper */
 
-  /* The sticky enrol bar is fixed over the bottom of the page; without
-     this the footer's last line sits under it. */
-  padding-bottom: 108px;
+  --dis: 'Space Grotesk', Manrope, system-ui, -apple-system, sans-serif;
+  --ui: Manrope, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mn: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --nav-h: 64px;
+  --band: clamp(60px, 8vw, 112px);
+
+  background: var(--night);
+  color: var(--fg);
+  font-family: var(--ui);
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 .lp-body :where(a) { color: inherit; }
 .lp-body img { height: auto; }
 
+/* base.css sets color-scheme:light on :root for the rest of the funnel,
+   which is what the viewport scrollbar follows — a pale scrollbar down the
+   side of a dark page. Reaching the root from a body class needs :has();
+   where that is missing the page simply keeps the light scrollbar. */
+html:has(.lp-body) { color-scheme: dark; }
+
+/* Paper bands. Everything inside flips to the ink scale; the rules
+   below name --ink / --pr rather than re-declaring a colour per
+   element, so a section only has to carry this one class. */
+.lp-paper { background: var(--paper); color: var(--ink); }
+
 /* Section shell: one centred column, one gutter, set once. */
 .lp-wrap {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-inline: 27px;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 5vw, 40px);
 }
 
-/* ---------- Section headings ----------
+/* The lime reads as the focus ring on night; on paper it does not,
+   so the ink takes over there. */
+.lp-body :focus-visible { outline: 2px solid var(--volt); outline-offset: 3px; }
+.lp-paper :focus-visible { outline-color: var(--ink); }
 
-   Each one is a hand-drawn rule under the words. The rule is a fixed
-   width and centred on the heading, so it underlines the middle of the
-   line rather than stretching with it — the same as the original. */
+/* Nothing on the page links to the curriculum any more, but the section
+   keeps its id so an ad or a message can deep-link to it — and the offset
+   keeps that landing under the sticky bar rather than behind it. */
+#curriculum { scroll-margin-top: calc(var(--nav-h) + 16px); }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* ---------- Type primitives ----------
+
+   Three shapes cover every heading on the page: a mono eyebrow, a
+   display heading, and the pair of them stacked as a section head.
+   The old page's underline SVGs are gone — emphasis is now the
+   heading's own colour. */
+
+.lp-eyebrow {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mn);
+  font-weight: 500;
+  font-size: 11.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.lp-paper .lp-eyebrow { color: var(--ink-3); }
+
+@keyframes lp-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
 
 .lp-head {
-  position: relative;
-  display: block;
-  text-align: center;
   margin: 0;
-  font-family: var(--lp-display);
+  font-family: var(--dis);
   font-weight: 700;
-  font-size: 40px;
-  line-height: 1.5;
-  color: var(--ink);
+  font-size: clamp(28px, 3.6vw, 46px);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.lp-paper .lp-head { color: var(--ink); }
+.lp-head em { font-style: normal; color: var(--volt); }
+.lp-paper .lp-head em { color: var(--red-ink); }
+
+.lp-sec-head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 720px;
+  margin-bottom: clamp(32px, 4vw, 56px);
 }
 
-.lp-head img {
-  position: absolute;
-  left: 50%;
-  bottom: -4px;
-  transform: translateX(-50%);
-  max-width: 84%;
-  pointer-events: none;
-}
+/* ---------- Buttons ----------
 
-/* ---------- The Enroll button ----------
-
-   One shape used six times: hero, bonuses, certificate, final CTA and
-   the sticky bar. base.css gives .btn its sweep; this is the pill the
-   landing page was drawn with, so it declares its own box. */
+   One primary shape, in lime, used seven times: the bar, the hero,
+   the bonus grid, the certificate, the closing band and the sticky
+   bar. */
 
 .lp-cta {
+  /* base.css runs the light sweep on every button in the funnel, tuned
+     against the red and navy ones. Lime is already a bright face, so a
+     half-white streak lands on it and reads as nothing — near-white is
+     what actually registers as it crosses. */
+  --sheen: rgba(255, 255, 255, 0.9);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  width: 100%;
-  max-width: 420px;
   padding: 16px 32px;
   border: 0;
-  border-radius: 70px;
-  background: var(--blue);
-  color: #fff;
-  font-family: var(--lp-display);
+  border-radius: 999px;
+  background: var(--volt);
+  color: #08202f;
+  font-family: var(--dis);
   font-weight: 700;
-  font-size: 22px;
-  line-height: 1.5;
+  font-size: clamp(16px, 1.3vw, 18px);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 10px 30px rgba(182, 238, 60, 0.16);
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.lp-cta:hover { background: #04517f; color: #fff; transform: translateY(-1px); }
+/* And a slightly wider band than base.css's, for the same reason: a narrow
+   streak on a light face is gone before the eye catches it. Much wider than
+   this and it stops reading as a streak crossing and starts reading as half
+   the button being a lighter colour. The keyframe and the timing stay
+   shared. */
+.lp-cta::after {
+  background-image: linear-gradient(105deg, transparent 40%, var(--sheen) 50%, transparent 60%);
+}
+
+.lp-cta:hover {
+  background: var(--volt-2);
+  color: #08202f;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(182, 238, 60, 0.26);
+}
 .lp-cta svg { flex: none; }
 
-/* The narrower pill under the bonus grid. */
+/* The bar's button, and the one under the bonus grid. */
+.lp-cta-xs { padding: 9px 18px; font-size: 14px; box-shadow: none; }
 .lp-cta-sm {
-  width: auto;
-  max-width: none;
-  gap: 6px;
-  padding: 8px 16px;
-  font-family: var(--lp-ui);
-  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
+  align-self: center;
+  margin-top: clamp(28px, 3.5vw, 44px);
+  padding: 13px 26px;
+  font-size: 16px;
+}
+
+/* Inverted, for the lime closing band. */
+.lp-cta-ink {
+  --sheen: rgba(255, 255, 255, 0.4);
+  background: var(--night);
+  color: var(--volt);
+  box-shadow: 0 12px 30px rgba(7, 26, 41, 0.28);
+}
+.lp-cta-ink:hover { background: var(--night-2); color: var(--volt); }
+
+/* ---------- Brand tile ---------- */
+
+.lp-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--dis);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.lp-brand img { width: 32px; height: 32px; flex: none; }
+
+/* ===========================================================
+   0. Top bar
+
+   New to this design. The page is long and the date is the thing
+   people scroll back for, so it rides along with the checkout link.
+   Under 760px the bar's button stands down: the sticky bar at the
+   bottom of the screen is already carrying one.
+   =========================================================== */
+
+.lp-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(7, 26, 41, 0.72);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--rule-2);
+}
+
+.lp-nav-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: var(--nav-h);
+}
+
+.lp-nav-right { display: flex; align-items: center; gap: 18px; }
+
+.lp-nav-date {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--mn);
+  font-weight: 500;
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--fg-2);
+}
+.lp-nav-date i {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--red);
+  animation: lp-pulse 2s ease-in-out infinite;
 }
 
 /* ===========================================================
    1. Hero
    =========================================================== */
 
-.lp-hero { padding-top: 40px; }
+.lp-hero { position: relative; overflow: hidden; }
 
-.lp-hero-card {
-  display: flex;
+/* A lime bloom off the top-right corner, behind everything. */
+.lp-hero::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: -34%;
+  right: -12%;
+  width: min(900px, 84vw);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(182, 238, 60, 0.15), rgba(182, 238, 60, 0) 62%);
+  pointer-events: none;
+}
+
+/* A faint grid, faded out before it reaches the next section. */
+.lp-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(238, 246, 251, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(238, 246, 251, 0.04) 1px, transparent 1px);
+  background-size: 68px 68px;
+  -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 0%, #000, transparent 76%);
+  mask-image: radial-gradient(ellipse 85% 70% at 50% 0%, #000, transparent 76%);
+}
+
+.lp-hero-in {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(24px, 4vw, 60px);
   align-items: center;
-  gap: 0;
-  padding: 40px 80px;
-  border: 1px solid var(--hair);
-  border-radius: 22px;
-  backdrop-filter: blur(50px);
+  padding-block: clamp(32px, 5vw, 60px) clamp(48px, 7vw, 96px);
 }
 
 .lp-hero-copy {
-  flex: 1 0 54%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
-  gap: 20px;
+  gap: clamp(18px, 2.2vw, 26px);
 }
 
 .lp-hero h1 {
   margin: 0;
-  font-family: var(--lp-display);
-  font-weight: 800;
-  line-height: 1.25;
-  font-size: clamp(26px, 3.2vw, 34px);
-  color: var(--ink);
+  font-family: var(--dis);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
 }
+/* The first line is the subject, the second is who it is for — so
+   the second one is the coloured one, not the smaller one. */
+.lp-hero h1 span { display: block; font-size: clamp(34px, 5.6vw, 68px); color: var(--fg); }
+.lp-hero h1 em { display: block; font-style: normal; font-size: clamp(28px, 4.4vw, 54px); color: var(--volt); }
 
-/* The first line is the loud one; the second is the qualifier. */
-.lp-hero h1 b {
-  display: block;
-  font-weight: 800;
-  font-size: clamp(34px, 4.6vw, 50px);
-  color: var(--red);
-}
+.lp-hero-copy > .lp-cta { min-width: min(360px, 100%); }
 
-.lp-points {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 0;
-  margin: 0;
-  list-style: none;
-}
+.lp-points { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
 
 .lp-points li {
   display: flex;
   align-items: center;
-  gap: 22px;
-  font-size: 16px;
-  line-height: 2;
-  color: #000;
+  gap: 14px;
+  font-size: clamp(15px, 1.1vw, 17px);
+  color: var(--fg-2);
 }
+.lp-points svg { width: 22px; height: 22px; flex: none; color: var(--volt); }
 
-.lp-points img { width: 24px; height: 24px; flex: none; }
-
-/* The two facts either side of the button: language and length. */
+/* The three facts, set as a ledger under the button rather than as
+   bordered chips beside it. */
 .lp-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   width: 100%;
+  margin: 4px 0 0;
 }
 
-.lp-fact {
-  flex: 1 1 150px;
-  min-width: 0;
+.lp-fact { padding: 15px 14px 0 0; border-top: 1px solid var(--rule); }
+.lp-fact + .lp-fact { padding-left: 18px; border-left: 1px solid var(--rule); }
+
+.lp-fact dt {
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 6px 7px;
-  border: 1px solid var(--red);
-  border-radius: 5px;
-  white-space: nowrap;
+  font-family: var(--mn);
+  font-weight: 500;
+  font-size: 10.5px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.lp-fact-live dt::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--red);
+}
+.lp-fact dd {
+  margin: 6px 0 0;
+  font-family: var(--dis);
+  font-weight: 600;
+  font-size: clamp(15px, 1.3vw, 18px);
+  letter-spacing: -0.01em;
+  color: var(--fg);
 }
 
-.lp-fact svg { width: 20px; height: 20px; margin: 4px; flex: none; color: var(--blue); }
-.lp-fact-live svg { color: var(--red); }
-.lp-fact span { display: block; font-size: 13px; line-height: 1.2; }
-.lp-fact b { display: block; font-size: 16px; font-weight: 700; line-height: 1.5; }
+.lp-hero-media { position: relative; aspect-ratio: 1 / 1; }
 
-.lp-hero-media {
-  position: relative;
-  z-index: 9;
-  flex: 1 0 46.5%;
-  aspect-ratio: 458 / 433;
+/* The arch behind the cut-out — a lime wash that fades before it
+   reaches the feet, so nothing has to be cropped on a hard edge. */
+.lp-hero-media::before {
+  content: "";
+  position: absolute;
+  inset: 7% 5% 5%;
+  border-radius: 999px 999px 32px 32px;
+  background: linear-gradient(180deg, rgba(182, 238, 60, 0.2), rgba(182, 238, 60, 0.04) 46%, rgba(182, 238, 60, 0) 78%);
+  border: 1px solid rgba(182, 238, 60, 0.22);
+  border-bottom-color: transparent;
 }
 
-/* The arch sits behind the cut-out and is anchored to its feet, so the
-   two stay registered as the column changes width. */
-.lp-hero-media picture,
-.lp-hero-media > img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 0;
-  background: url('assets/home/hero-arch.svg') no-repeat 50% 100% / 78% auto;
-}
-
-/* Fades the bottom of the cut-out into the card rather than cropping it
-   on a hard edge. */
+/* And a dashed ring inside it, the one piece of drawn decoration the
+   page keeps from the old design. */
 .lp-hero-media::after {
   content: "";
   position: absolute;
-  inset: 70% 0 0;
-  background: linear-gradient(rgba(249, 248, 244, 0), var(--cream));
+  inset: 14% 12% 11%;
+  border-radius: 999px 999px 26px 26px;
+  border: 1px dashed rgba(238, 246, 251, 0.14);
+  border-bottom-color: transparent;
   pointer-events: none;
+}
+
+.lp-hero-media > img {
+  position: relative;
   z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 100%;
+  -webkit-mask-image: linear-gradient(180deg, #000 84%, transparent 99%);
+  mask-image: linear-gradient(180deg, #000 84%, transparent 99%);
 }
 
 .lp-flag {
   position: absolute;
   z-index: 2;
   left: 50%;
-  bottom: 8px;
+  bottom: -8px;
   transform: translateX(-50%);
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   width: max-content;
   max-width: 100%;
-  padding: 8px clamp(10px, 3vw, 26px);
-  border-radius: 99px;
-  background: rgba(0, 255, 89, 0.3);
+  padding: 10px clamp(13px, 2.2vw, 20px);
+  border-radius: 999px;
+  background: var(--volt);
+  color: #08202f;
+  font-family: var(--mn);
   font-weight: 700;
-  font-size: clamp(12.5px, 3.9vw, 19px);
-  line-height: 1.5;
+  font-size: clamp(11.5px, 1.05vw, 13.5px);
+  line-height: 1;
   white-space: nowrap;
+  box-shadow: 0 16px 36px rgba(182, 238, 60, 0.2);
 }
-
-.lp-flag svg {
-  width: clamp(20px, 5.6vw, 31px);
-  height: clamp(20px, 5.6vw, 31px);
-  margin: clamp(2px, 0.8vw, 4px);
-  flex: none;
-}
+.lp-flag svg { width: 17px; height: 17px; flex: none; }
 
 /* ===========================================================
    2. STOP Consuming, START Creating
    =========================================================== */
 
-.lp-pain { padding-block: 40px; }
+.lp-pain { padding-block: var(--band); }
 
-.lp-pain-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
+.lp-pain-in {
+  display: grid;
+  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+  gap: clamp(28px, 5vw, 76px);
+  align-items: start;
 }
 
-.lp-pain-list {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.lp-pain-head { display: flex; flex-direction: column; gap: 14px; }
+.lp-pain .lp-head em { color: var(--red-ink); }
+/* START gets the lime, as a highlighter stroke rather than a colour —
+   lime type on paper would not hold up. */
+.lp-pain .lp-head b {
+  font-weight: inherit;
+  background: linear-gradient(transparent 52%, rgba(182, 238, 60, 0.62) 52%, rgba(182, 238, 60, 0.62) 94%, transparent 94%);
 }
+
+.lp-pain-list { display: grid; margin: 0; padding: 0; list-style: none; }
 
 .lp-pain-list li {
-  flex: 1 0 0;
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 10px;
-  font-size: 16px;
-  line-height: 1.5;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 20px;
+  align-items: baseline;
+  padding: 22px 0;
+  border-top: 1px solid var(--pr);
 }
+.lp-pain-list li:last-child { border-bottom: 1px solid var(--pr); }
 
-.lp-pain-list img { width: 50px; height: 50px; flex: none; }
+.lp-pain-list span {
+  font-family: var(--mn);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--red-ink);
+}
+.lp-pain-list p {
+  margin: 0;
+  font-family: var(--dis);
+  font-weight: 500;
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
 
 /* ===========================================================
    3. Unlock Bonuses worth ₹9,500
    =========================================================== */
 
-.lp-bonus { padding-bottom: 80px; }
-
-.lp-bonus-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 48px;
-  max-width: 1076px;
-  margin: 0 auto;
-}
+.lp-bonus { padding-block: var(--band); }
 
 .lp-bonus-grid {
-  display: flex;
-  align-items: stretch;
-  gap: 12px;
-  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
 }
 
 .lp-bonus-card {
-  flex: 1 0 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 24px 8px 8px;
-  border: 1px solid #d9d8d8;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.2);
-  text-align: center;
+  border: 1px solid var(--rule-2);
+  border-radius: 20px;
+  background: var(--night-2);
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.25s ease;
 }
+.lp-bonus-card:hover { transform: translateY(-4px); border-color: rgba(182, 238, 60, 0.34); }
 
-.lp-bonus-body { display: contents; }
-.lp-bonus-body > h3 { order: 1; }
-.lp-bonus-body > p { order: 2; }
-.lp-bonus-card > img { order: 3; }
-.lp-bonus-body > .lp-price { order: 4; }
+.lp-bonus-art { aspect-ratio: 1 / 1; overflow: hidden; background: #0b1e2e; }
+.lp-bonus-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.lp-bonus-body { display: flex; flex-direction: column; gap: 8px; flex: 1; padding: 20px; }
 
 .lp-bonus-card h3 {
   margin: 0;
-  font-weight: 700;
-  font-size: 22px;
-  line-height: 1.13;
+  font-family: var(--dis);
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  color: var(--fg);
 }
+.lp-bonus-card p { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--fg-3); }
 
-.lp-bonus-card p {
-  margin: 0;
-  font-size: 18px;
-  line-height: 1.5;
-}
-
-.lp-bonus-card > img {
-  display: block;
-  width: 100%;
-  border-radius: 12px;
-}
-
-.lp-price {
+.lp-bonus-card .lp-price {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 12px 0;
-  font-size: 22px;
-  line-height: 1.5;
+  gap: 12px;
+  margin: auto 0 0;
+  padding-top: 14px;
+}
+.lp-price s { font-size: 15px; color: var(--fg-3); text-decoration: line-through; }
+.lp-price b {
+  padding: 5px 11px;
+  border: 1px solid rgba(182, 238, 60, 0.3);
+  border-radius: 999px;
+  background: rgba(182, 238, 60, 0.1);
+  font-family: var(--mn);
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  color: var(--volt);
 }
 
-.lp-price s { font-weight: 500; text-decoration: line-through; }
-.lp-price b { font-weight: 700; color: var(--red); }
+/* The button under the grid is the only centred thing in the band. */
+.lp-bonus .lp-cta-sm { display: flex; margin-inline: auto; width: max-content; }
 
 /* ===========================================================
    4. What you'll actually learn?
    =========================================================== */
 
-.lp-learn { padding-bottom: 80px; }
+.lp-learn { padding-block: var(--band); }
 
-.lp-learn-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 48px;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding-inline: 23px;
+.lp-learn-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  gap: clamp(28px, 4.5vw, 68px);
+  align-items: start;
 }
 
-.lp-learn-cols { display: flex; gap: 20px; width: 100%; }
-
+/* Sticky, so the photograph stays beside whichever module is open.
+   The offset lime block is the section's one graphic gesture. */
 .lp-learn-shot {
-  flex: 1 0 45%;
-  align-self: flex-start;
   position: sticky;
-  top: 24px;
-  border-radius: 12px;
+  top: calc(var(--nav-h) + 28px);
+  border-radius: 20px;
   overflow: hidden;
+  box-shadow: 14px 14px 0 rgba(182, 238, 60, 0.85);
 }
-
 .lp-learn-shot img { display: block; width: 100%; }
 
-.lp-learn-col {
-  flex: 1 0 45%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.lp-more {
-  margin: 0;
-  font-weight: 700;
-  font-size: clamp(24px, 3.4vw, 32px);
-  line-height: 1;
-  color: var(--red);
-}
+.lp-learn-col { display: flex; flex-direction: column; }
 
 /* ---------- Modules accordion ----------
 
-   Rows alternate mint and red down the list. Both states are declared
-   here rather than with :nth-child so a row can be reordered in the
-   markup without the colours resequencing on their own. */
+   The alternating mint and red rows are gone. This is a list with
+   hairlines: a mono numeral, the title, and a plus that turns into a
+   cross. The open row tints rather than shouts. */
 
-.lp-modules { display: flex; flex-direction: column; gap: 8px; }
+.lp-modules { display: grid; }
 
-.lp-module {
-  border: 0.5px solid;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.lp-module-mint { background: var(--mint); border-color: var(--maroon); color: var(--maroon); }
-.lp-module-red { background: var(--red); border-color: #fff; color: #fff; }
+.lp-module { border-top: 1px solid var(--pr); transition: background-color 0.25s ease; }
+.lp-module:last-child { border-bottom: 1px solid var(--pr); }
+.lp-module[open] { background: rgba(10, 32, 51, 0.035); }
 
 .lp-module > button {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   width: 100%;
-  padding: 10px 12px;
+  padding: 20px 8px;
   border: 0;
   background: none;
   color: inherit;
@@ -448,16 +628,28 @@
   cursor: pointer;
 }
 
+.lp-module-no {
+  font-family: var(--mn);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  transition: color 0.25s ease;
+}
+.lp-module[open] .lp-module-no { color: var(--red-ink); }
+
 .lp-module h3 {
   margin: 0;
-  font-weight: 700;
-  font-size: clamp(17px, 1.8vw, 21px);
-  line-height: 1.55;
-  color: inherit;
+  font-family: var(--dis);
+  font-weight: 600;
+  font-size: clamp(17px, 1.5vw, 20px);
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--ink);
 }
 
-.lp-module-plus { flex: none; transition: transform 0.35s ease; }
-.lp-module[open] .lp-module-plus { transform: rotate(45deg); }
+.lp-module-plus { flex: none; color: var(--ink-3); transition: transform 0.35s ease, color 0.25s ease; }
+.lp-module[open] .lp-module-plus { transform: rotate(45deg); color: var(--red-ink); }
 
 /* A grid row animating 0fr → 1fr opens the panel to whatever height its
    own content needs, which max-height cannot do without a magic number
@@ -469,10 +661,12 @@
 }
 .lp-module[open] .lp-module-body { grid-template-rows: 1fr; }
 
+/* The left padding lines the bullets up under the title rather than
+   under the numeral. */
 .lp-module-body > ul {
   overflow: hidden;
   margin: 0;
-  padding: 0;
+  padding: 0 8px 0 46px;
   list-style: none;
 }
 
@@ -480,135 +674,126 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
 }
+.lp-module-body li:first-child { margin-top: 2px; }
+.lp-module-body li:last-child { margin-bottom: 20px; }
+.lp-module-body li + li { margin-top: 10px; }
+.lp-module-body svg { flex: none; width: 17px; height: 17px; margin-top: 4px; color: var(--leaf); }
 
-.lp-module-body li:first-child { margin-top: 4px; }
-.lp-module-body li:last-child { margin-bottom: 12px; }
-.lp-module-body li + li { margin-top: 12px; }
-.lp-module-body ul { padding: 0 12px; }
-.lp-module-body svg { flex: none; width: 20px; height: 20px; margin-top: 2px; }
+.lp-more {
+  margin: 26px 0 0;
+  font-family: var(--dis);
+  font-weight: 700;
+  font-size: clamp(20px, 2.2vw, 26px);
+  letter-spacing: -0.02em;
+  color: var(--red-ink);
+}
 
 /* ===========================================================
    5. Get Certified
    =========================================================== */
 
-.lp-cert { padding-bottom: 80px; }
+.lp-cert { padding-block: var(--band); }
 
-.lp-cert-card {
-  position: relative;
-  overflow: hidden;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 25px 40px;
-  border: 3px solid #fff;
-  border-radius: 40px;
-  background: rgba(241, 237, 226, 0.46);
-}
-
-.lp-cert-cols {
-  position: relative;
-  z-index: 1;
-  display: flex;
+.lp-cert-in {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(32px, 5vw, 76px);
   align-items: center;
-  gap: 60px;
 }
 
-.lp-cert-copy {
-  flex: 1 0 48%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 32px;
-}
+.lp-cert-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+.lp-cert-copy .lp-cta { margin-top: 8px; }
 
-.lp-cert-copy .lp-head { text-align: left; }
+.lp-checks { display: grid; gap: 12px; margin: 4px 0; padding: 0; list-style: none; }
+.lp-checks li { display: flex; align-items: center; gap: 12px; font-size: 16px; color: var(--fg-2); }
+.lp-checks svg { flex: none; width: 17px; height: 17px; color: var(--volt); }
 
-.lp-checks {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.lp-checks li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-.lp-checks svg { flex: none; width: 16px; height: 16px; color: var(--ink); }
-
-.lp-cert-shot { flex: 1 0 41%; }
-.lp-cert-shot img { display: block; width: 100%; border-radius: 8px; }
-
-/* The three soft blobs behind the card. Decoration only, so they are
-   hidden from assistive tech in the markup and never intercept a click. */
-.lp-blob {
+/* The three blob SVGs are gone. The certificate is a white sheet on a
+   dark ground, so it only needs a glow behind it and a couple of
+   degrees of tilt; hovering straightens it. */
+.lp-cert-shot { position: relative; }
+.lp-cert-shot::before {
+  content: "";
   position: absolute;
+  inset: -12% -8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(182, 238, 60, 0.15), rgba(182, 238, 60, 0) 66%);
   pointer-events: none;
-  user-select: none;
 }
-.lp-blob-1 { top: -40px; left: 18%; width: 200px; }
-.lp-blob-2 { bottom: -60px; left: 34%; width: 200px; }
-.lp-blob-3 { top: 30%; right: 6%; width: 138px; }
+.lp-cert-shot img {
+  position: relative;
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  transform: rotate(-2.2deg);
+  box-shadow: 0 34px 70px rgba(0, 0, 0, 0.46);
+  transition: transform 0.4s ease;
+}
+.lp-cert-shot:hover img { transform: rotate(0deg); }
 
 /* ===========================================================
    6. Testimonials
    =========================================================== */
 
-.lp-tst { padding-bottom: 80px; }
+.lp-tst { padding-block: var(--band); }
 
-.lp-tst-inner {
+/* The arrows moved out of the strip's flanks and into the heading
+   row, which is what buys the cards the full width of the column. */
+.lp-rail-head {
   display: flex;
-  flex-direction: column;
-  gap: 48px;
-  max-width: 1340px;
-  margin: 0 auto;
-  padding-inline: 23px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: clamp(28px, 3.4vw, 44px);
 }
+.lp-rail-head > div:first-child { display: flex; flex-direction: column; gap: 14px; }
 
-.lp-rail {
-  display: flex;
-  align-items: center;
-  gap: 40px;
+.lp-arrows { display: flex; gap: 10px; flex: none; }
+
+.lp-arrow {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg-2);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
 }
+.lp-arrow:hover:not(:disabled) { border-color: var(--volt); color: var(--volt); }
+/* At either end of the strip the arrow stays put rather than wrapping. */
+.lp-arrow:disabled { opacity: 0.28; cursor: default; }
+.lp-arrow svg { width: 20px; height: 20px; }
 
 /* Scroll-snap rather than a carousel library: the arrows scroll the
    same overflow the finger already does, so touch and click agree and
    nothing has to be initialised before the strip is usable. */
 .lp-track {
-  flex: 1;
   display: flex;
-  gap: 24px;
+  gap: 20px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  padding-bottom: 4px;
+  padding-bottom: 6px;
 }
 .lp-track::-webkit-scrollbar { display: none; }
 
 .lp-slide {
-  flex: 0 0 268px;
+  flex: 0 0 246px;
   scroll-snap-align: start;
-  border: 1px solid #cfcfcf;
-  border-radius: 7px;
-  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--rule-2);
+  border-radius: 18px;
+  background: #08151f;
   overflow: hidden;
 }
-
-.lp-slide iframe {
-  display: block;
-  width: 100%;
-  height: 473px;
-  border: 0;
-}
+.lp-slide iframe { display: block; width: 100%; aspect-ratio: 9 / 16; border: 0; }
 
 /* ---------- The poster in front of each clip ----------
 
@@ -620,112 +805,98 @@
   position: relative;
   display: block;
   width: 100%;
-  height: 473px;
+  aspect-ratio: 9 / 16;
   padding: 0;
   border: 0;
-  background: #111;
+  background: #0b1722;
   cursor: pointer;
   overflow: hidden;
 }
+.lp-play img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
 
-.lp-play img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
+/* Darkens the foot of the poster so the strip reads as one row rather
+   than nine unrelated frames. */
+.lp-play::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 42%;
+  background: linear-gradient(rgba(4, 12, 20, 0), rgba(4, 12, 20, 0.72));
+  pointer-events: none;
 }
 
 .lp-play-mark {
   position: absolute;
+  z-index: 1;
   inset: 50% auto auto 50%;
   transform: translate(-50%, -50%);
   display: grid;
   place-items: center;
-  width: 56px;
-  height: 56px;
+  width: 54px;
+  height: 54px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.62);
-  color: #fff;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  background: var(--volt);
+  color: #08202f;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
-.lp-play-mark svg { width: 26px; height: 26px; margin-left: 2px; }
+.lp-play-mark svg { width: 24px; height: 24px; margin-left: 2px; }
 
-.lp-play:hover img { transform: scale(1.03); }
+.lp-play:hover img { transform: scale(1.04); }
 .lp-play:hover .lp-play-mark,
 .lp-play:focus-visible .lp-play-mark {
-  background: var(--red);
-  transform: translate(-50%, -50%) scale(1.06);
+  background: var(--volt-2);
+  transform: translate(-50%, -50%) scale(1.08);
 }
-
-.lp-arrow {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 58px;
-  height: 58px;
-  border: 0;
-  border-radius: 999px;
-  background: #2a2a2a;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-.lp-arrow:hover:not(:disabled) { background: #444; }
-/* At either end of the strip the arrow stays put rather than wrapping. */
-.lp-arrow:disabled { opacity: 0.35; cursor: default; }
-.lp-arrow svg { width: 28px; height: 28px; }
 
 /* ===========================================================
    7. Brands we have worked with
+
+   The logos arrive in every style there is — flat colour, black
+   wordmarks, one with a white background baked in. Rather than fight
+   that, each sits on its own white tile, which is also what makes a
+   run of them read as a wall on a dark ground.
    =========================================================== */
 
-.lp-brands { padding: 8px 0 80px; }
-
-.lp-brands-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-}
+.lp-brands { padding-bottom: var(--band); }
 
 .lp-chip {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 10px;
-  border: 1px solid var(--red);
-  border-radius: 9999px;
-  background: rgba(121, 111, 237, 0.08);
-  font-family: var(--lp-display);
-  font-weight: 600;
-  font-size: 17px;
-  line-height: 1.5;
-  color: var(--red);
+  gap: 18px;
+  margin: 0 0 28px;
+  font-family: var(--mn);
+  font-weight: 500;
+  font-size: 11.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-3);
 }
+.lp-chip::before, .lp-chip::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
 
 .lp-marquee {
   width: 100%;
   overflow: hidden;
   /* Feathered ends, so logos arrive and leave rather than being cut
      off against the gutter. */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
 
-/* The track holds the run twice; the keyframe travels exactly one run,
-   so the loop point lands logo-for-logo and reads as continuous. */
+/* The track holds the run twice; the keyframe travels exactly one run
+   plus half the gap, so the loop point lands logo-for-logo and reads
+   as continuous. Change the gap and this has to change with it. */
 .lp-marquee-track {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   width: max-content;
-  animation: lp-marquee 18s linear infinite;
+  animation: lp-marquee 26s linear infinite;
 }
 .lp-marquee:hover .lp-marquee-track { animation-play-state: paused; }
 
 @keyframes lp-marquee {
   from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(calc(-50% - 12px), 0, 0); }
+  to { transform: translate3d(calc(-50% - 10px), 0, 0); }
 }
 
 .lp-logo {
@@ -733,50 +904,42 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  width: 160px;
-  min-height: 52px;
-  padding: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  gap: 8px;
+  width: 172px;
+  height: 76px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #fff;
 }
-
 .lp-logo img { display: block; }
 
 /* ===========================================================
    8. Meet your Mentor
    =========================================================== */
 
-.lp-mentor { padding-block: 50px; }
+.lp-mentor { padding-bottom: var(--band); }
 
-.lp-mentor-inner {
-  display: flex;
-  gap: 48px;
-  max-width: 880px;
-  margin: 0 auto;
+.lp-mentor-in {
+  display: grid;
+  grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr);
+  gap: clamp(28px, 4.5vw, 64px);
+  align-items: start;
 }
 
+/* The name plate used to be a grey slab under the photograph. It is
+   now set into the foot of the frame, over a gradient. */
 .lp-mentor-card {
-  flex: 1 0 33%;
+  position: relative;
   margin: 0;
-  align-self: flex-start;
-  border-radius: 16px;
+  border-radius: 22px;
   overflow: hidden;
+  background: #0b1722;
 }
 
 /* The source is 760x1362 — a 0.56 ratio, so tall that any width the column
-   gives it comes back 1.8x that in height, and the card ends up the longest
-   thing in a section whose point is the copy beside it. Narrowing the column
-   does not help: it shortens and thins in the same proportion, so the shape
-   stays just as elongated.
-
-   So the height is cropped rather than the width scaled. 3:4 is a standard
-   portrait ratio and keeps 74% of the frame; at 10% down that window runs
-   from just above his hair to just below the crossed arms, which is the
-   part of the photo worth keeping — the empty jacket below the arms is what
-   was making it long. */
+   gives it comes back 1.8x that in height. 3:4 keeps 74% of the frame; at
+   10% down that window runs from just above his hair to just below the
+   crossed arms, which is the part of the photo worth keeping. */
 .lp-mentor-card img {
   display: block;
   width: 100%;
@@ -786,92 +949,102 @@
 }
 
 .lp-mentor-name {
+  position: absolute;
+  inset: auto 0 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 24px;
-  background: linear-gradient(to right, #f5f5f5, #f1f4ff);
-  color: #000;
-  text-align: center;
+  gap: 5px;
+  padding: 72px 22px 22px;
+  background: linear-gradient(rgba(4, 12, 20, 0), rgba(4, 12, 20, 0.62) 45%, rgba(4, 12, 20, 0.95));
+  color: var(--fg);
 }
-
-.lp-mentor-name i { font-style: italic; font-size: 14.7px; line-height: 1.5; }
-.lp-mentor-name b { font-weight: 700; font-size: 30px; line-height: 1.06; }
-.lp-mentor-name span { font-size: 14.7px; line-height: 1.5; }
-
-.lp-mentor-copy {
-  flex: 1 0 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 32px;
-  padding-bottom: 48px;
+.lp-mentor-name i {
+  font-style: normal;
+  font-family: var(--mn);
+  font-weight: 500;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--volt);
 }
-
-.lp-mentor-copy .lp-head {
-  text-align: left;
-  font-size: clamp(30px, 4vw, 48px);
-  line-height: 1.2;
+.lp-mentor-name b {
+  font-family: var(--dis);
+  font-weight: 700;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
 }
+.lp-mentor-name span { font-size: 13.5px; color: var(--fg-3); }
 
-.lp-bio { display: flex; flex-direction: column; gap: 24px; }
-.lp-bio p { margin: 0; font-size: 16px; line-height: 1.55; }
+.lp-mentor-copy { display: flex; flex-direction: column; gap: 18px; }
+
+.lp-bio { display: grid; gap: 16px; margin-top: 4px; }
+.lp-bio p { margin: 0; font-size: 16px; line-height: 1.7; color: var(--fg-2); }
+.lp-bio b { font-weight: 700; color: var(--fg); }
 
 .lp-stats {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  width: 100%;
-  border-top: 1px solid rgba(6, 29, 25, 0.1);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 10px;
 }
 
 .lp-stat {
-  flex: 1 1 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 16px;
+  gap: 8px;
+  padding: 20px 14px 0 0;
+  border-top: 1px solid var(--rule);
 }
-
-.lp-stat img { width: 45px; height: 45px; }
-.lp-stat b { font-family: var(--lp-display); font-weight: 700; font-size: 26px; line-height: 1.06; }
-.lp-stat span { font-weight: 500; font-size: 18px; line-height: 1.5; color: #797773; }
+.lp-stat + .lp-stat { padding-left: 20px; border-left: 1px solid var(--rule); }
+.lp-stat img { width: 34px; height: 34px; }
+.lp-stat b {
+  font-family: var(--dis);
+  font-weight: 700;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--volt);
+}
+.lp-stat span {
+  font-family: var(--mn);
+  font-weight: 500;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
 
 /* ===========================================================
    9. FAQ
    =========================================================== */
 
-.lp-faq { padding-bottom: 60px; }
+.lp-faq { padding-block: var(--band); }
 
-.lp-faq-inner {
+.lp-faq-in {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(28px, 5vw, 76px);
+  align-items: start;
+}
+
+.lp-faq-head {
+  position: sticky;
+  top: calc(var(--nav-h) + 28px);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 48px;
-  max-width: 820px;
-  margin: 0 auto;
+  gap: 14px;
 }
 
-.lp-faq-list { width: 100%; }
-
-.lp-q {
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 10px;
-  background: rgba(192, 192, 192, 0.2);
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-}
-.lp-q + .lp-q { margin-top: 16px; }
+.lp-q { border-top: 1px solid var(--pr); }
+.lp-faq-list .lp-q:last-child { border-bottom: 1px solid var(--pr); }
 
 .lp-q > button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 20px;
   width: 100%;
-  padding: 24px;
+  padding: 22px 4px;
   border: 0;
   background: none;
   color: var(--ink);
@@ -882,14 +1055,16 @@
 
 .lp-q h3 {
   margin: 0;
+  font-family: var(--dis);
   font-weight: 600;
-  font-size: 16px;
-  line-height: 1.4;
+  font-size: clamp(16px, 1.35vw, 18px);
+  line-height: 1.35;
+  letter-spacing: -0.015em;
   color: var(--ink);
 }
 
-.lp-q-chev { flex: none; transition: transform 0.35s ease; }
-.lp-q[open] .lp-q-chev { transform: rotate(180deg); }
+.lp-q-chev { flex: none; color: var(--ink-3); transition: transform 0.35s ease, color 0.25s ease; }
+.lp-q[open] .lp-q-chev { transform: rotate(180deg); color: var(--red-ink); }
 
 .lp-q-body {
   display: grid;
@@ -901,86 +1076,110 @@
 .lp-q-body > div { overflow: hidden; }
 .lp-q-body p {
   margin: 0;
-  padding: 0 24px 24px;
-  font-size: 16px;
-  line-height: 1.5;
+  max-width: 62ch;
+  padding: 0 4px 24px;
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
 }
-.lp-q-body a { text-decoration: underline; }
+.lp-q-body a { color: var(--red-ink); text-decoration: underline; text-underline-offset: 2px; }
 
 /* ===========================================================
    10. Final CTA
+
+   The one place the page goes loud: a full-bleed lime band, ink type,
+   and the button inverted. It is also the only centred block.
    =========================================================== */
 
-.lp-final { padding-bottom: 40px; }
-
-/* A dashed gold hairline outside a soft pink card — two frames, as
-   drawn, so the dash reads as a ticket edge rather than a border. */
-.lp-final-frame {
-  padding: 16px;
-  border: 0.5px dashed #fc0;
-  border-radius: 27px;
-}
-
-.lp-final-card {
+.lp-final {
   position: relative;
   overflow: hidden;
+  padding-block: clamp(56px, 7vw, 100px);
+  background: var(--volt);
+  color: #08202f;
+}
+
+/* A fine diagonal hatch, just enough that the band is not a flat
+   rectangle of colour. */
+.lp-final::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(135deg, rgba(8, 32, 47, 0.05) 0 2px, transparent 2px 15px);
+  pointer-events: none;
+}
+
+.lp-final-in {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 48px;
-  padding: 30px 80px;
-  border: 2px solid rgba(144, 144, 144, 0.43);
-  border-radius: 24px;
-  background: rgba(255, 118, 121, 0.1);
+  gap: 26px;
   text-align: center;
 }
 
-.lp-final-card h2 {
-  position: relative;
-  z-index: 1;
+.lp-final h2 {
   margin: 0;
-  font-family: var(--lp-display);
+  max-width: 900px;
+  font-family: var(--dis);
   font-weight: 700;
-  font-size: clamp(26px, 3.6vw, 40px);
-  line-height: 1.3;
+  font-size: clamp(30px, 4.9vw, 58px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
   text-wrap: balance;
 }
-
-.lp-final-card h2 span {
+.lp-final h2 span {
   display: block;
-  margin-top: 12px;
-  font-size: clamp(16px, 1.9vw, 22px);
-  color: var(--red);
+  max-width: 52ch;
+  margin: 18px auto 0;
+  font-family: var(--ui);
+  font-weight: 500;
+  font-size: clamp(15px, 1.6vw, 19px);
+  line-height: 1.45;
+  letter-spacing: 0;
+  color: rgba(8, 32, 47, 0.66);
 }
 
-.lp-final-card .lp-cta { position: relative; z-index: 1; }
-.lp-final-card .lp-blob { top: 30%; right: 22%; width: 149px; }
+.lp-final-meta {
+  margin: 0;
+  font-family: var(--mn);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(8, 32, 47, 0.6);
+}
 
 /* ===========================================================
    11. Footer
    =========================================================== */
 
 .lp-foot {
-  padding: 40px 0 110px;
-  background: #000;
-  color: #fff;
-  text-align: center;
+  background: #040e17;
+  border-top: 1px solid var(--rule-2);
+  /* The bottom padding is what clears the fixed enrol bar. */
+  padding-block: clamp(36px, 4.5vw, 52px) clamp(104px, 11vw, 128px);
 }
 
-.lp-foot-inner {
+.lp-foot-in {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
-  max-width: 700px;
-  margin: 0 auto;
-  padding-inline: 32px;
+  justify-content: space-between;
+  gap: 14px 32px;
 }
-
-.lp-foot img { width: 66px; height: 66px; }
-.lp-foot p { margin: 0; font-size: 20px; line-height: 1.1; }
-.lp-foot a { color: #fff; text-decoration: underline; }
-.lp-foot small { font-size: 15px; line-height: 1.4; }
+.lp-brand-foot img { width: 40px; height: 40px; }
+.lp-foot p { margin: 0; font-size: 14.5px; color: var(--fg-3); }
+.lp-foot a { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
+.lp-foot small {
+  font-family: var(--mn);
+  font-weight: 500;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
 
 /* ===========================================================
    12. Sticky enrol bar
@@ -988,239 +1187,245 @@
 
 .lp-sticky {
   position: fixed;
-  z-index: 40;
+  z-index: 60;
   left: 50%;
-  bottom: 16px;
-  transform: translate(-50%, 140%);
+  bottom: 18px;
+  transform: translate(-50%, 170%);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 4px;
-  width: min(937px, calc(100% - 32px));
-  padding: 20px 10px;
-  border: 1px solid #fff;
-  border-radius: 24px;
-  background: #150000;
-  transition: transform 0.4s ease;
+  gap: 12px;
+  width: min(880px, calc(100% - 28px));
+  padding: 14px 14px 14px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 20px;
+  background: rgba(8, 26, 41, 0.86);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.25, 1);
 }
 
 /* Held back until the hero has been read, so it does not cover the
    button it duplicates. */
 .lp-sticky.is-in { transform: translate(-50%, 0); }
 
-.lp-sticky-thumb { position: relative; flex: 0 0 15%; height: 41px; }
+.lp-sticky-thumb { position: relative; flex: 0 0 98px; height: 46px; }
 
 /* The cut-out overhangs the bar's top edge, which is the whole gag —
    she is standing on it rather than sitting in it. */
 .lp-sticky-thumb img {
   position: absolute;
-  bottom: -20px;
-  left: 0;
-  width: 142px;
+  left: -8px;
+  bottom: -14px;
+  width: 112px;
   max-width: none;
+}
+
+/* The bar names the workshop and, under it, when it is — the same line the
+   top bar carries, so someone who has scrolled past both the hero badge and
+   the nav still has the date in front of them at the moment they decide. */
+.lp-sticky-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .lp-sticky p {
   margin: 0;
-  font-family: var(--lp-display);
-  font-weight: 800;
-  font-size: clamp(16px, 2.4vw, 30px);
-  line-height: 1;
-  color: #ffdcdc;
+  font-family: var(--dis);
+  font-weight: 700;
+  font-size: clamp(15px, 1.7vw, 21px);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: var(--fg);
 }
 
-.lp-sticky .lp-cta {
-  width: auto;
-  flex: none;
-  padding: 16px 32px;
-  font-size: 20px;
+.lp-sticky-when {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mn);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-2);
 }
+.lp-sticky-when i {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--red);
+  animation: lp-pulse 2s ease-in-out infinite;
+}
+
+.lp-sticky .lp-cta { flex: none; padding: 12px 24px; font-size: 15px; box-shadow: none; }
 
 /* ===========================================================
    Below the fold
 
-   These five bands are laid out and painted only once they are near
-   the viewport, which is most of the page's first-render cost. The
-   sizes are what each measures at 1440px and are only a placeholder
-   for the very first pass — `auto` makes the browser remember the real
-   height afterwards, so the scrollbar does not jump on the way back up.
+   These bands are laid out and painted only once they are near the
+   viewport, which is most of the page's first-render cost. The sizes
+   are what each measures at 1280px and are only a placeholder for the
+   very first pass — `auto` makes the browser remember the real height
+   afterwards, so the scrollbar does not jump on the way back up.
 
-   Deliberately not on .lp-learn or .lp-cert: the modules image is
-   `position: sticky`, and containment would strand it.
+   Deliberately not on .lp-learn or .lp-faq: both hold a
+   `position: sticky` column, and containment would strand it.
    =========================================================== */
 
-.lp-tst    { content-visibility: auto; contain-intrinsic-size: auto 675px; }
-.lp-brands { content-visibility: auto; contain-intrinsic-size: auto 217px; }
-.lp-mentor { content-visibility: auto; contain-intrinsic-size: auto 780px; }
-.lp-faq    { content-visibility: auto; contain-intrinsic-size: auto 786px; }
-.lp-foot   { content-visibility: auto; contain-intrinsic-size: auto 279px; }
+.lp-tst    { content-visibility: auto; contain-intrinsic-size: auto 770px; }
+.lp-brands { content-visibility: auto; contain-intrinsic-size: auto 225px; }
+.lp-mentor { content-visibility: auto; contain-intrinsic-size: auto 660px; }
+.lp-final  { content-visibility: auto; contain-intrinsic-size: auto 465px; }
+.lp-foot   { content-visibility: auto; contain-intrinsic-size: auto 220px; }
 
 /* ===========================================================
-   Wide-screen and tablet
+   Tablet
    =========================================================== */
 
-@media (max-width: 1100px) {
-  .lp-hero-card { padding: 32px 40px; }
-  .lp-final-card { padding: 30px 40px; }
+@media (max-width: 1040px) {
+  .lp-hero-in { gap: 24px; }
+  .lp-pain-in,
+  .lp-cert-in,
+  .lp-faq-in { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .lp-faq-head, .lp-learn-shot { position: static; }
+  .lp-cert-shot { order: -1; }
+  .lp-learn-shot { box-shadow: 10px 10px 0 rgba(182, 238, 60, 0.85); }
+  .lp-bonus-grid { gap: 16px; }
 }
 
 /* ===========================================================
    Mobile — one column
 
    The hero reorders here: the picture comes straight after the
-   headline, the way it does on the phone layout of the original, and
-   the two facts drop below the button.
+   headline, and the three facts drop below the button, the way the
+   phone layout of the original did it.
    =========================================================== */
 
-@media (max-width: 900px) {
-  .lp-body { padding-bottom: 96px; }
-  .lp-wrap { padding-inline: 18px; }
-  .lp-head { font-size: 32px; }
+@media (max-width: 860px) {
+  .lp-body { font-size: 15.5px; }
 
-  .lp-hero { padding-top: 24px; }
-  .lp-hero-card { flex-direction: column; gap: 8px; padding: 24px 16px; }
+  .lp-nav-date { display: none; }
 
-  .lp-hero-copy {
-    display: contents;
-  }
+  .lp-hero-in { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  /* display:contents lifts the copy's children into the hero grid so
+     the picture can sit between the headline and the points. */
+  .lp-hero-copy { display: contents; }
+  .lp-hero h1 span { font-size: min(10.4vw, 48px); }
+  .lp-hero h1 em { font-size: min(8.2vw, 38px); }
 
-  /* One centred column capped at the width the phone layout was drawn
-     for, so a tablet gets the same hero rather than a 700px-tall
-     photograph. Each block is full width inside that cap — a point that
-     needs the whole line gets it, instead of wrapping inside a
-     shrink-to-fit box. */
-  .lp-hero-card > * { align-self: center; width: 100%; max-width: 460px; }
-
-  .lp-hero h1 { order: 1; text-align: center; }
-  .lp-hero-media { order: 2; aspect-ratio: 1 / 1; }
+  .lp-hero h1 { order: 1; }
+  .lp-hero-media { order: 2; }
   .lp-points { order: 3; }
-  .lp-points li { width: 100%; }
   .lp-hero-copy > .lp-cta { order: 4; }
   .lp-facts { order: 5; }
 
-  .lp-points li { gap: 12px; font-size: 14px; line-height: 1.7; }
-  .lp-flag { bottom: 4px; }
-  .lp-cta { font-size: 20px; }
-
-  .lp-pain-list { flex-wrap: wrap; gap: 4px 0; }
-  .lp-pain-list li { flex: 1 1 46%; }
-
-  /* Bonus cards turn on their side: art left, copy and price right. */
-  .lp-bonus-grid { flex-direction: column; }
-  .lp-bonus-card {
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 16px;
-    padding: 12px;
-    text-align: left;
+  /* The cut-out carries ~14% of empty frame above the heads. In a square
+     box that is dead space under the headline, so the box is shortened and
+     the picture switched to cover, which crops exactly that band off the
+     top — leaving the grid gap to do the spacing under the headline
+     rather than a band of empty frame. */
+  .lp-hero-media {
+    aspect-ratio: 1 / 0.87;
+    max-width: 460px;
+    width: 100%;
+    margin: 4px auto 0;
   }
-  .lp-bonus-card > img { order: 0; flex: 0 0 40%; width: 40%; }
-  .lp-bonus-body { display: flex; flex-direction: column; gap: 8px; order: 1; }
-  .lp-bonus-card h3 { font-size: 19px; }
-  .lp-bonus-card p { font-size: 15px; }
-  .lp-price { justify-content: flex-start; gap: 12px; padding: 4px 0 0; font-size: 18px; }
+  .lp-hero-media > img { object-fit: cover; }
+  .lp-hero-media::before { inset: 3% 4% 5%; }
+  .lp-hero-media::after { inset: 9% 11% 11%; }
 
-  .lp-learn-inner { padding-inline: 0; }
-  .lp-learn-cols { flex-direction: column; }
-  .lp-learn-shot { position: static; flex: none; width: 100%; }
-  .lp-learn-col { flex: none; width: 100%; }
+  .lp-bonus-grid { grid-template-columns: minmax(0, 1fr); }
+  /* Turned on their side: art left, copy and price right. */
+  .lp-bonus-card { flex-direction: row; align-items: stretch; }
+  .lp-bonus-art { flex: 0 0 38%; aspect-ratio: auto; }
+  .lp-bonus-body { padding: 16px; gap: 6px; }
+  .lp-bonus-card h3 { font-size: 17px; }
+  .lp-bonus-card p { font-size: 13.5px; }
+  .lp-bonus-card .lp-price { padding-top: 10px; }
+
+  .lp-learn-cols, .lp-mentor-in { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+  .lp-learn-shot { box-shadow: none; }
   .lp-more { text-align: center; }
 
-  .lp-cert-card { padding: 20px; border-radius: 28px; }
-  .lp-cert-cols { flex-direction: column; gap: 24px; }
-  .lp-cert-copy { flex: none; width: 100%; align-items: center; gap: 20px; }
-  .lp-cert-copy .lp-head { text-align: center; }
-  .lp-cert-shot { flex: none; width: 100%; order: -1; }
-  .lp-blob-1, .lp-blob-2, .lp-blob-3 { display: none; }
+  /* Full width is what a phone should give the portrait; a tablet
+     should not — at 760px an uncapped card came back over 950 tall
+     even cropped. */
+  .lp-mentor-card { max-width: 420px; margin-inline: auto; }
 
-  .lp-tst-inner { padding-inline: 0; }
-  .lp-rail { gap: 8px; }
-  .lp-arrow { width: 44px; height: 44px; }
-  .lp-arrow svg { width: 22px; height: 22px; }
+  .lp-rail-head { align-items: center; }
+  .lp-arrow { width: 40px; height: 40px; }
+  .lp-arrow svg { width: 18px; height: 18px; }
   .lp-slide { flex-basis: 200px; }
-  .lp-slide iframe,
-  .lp-play { height: 353px; }
   .lp-play-mark { width: 46px; height: 46px; }
-  .lp-play-mark svg { width: 21px; height: 21px; }
+  .lp-play-mark svg { width: 20px; height: 20px; }
 
-  .lp-mentor { padding-block: 24px; }
-  .lp-mentor-inner { flex-direction: column; gap: 24px; }
-  .lp-mentor-copy { flex: none; width: 100%; }
-  /* Stacked, a full-width portrait at this aspect ratio is ~575px tall on a
-     phone — most of a screen for one photo. Narrower and centred instead,
-     which is also why it needs the auto margins: at width:100% there was
-     nothing to centre. */
-  /* Full width is what a phone should give it. A tablet should not: at 760px
-     the column is ~720 wide, and an uncapped card came back over 950 tall
-     even cropped. The cap is above any phone width, so on a phone this is
-     still edge to edge and only the wider stacked layout is held back. */
-  .lp-mentor-card {
-    flex: none;
-    width: 100%;
-    max-width: 420px;
-    margin-inline: auto;
-  }
-  .lp-mentor-copy { padding-bottom: 0; }
-  .lp-mentor-copy .lp-head { order: -1; text-align: center; align-self: center; }
-  .lp-stats { gap: 0; }
-  .lp-stat { padding: 16px 8px; }
-  .lp-stat span { font-size: 15px; }
+  .lp-logo { width: 148px; height: 66px; padding: 13px; }
 
-  .lp-faq-list .lp-q > button { padding: 18px; }
-  .lp-q-body p { padding: 0 18px 18px; }
+  .lp-foot-in { flex-direction: column; align-items: flex-start; gap: 12px; }
 
-  .lp-final-card { gap: 24px; padding: 26px 18px; }
-  /* Two lines, not three, and the blur sits in the corner behind them
-     rather than through the middle of the sentence. */
-  .lp-final-card h2 { font-size: 23px; line-height: 1.3; }
-  .lp-final-card h2 span { margin-top: 10px; font-size: 15px; line-height: 1.45; }
-  .lp-final-card .lp-blob { top: auto; bottom: -30px; right: -30px; width: 130px; opacity: 0.7; }
-
-  /* The bar has three things and 358px. The cut-out's column is
-     narrower than the cut-out, which overhangs it to the right as well
-     as upward — its left edge is transparent, so the headline reads
-     over it — and that buys the headline enough width for two lines
-     rather than three. */
   .lp-sticky {
     bottom: 10px;
     gap: 8px;
-    padding: 10px 8px 12px 12px;
-    border-radius: 18px;
+    padding: 10px 10px 12px 10px;
+    border-radius: 16px;
   }
-  .lp-sticky-thumb { flex: 0 0 58px; height: 30px; }
-  .lp-sticky-thumb img { width: 80px; left: -6px; bottom: -10px; }
-  .lp-sticky p { flex: 1; font-size: 16px; line-height: 1.15; }
-  .lp-sticky .lp-cta { padding: 11px 18px; font-size: 15px; }
+  .lp-sticky-thumb { flex: 0 0 68px; height: 32px; }
+  .lp-sticky-thumb img { width: 80px; left: -8px; bottom: -11px; }
+  .lp-sticky-copy { gap: 3px; }
+  .lp-sticky-when { font-size: 10px; letter-spacing: 0.08em; gap: 6px; }
+  .lp-sticky .lp-cta { padding: 11px 18px; font-size: 14px; }
 }
 
 @media (max-width: 560px) {
-  /* 23px is the size at which both of the long headings — "What you'll
-     actually learn?" and "Unlock Bonuses worth ₹9,500" — still set on
-     one line inside a 390px screen's gutters. */
-  .lp-head { font-size: 23px; line-height: 1.25; }
+  .lp-pain-list li { gap: 14px; padding: 18px 0; }
 
-  /* Two-up needs room for three or four words a line. Under this the
-     cards go full width rather than becoming a column of single
-     words. */
-  .lp-pain-list { display: block; }
-  .lp-pain-list li { width: 100%; }
-
-  .lp-hero h1 b { font-size: clamp(30px, 9vw, 40px); }
+  /* Three facts across a 360px screen have no room for a rule between
+     them, so they lose the rules and gain a gap. */
   .lp-facts { gap: 10px; }
-  .lp-fact { flex: 1 1 145px; gap: 5px; padding: 6px; }
-  .lp-fact svg { width: 18px; height: 18px; margin: 3px; }
-  .lp-fact b { font-size: 13px; }
-  .lp-fact span { font-size: 11px; }
-  .lp-bonus-card h3 { font-size: 17px; }
-  .lp-foot p { font-size: 17px; }
+  .lp-fact { padding: 12px 8px 0 0; }
+  .lp-fact + .lp-fact { padding-left: 0; border-left: 0; }
+  .lp-fact dt { font-size: 9.5px; letter-spacing: 0.1em; gap: 5px; }
+  .lp-fact dd { font-size: 14px; }
+
+  .lp-module > button { gap: 12px; padding: 17px 4px; }
+  .lp-module-body > ul { padding-left: 38px; }
+
+  .lp-q > button { padding: 18px 2px; }
+  .lp-q-body p { padding: 0 2px 20px; }
+
+  .lp-final-meta { font-size: 10px; letter-spacing: 0.12em; }
+
+  /* At this width the bar's text column is ~147px. The date fits on one
+     line at 9px without its dot, and not with it. */
+  .lp-sticky-when { font-size: 9px; letter-spacing: 0.05em; }
+  .lp-sticky-when i { display: none; }
+
+  .lp-mentor-name { padding: 56px 18px 18px; }
+  .lp-stat { padding: 16px 8px 0 0; }
+  .lp-stat + .lp-stat { padding-left: 12px; }
+  .lp-stat img { width: 28px; height: 28px; }
 }
 
-/* The marquee and the sticky bar's entrance are the only motion that
-   is not a direct response to a tap; both stop here. base.css already
-   flattens transitions and the button sweep. */
+/* Under 400px the enrol bar has three things and 272px of room, and the
+   headline was coming out three lines deep. The cut-out is the part that
+   can go: it is a joke about the bar, not a reason to press the button. */
+@media (max-width: 400px) {
+  .lp-sticky-thumb { display: none; }
+  .lp-sticky { padding-left: 14px; }
+}
+
+/* The marquee, the bar's live dot and the sticky bar's entrance are the
+   only motion that is not a direct response to a tap; all three stop here.
+   base.css already flattens transitions and the button sweep. */
 @media (prefers-reduced-motion: reduce) {
   .lp-marquee-track { animation: none; }
+  .lp-nav-date i, .lp-sticky-when i { animation: none; }
   .lp-play img { transition: none; }
   .lp-sticky { transform: translate(-50%, 0); }
   .lp-track { scroll-behavior: auto; }

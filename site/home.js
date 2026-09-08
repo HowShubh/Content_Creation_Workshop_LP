@@ -96,7 +96,11 @@ document.querySelectorAll('[data-rail]').forEach((rail) => {
   function page() {
     const slide = track.querySelector('.lp-slide');
     if (!slide) return track.clientWidth;
-    const step = slide.getBoundingClientRect().width + 24;
+    /* The gap is read rather than hard-coded: it is a clamp in the
+       stylesheet on some widths, and a stale constant here shows up
+       as a card creeping out of alignment a few presses in. */
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    const step = slide.getBoundingClientRect().width + gap;
     /* At least one card, otherwise as many whole cards as fit minus one. */
     return Math.max(step, Math.floor(track.clientWidth / step - 1) * step);
   }

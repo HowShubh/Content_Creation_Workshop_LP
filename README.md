@@ -6,8 +6,8 @@ workshop, built from the Claude Design handoff bundle in `CCB Structure/`.
 **The whole funnel now lives here**: the landing page at `/`, the one-time
 offer, the two thank-you pages, and the join page for the day. The landing
 page used to be a TagMango page-builder site at
-`lp.kkcreate.in/content-creation`; it has been rebuilt here as hand-written
-HTML at the same design, so there is one place to change a price or a date.
+`lp.kkcreate.in/content-creation`; it is hand-written here, and has since been
+redesigned — the words are the ones that page carried, the design is not.
 
 The workshop is **live on Sunday 20 September 2026, 12:00–4:00 PM IST, on
 Zoom**. These pages are date-dependent: the date appears in the landing page's
@@ -70,17 +70,23 @@ its own copy — and it is handed out weeks early on a calendar entry, a QR
 code and a slide, where nobody can reissue it. Any future rename needs the
 same treatment, and it is worth not renaming it again.
 
-`/` is the **landing page**. Every Enroll button on it — hero, bonuses,
-certificate, the closing card and the sticky bar — goes to the same TagMango
+`/` is the **landing page**. Every Enroll button on it — the top bar, the
+hero, the bonuses, the certificate, the closing band and the sticky bar at the
+bottom of the screen — goes to the same TagMango
 workshop checkout, which is the only link on the page:
 `https://learn.kkcreate.in/web/checkout/6a99159a9cbde21f8b847e6b`. Change it
 in `site/index.html`; it is written out at each button rather than injected,
 so the page needs no script to be clickable.
 
-**The date is on it twice over.** The hero badge reads `12:00PM | 20 Sept
-(Sunday)` and the three facts beside it say the workshop is live, 3+ hours,
-on Zoom. That is the same session `ty.js`, the boarding pass and the .ics
-describe, so all of it moves together — grep for `20 Sept` and `20260920`.
+**The date is on it four times over.** The top bar, the badge under the hero
+cut-out (`12:00PM IST | 20 Sept (Sunday)`), the sticky enrol bar and the line
+under the closing band all carry it, and the three facts below the hero
+button say the workshop is live, 3+ hours, on Zoom. The bar is the one that
+matters most: by the time someone reaches the FAQ, both the badge and the top
+bar's copy are long gone, and the bar is what is in front of them at the
+moment they decide. That is the same session `ty.js`, the boarding
+pass and the .ics describe, so all of it moves together — grep for `20 Sept`
+and `20260920`.
 
 Every page is noindexed — see Deploying below.
 
@@ -200,22 +206,41 @@ cannot drift apart.
 
 ## The landing page (/)
 
-A rebuild of `lp.kkcreate.in/content-creation`, which was assembled in
-TagMango's page builder. The design is unchanged and was matched against the
-live page section by section; what changed is that it is hand-written, so it
-sits in this repo with the rest of the funnel.
+The copy came off `lp.kkcreate.in/content-creation`, which was assembled in
+TagMango's page builder; the page was first rebuilt here at that same design
+and has since been redesigned outright. Every word is still the builder's —
+what changed is how it is set.
+
+**The design.** A creator studio rather than a course brochure. A deep navy
+ground (`--night`, base.css's `--panel` taken darker) carries most of the
+page; two paper-white bands break it where the reading is longest — the
+problem, the curriculum, the FAQ — and one full-bleed lime band closes it.
+Lime (`--volt`, base.css's `--lime`) is the only action colour, so every
+Enroll button on the page is the same object; red survives as a signal, on
+the live dot and the numerals, not as a second brand colour. Headings are
+**Space Grotesk** set large, tight and ranged left, body copy is Manrope, and
+every small label — eyebrows, the facts under the hero, the module numbers,
+the date pill — is **JetBrains Mono** in caps. Nothing is centred except the
+closing band, and the hero carries one action and no eyebrow — the facts
+below the button already say live, Hinglish and Zoom, so saying it again over
+the headline was the same sentence twice. Poppins, the centred headings, the
+hand-drawn underline SVGs, the blobs and the mint-and-red accordion rows are
+all gone with the old design; so are the twelve decoration assets that only
+they used.
 
 **One DOM, not two.** The builder shipped a desktop and a mobile copy of
 every section, each hidden at the other width — which is why the exported
 HTML contains every testimonial and every FAQ answer twice. Here the layout
-changes at 900px and the copy exists once, so the two cannot drift apart.
+changes at 860px and the copy exists once, so the two cannot drift apart.
 
 **The share card.** `assets/home/og-share.jpg` is what WhatsApp, Instagram
 and Slack show when the link is pasted, which is how this page mostly travels
 — so it carries the date rather than being a bare photograph. It is composed
-by `tools/make-og.py` from the hero cut-out and the page's own Manrope, read
-straight out of the woff2 in `assets/fonts` so the card cannot drift to a
-different face than the page. **Re-run it when the date changes**, and keep
+by `tools/make-og.py` from the hero cut-out and the page's own Space Grotesk
+and JetBrains Mono, read straight out of the woff2 in `assets/fonts` so the
+card cannot drift to a different face than the page. **It carries the page's
+palette too** — navy ground, white headline, lime second line and date pill —
+so re-run it after any change to those. **Re-run it when the date changes**, and keep
 `WHEN` in step with the hero badge:
 
 ```bash
@@ -250,12 +275,13 @@ instead (Vimeo's own thumbnail, served from here), and `home.js` swaps in the
 real player, already playing, on the first click. Until someone presses one,
 the page makes no request off this origin at all.
 
-The five bands below the certificate carry `content-visibility: auto`, so
-they are laid out and painted only as they come near the viewport. Each has a
-`contain-intrinsic-size: auto <height>px` placeholder for the first pass;
-`auto` makes the browser remember the real height afterwards, so scrolling
-back up does not jump. `.lp-learn` and `.lp-cert` are deliberately left out —
-the modules image is `position: sticky`, and containment would strand it.
+Five bands — testimonials, brands, mentor, the closing band and the footer —
+carry `content-visibility: auto`, so they are laid out and painted only as
+they come near the viewport. Each has a `contain-intrinsic-size: auto
+<height>px` placeholder for the first pass, measured at 1280px; `auto` makes
+the browser remember the real height afterwards, so scrolling back up does
+not jump. `.lp-learn` and `.lp-faq` are deliberately left out — each holds a
+`position: sticky` column, and containment would strand it.
 
 ### Its assets
 
@@ -271,9 +297,11 @@ are plain `.webp`: the Instagram one alone was 457KB for a 42px icon, and ITC
 was 30KB for one sprite the SVG cropped twice, which is now the two `.webp`
 files the tile actually shows.
 
-The three hand-drawn heading rules were 36KB apiece of path data at full
-float precision. `svgo --precision=1` takes each to ~2.5KB, which is more
-than enough for a 258x9 squiggle.
+The three hand-drawn heading rules, the four blobs, the hero arch and the
+four line icons are **gone** — the redesign draws its emphasis with type and
+its few shapes in CSS, and the icons it does keep are inline SVG on
+`currentColor`, so they take the colour of whichever band they sit in. Git
+history has them if the old look is ever wanted back.
 
 The nine `tst-*.webp` are Vimeo's thumbnails for the testimonial clips,
 fetched through its oEmbed API and re-encoded at 440px. They sit behind a
@@ -281,9 +309,11 @@ play button, so they are sized for that rather than for a full-quality
 photograph.
 
 **The rupee sign matters for the fonts.** ₹ (U+20B9) is in the latin-ext
-subset, not latin, and this page sets prices in both Manrope and Poppins —
-see the note at the top of `base.css`. Manrope 800 and Poppins 700 were added
-to `base.css` for this page; every other weight it uses was already there.
+subset, not latin, and this page sets prices in Space Grotesk (the bonuses
+heading) and JetBrains Mono (the FREE tags) — see the note at the top of
+`base.css`. Both subsets are declared for every weight there, so this is
+already handled; it is worth knowing before anyone trims the @font-face
+list.
 
 ## Attribution
 

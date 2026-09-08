@@ -1206,9 +1206,22 @@ html:has(.lp-body) { color-scheme: dark; }
   transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.25, 1);
 }
 
-/* Held back until the hero has been read, so it does not cover the
-   button it duplicates. */
+/* On a phone the bar is held back until the hero's own button has scrolled
+   away — home.js does that — because showing both at once puts two copies
+   of one button on a small screen and covers the hero art, which is the
+   screen the bar exists to help.
+
+   A desktop window has room for both, and the bar is what keeps checkout
+   one click away from anywhere on a 6,500px page, so there it is up from
+   the first paint. In CSS rather than in the script, so it does not wait on
+   one and does not slide in over content that has not moved. The observer
+   keeps running either way, which is what makes a resize down to the phone
+   layout land in the right state. */
 .lp-sticky.is-in { transform: translate(-50%, 0); }
+
+@media (min-width: 861px) {
+  .lp-sticky { transform: translate(-50%, 0); }
+}
 
 .lp-sticky-thumb { position: relative; flex: 0 0 98px; height: 46px; }
 

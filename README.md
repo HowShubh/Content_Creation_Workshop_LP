@@ -254,9 +254,14 @@ card keeps appearing for weeks.
 **Five behaviours, in `site/home.js`.** The Enroll buttons pick up the
 campaign params (see Attribution); the modules and the FAQ open one row at a
 time; the testimonial strip scrolls by its arrows as well as by finger; a
-poster becomes a player on click; and the sticky enrol bar arrives once the
-hero's own button has scrolled away, so there are never two of the same
-button on screen. With scripting off every panel is shut but every word is in
+poster becomes a player on click; and on the phone layout the sticky enrol
+bar arrives once the hero's own button has scrolled away, so a small screen
+never carries two copies of the same button. Above 860px the bar is up from
+the first paint — a desktop window has room for both, and the bar is what
+keeps checkout one click away from anywhere on a 6,500px page. That half is
+a line of CSS, not script, so it does not wait on `home.js`; the observer
+still runs there, which is what makes a window resized down to the phone
+layout land in the right state. With scripting off every panel is shut but every word is in
 the markup, the strip still scrolls, the Enroll buttons still reach checkout
 (untracked), and the bar reveals itself below — the one thing that needs
 script outright is playing a clip, which is the trade that keeps Vimeo off

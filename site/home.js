@@ -3,15 +3,17 @@
    Five small behaviours, none of which the page depends on to be
    readable: the Enroll buttons pick up the campaign params, the modules
    and FAQ open, the testimonial strip scrolls by the arrows as well as
-   by finger, a poster becomes a player on click, and the sticky enrol
-   bar arrives once the hero has been passed.
+   by finger, a poster becomes a player on click, and — on the phone
+   layout only — the sticky enrol bar arrives once the hero has been
+   passed. Above 860px that bar is up from the first paint, which is a
+   line of CSS rather than anything here.
 
    With scripting off every panel is shut but every word is in the
    markup, the strip still scrolls horizontally, the Enroll buttons
-   still reach checkout (untracked), and the bar reveals itself below.
-   The one thing that needs script outright is playing a clip — which is
-   the trade that keeps Vimeo's player off the page until someone wants
-   it. */
+   still reach checkout (untracked), and the bar is there on a desktop
+   window. The one thing that needs script outright is playing a clip —
+   which is the trade that keeps Vimeo's player off the page until
+   someone wants it. */
 
 /* ---------- Checkout links ----------
 
@@ -154,6 +156,11 @@ document.querySelectorAll('[data-vimeo]').forEach((poster) => {
    the hero art on a phone, which is the one screen the bar is meant to
    help. IntersectionObserver rather than a scroll listener so this
    costs nothing while the page is being read.
+
+   Above 860px home.css shows the bar from the first paint regardless —
+   a desktop window has room for both buttons. This still runs there, so
+   a window resized down to the phone layout lands in the right state
+   rather than waiting for the next scroll.
 
    If the hero button is missing for any reason the bar is shown rather
    than hidden — a missing checkout link is the worse failure. */

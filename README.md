@@ -37,7 +37,7 @@ Then open http://localhost:4321/
      │        ▼
      │   /tycontent101 ─── seat confirmed
      │        │
-     │        │ offer strip: "Get it for ₹299"
+     │        │ offer strip: "Add it to my order"
      │        └──────────► back up to /ccboto
      │
      │ TagMango bundle checkout
@@ -194,9 +194,11 @@ curl -o /dev/null -w '%{http_code}\n' https://contentcreation.kkcreate.in/_verce
 ## Editing content
 
 Links and timings live in the `TY` object at the top of `site/ty.js` and the
-`OTO` object at the top of `site/oto.js`. Prices are markup: the offer strip
-on `/tycontent101` quotes ₹299 against a ₹999 MRP, and the offer page quotes
-nothing at all, so a price change is one file, not two.
+`OTO` object at the top of `site/oto.js`. **No page here quotes the bundle's
+price.** The offer page never did — the amount is shown at checkout — and the
+strip on `/tycontent101` stopped: someone reading it has just declined the
+offer once, and repeating the number turns a reminder into a haggle. A price
+change is therefore a TagMango change, not a repo change.
 
 The Learning Portal is presented as a sign-in pill carrying the address
 itself (`learn.kkcreate.in` + SIGN IN), and the support button shows the

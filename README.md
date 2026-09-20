@@ -19,7 +19,9 @@ their calendar card, the `.ics` link and the Google Calendar builder in
 only needed two lines reworded. The one page that still carries the date is
 `/zoomlink`, which served the day itself.
 
-Static HTML/CSS/JS — no build step, no dependencies.
+Static HTML/CSS/JS — no build step. The one dependency in `package.json`
+is for the one Vercel function, `api/tagline.js`; the pages themselves
+have none.
 
 ## Run locally
 
@@ -27,7 +29,9 @@ Static HTML/CSS/JS — no build step, no dependencies.
 python3 -m http.server 4321 --directory site
 ```
 
-Then open http://localhost:4321/
+Then open http://localhost:4321/. That serves the pages only; `/api/tagline`
+is a Vercel function and needs `vercel dev` (plus the key — see The Creator
+Pass). Without it `/certificate` still works and just shows the plain line.
 
 ## The funnel
 
@@ -67,6 +71,10 @@ the day, and it was the venue in the calendar invite, the target of the QR
 code and of any short link — so it is reached from someone's calendar or
 phone, never by clicking through these pages.
 
+`/certificate` sits outside it too: the Creator Pass, the certificate a
+student gets for completing the workshop, with a form to put their own
+name, city and photo on it and download it. See below.
+
 **It was `/livelink` until 62a1fac**, and `vercel.json` redirects the old path
 permanently. That redirect is not optional housekeeping: this is the one page
 whose entire promise is that its address never changes — the page says so in
@@ -104,15 +112,21 @@ vercel.json               static deploy config — serves site/
 site/
   index.html              the landing page
   home.css / home.js      the landing page's styles and its five behaviours
-  analytics.js            the tags, shared by all five pages (see Analytics)
+  analytics.js            the tags, shared by all six pages (see Analytics)
   base.css                self-hosted type, the KK palette, shared primitives
   ty.css / ty.js          both thank-you pages
   oto.css / oto.js        the offer page
   zoomlink.css / .js      the Zoom-link page
+  certificate.css / .js   the Creator Pass generator
+  html-to-image.js        vendored, MIT — turns the pass into a PNG
   tycontent101/           thank-you — seat only
   tybundle/               thank-you — seat plus bundle
   ccboto/                 the one-time offer
   zoomlink/               the join-link page for the day
+  certificate/            the Creator Pass — both cards, see below
+api/
+  tagline.js              Vercel function: the city's line, via Claude
+package.json              the SDK for that function; nothing else
   robots.txt / sitemap.xml  crawler rules — see Deploying
   assets/                 fonts, logo, bundle covers, the .ics
   assets/home/            everything the landing page draws
@@ -142,11 +156,11 @@ canonical and `og:*` tags in `site/index.html`, and
 page's own origin is not available (a calendar entry, a share crawler, a
 pasted link). Grep for `contentcreation.kkcreate.in` if it ever moves.
 
-**`/` is indexable; the other four are not.** The landing page is the public
-front of the funnel. Each post-checkout page carries a `noindex, nofollow`
-meta tag, and `vercel.json` adds an `X-Robots-Tag` header saying the same on
-those four routes only — `/ccboto`, `/tycontent101`, `/tybundle`,
-`/zoomlink`. `site/robots.txt` deliberately **allows** crawling all of it: a
+**`/` is indexable; the other five are not.** The landing page is the public
+front of the funnel. Every other page carries a `noindex, nofollow` meta
+tag, and `vercel.json` adds an `X-Robots-Tag` header saying the same on
+those five routes only — `/ccboto`, `/tycontent101`, `/tybundle`,
+`/zoomlink`, `/certificate`. `site/robots.txt` deliberately **allows** crawling all of it: a
 crawler has to fetch a page to see either of those signals, so disallowing
 the funnel paths would hide the noindex while leaving the URLs indexable from
 any external link — the opposite of what it looks like it does.
@@ -553,6 +567,84 @@ It has three states, driven by `LIVE` at the top of `site/zoomlink.js`:
 `LIVE.startsAt` is the 20 Sept session start, the same instant the `.ics`
 carries. It no longer has a twin in `ty.js`.
 
+## The Creator Pass (/certificate)
+
+The certificate a student gets for finishing the workshop, and the page
+where they make their own. It opens on the pass itself with one button;
+**Customise & download** reveals a form above it — name, city, an optional
+line, an optional photo — and a download row below. What is typed lands on
+the card as it is typed. Nothing is stored anywhere: the pass exists on
+that screen until it is downloaded.
+
+**Two cards, same fields.** `site/certificate/index.html` holds both
+designs as they were delivered — the 1280x560 boarding pass in `#card` and
+its 1080x1920 story version in `#story`, styled inline, ZERO to HERO with
+five stops, a passenger name, a certificate code, a QR back to the landing
+page and the founders' signatures. The Pass / Story toggle shows one at a
+time; both carry `data-f` hooks on the personal fields, and `certificate.js`
+writes every field into both, so the two never disagree. The photo frames
+are circles (a profile picture drops straight in) rather than the delivered
+rectangles; that and the hooks are the only edits to the cards.
+
+**What goes on it.** Name and city are typed. The district code (`MDB`),
+the gate number and the certificate code (`KKC-26-MDB-0214`) are derived —
+the code from the city's consonants, the number from a hash of name and
+city, so the same person gets the same pass back. The handwritten line
+comes from `/api/tagline` (below), falls back to *"City's next
+storyteller."*, and can be overtyped; clearing the field hands it back.
+The story also shows the state under the name, when the API named one.
+The photo is redrawn to 800px on a canvas before it goes in the frame, so a
+4000px phone photo does not end up as a data URI in the export.
+
+**The download.** `html-to-image` (vendored at `site/html-to-image.js`,
+MIT) clones the visible card, embeds its fonts and images, draws it into an
+SVG and rasterises that at 2x — 2560x1120 for the pass, 2160x3840 for the
+story. Two things make that work: the animations are frozen at a good frame
+for the duration (`[data-card].capture`), since the clone takes whatever
+frame the bus is on; and the empty photo `<img>` is filtered out, since the
+library gives up on the first image that fails to load. Safari needs a
+warm-up pass before the pass that is kept, so a capture is two calls.
+Where the browser can share a file (phones), a Share button appears beside
+Download; Print / Save PDF prints just the card on a sheet its own shape,
+with the `@page` size swapped by script to match the format showing.
+
+**Fonts.** The cards' five faces — IBM Plex Sans (one variable file), IBM
+Plex Mono, DM Serif Display, Kalam, Rozha One with its Devanagari slice —
+are self-hosted in `assets/fonts` like the rest of the site's type, and
+declared in `certificate.css`. That is also what makes the export quick:
+the capture embeds every `@font-face` it can see, and ten files beat the
+forty-odd unicode-range slices Google Fonts would have served.
+
+The page loads `certificate.css`, not `base.css`: the cards set everything
+they need and the site's resets would fight them, so the page around them
+is set in the cards' own palette. It carries the noindex meta and
+`vercel.json` adds the `X-Robots-Tag`; nothing on the site links to it.
+
+### The city's line (/api/tagline)
+
+`api/tagline.js` is a Vercel function that writes the handwritten line —
+*"From the land of Mithila painting, Madhubani's next storyteller."* — for
+whatever city is typed, plus the state it is in. One Claude call
+(`claude-opus-5`, low effort, ~100 tokens) per city, and only per city:
+the response carries `s-maxage` of a month, so Vercel's edge answers the
+second person from Patna without a call. The page asks 700ms after the
+last keystroke in the city field and aborts if typing resumes.
+
+**It needs `ANTHROPIC_API_KEY` in the Vercel project's environment
+variables** (Settings > Environment Variables). Without it the function
+still answers, with the plain default line and `Cache-Control: no-store`,
+so setting the key takes effect on the next request. A refusal, a timeout
+or a rate limit also falls back to the plain line, cached for a minute
+only. Input is a place name or a 400; output is checked for the shape asked
+for (one line, ends in "storyteller", under 90 characters) or replaced.
+The function opts into Anthropic's server-side refusal fallback
+(`fallbacks: "default"`), which re-runs a declined request on another model
+rather than returning the refusal.
+
+`package.json` exists for this function's `@anthropic-ai/sdk` and nothing
+else; it has no scripts, so Vercel installs and does not build. The
+function runs on Vercel's default Node runtime.
+
 ## The instant-access banner (/tybundle)
 
 The bundle thank-you page is a receipt for two things bought together, and
@@ -575,7 +667,7 @@ on one.
 
 ## Analytics
 
-`site/analytics.js` is the one file all five pages share. Everything else in
+`site/analytics.js` is the one file all six pages share. Everything else in
 this funnel is duplicated per page on purpose — a shared file costs each page
 a request — but this code has to stay identical everywhere for the numbers to
 mean anything, and it is already about to fetch two much larger third-party

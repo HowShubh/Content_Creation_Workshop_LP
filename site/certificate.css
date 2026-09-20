@@ -1,0 +1,413 @@
+/* ===========================================================
+   /certificate — the Creator Pass generator.
+
+   Two things live here. The top half is the card's own CSS as it was
+   delivered: its five faces and the four little animations on the
+   highway scene. The bottom half is the page around the card — the
+   form, the stage that scales the 1280px card down to the screen, and
+   the download buttons — set in the card's palette rather than the
+   site's, because the card is the thing on the page and everything
+   else should look like it came off the same desk.
+
+   base.css is not loaded on this page. See the note in the markup.
+   =========================================================== */
+
+/* ---------- The card's type ----------
+   Self-hosted, like the rest of the site's fonts. The PNG export embeds
+   every @font-face it can see, so this list is also what makes the
+   download fast — keep it to what the card actually sets. IBM Plex Sans
+   is one variable file covering every weight the card uses. */
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-sans-wght-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-mono-400-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-mono-600-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'DM Serif Display';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/dm-serif-display-400-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Kalam';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/kalam-400-latin.woff2') format('woff2');
+}
+/* Rozha One sets the Hindi "क्रिएटर पास" in the header, so it needs its
+   Devanagari slice as well as Latin. */
+@font-face {
+  font-family: 'Rozha One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/rozha-one-400-devanagari.woff2') format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B09;
+}
+@font-face {
+  font-family: 'Rozha One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/rozha-one-400-latin.woff2') format('woff2');
+}
+
+/* ---------- The cards' motion ----------
+   As delivered: the bus drives the highway, the clouds drift, the
+   creator bobs and waves. The story has its own bus and clouds (sv-),
+   sized for its wider road. All of it stops under reduced motion, and
+   all of it is frozen at a good frame while the PNG is taken — see
+   [data-card].capture below. */
+
+.bpBus { animation: bpDrive 11s linear infinite; }
+.bpCloud { animation: bpDrift 30s linear infinite; }
+@keyframes bpDrive { from { transform: translateX(-110px); } to { transform: translateX(920px); } }
+@keyframes bpDrift { from { transform: translateX(0); } to { transform: translateX(-120px); } }
+.bpCreator { animation: bpBob 3.2s ease-in-out infinite; }
+@keyframes bpBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.bpWave { transform-box: view-box; transform-origin: 62px 66px; animation: bpWaveK 1.8s ease-in-out infinite; }
+@keyframes bpWaveK { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(8deg); } }
+.svBus { animation: svDrive 12s linear infinite; }
+.svCloud { animation: svDrift 34s linear infinite; }
+@keyframes svDrive { from { transform: translateX(-160px); } to { transform: translateX(1000px); } }
+@keyframes svDrift { from { transform: translateX(0); } to { transform: translateX(-180px); } }
+@media (prefers-reduced-motion: reduce) {
+  .bpBus, .bpCloud, .bpCreator, .bpWave, .svBus, .svCloud { animation: none; }
+}
+
+/* The capture clones the card with its computed styles, and an animated
+   transform is whatever frame the clock is on — which for the bus is
+   often off the left edge. So for the duration of a capture the scene
+   holds still with the bus mid-highway and the hand mid-wave. */
+[data-card].capture .bpBus { animation: none; transform: translateX(300px); }
+[data-card].capture .svBus { animation: none; transform: translateX(330px); }
+[data-card].capture .bpCloud, [data-card].capture .svCloud { animation: none; transform: translateX(-40px); }
+[data-card].capture .bpCreator { animation: none; transform: none; }
+[data-card].capture .bpWave { animation: none; transform: rotate(4deg); }
+
+/* The photo, once there is one, covers the silhouette; the label under
+   the circle only makes sense while it is empty. */
+.js-photo-box.has-photo [data-silhouette] { display: none; }
+.js-photo-box.has-photo + .js-photo-label { visibility: hidden; }
+
+/* ===========================================================
+   The page
+   =========================================================== */
+
+:root {
+  --cg-bg: #e9e4d8;        /* the card's own ground */
+  --cg-paper: #fbf8f1;     /* the card's stock */
+  --cg-ink: #1d2a44;       /* navy */
+  --cg-ink-2: #5c5446;
+  --cg-ink-3: #6b6456;
+  --cg-line: #c9bfa8;
+  --cg-red: #a5322b;
+  --cg-yellow: #f2c230;
+  --cg-sans: 'IBM Plex Sans', Georgia, sans-serif;
+  --cg-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --cg-serif: 'DM Serif Display', Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* The form, the two button rows and the card not showing all use the
+   hidden attribute, and all have a display rule of their own below —
+   this keeps hidden winning. */
+[hidden] { display: none !important; }
+body {
+  font-family: var(--cg-sans);
+  background: var(--cg-bg);
+  color: var(--cg-ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+a { color: var(--cg-ink); }
+a:hover { color: var(--cg-red); }
+
+/* ---------- Header ---------- */
+
+.cg-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  background: var(--cg-ink);
+  color: var(--cg-paper);
+}
+.cg-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--cg-paper);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+.cg-brand:hover { color: var(--cg-yellow); }
+.cg-brand img { width: 28px; height: 28px; display: block; }
+.cg-head-kicker {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  color: var(--cg-paper);
+  opacity: 0.85;
+}
+
+/* ---------- Intro and form ---------- */
+
+.cg {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 28px 20px 56px;
+}
+
+.cg-intro { max-width: 640px; }
+.cg-intro h1 {
+  margin: 0;
+  font-family: var(--cg-serif);
+  font-weight: 400;
+  font-size: clamp(30px, 4.5vw, 42px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+.cg-intro p {
+  margin: 10px 0 0;
+  font-size: 16px;
+  color: var(--cg-ink-2);
+}
+
+.cg-form {
+  margin-top: 22px;
+  scroll-margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+}
+.cg-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.cg-field-wide { grid-column: 1 / -1; }
+
+.cg-field label, .cg-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cg-ink-3);
+}
+.cg-field label small, .cg-label small {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  text-transform: none;
+}
+
+.cg-field input[type="text"] {
+  width: 100%;
+  margin: 0;
+  padding: 11px 13px;
+  border: 1px solid var(--cg-line);
+  border-radius: 10px;
+  background: var(--cg-paper);
+  color: var(--cg-ink);
+  font: inherit;
+  font-size: 16px;   /* 16px stops iOS zooming the page on focus */
+  line-height: 1.3;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.cg-field input[type="text"]::placeholder { color: #a39b8a; }
+.cg-field input[type="text"]:focus {
+  border-color: var(--cg-ink);
+  box-shadow: 0 0 0 3px rgba(242, 194, 48, 0.45);
+}
+
+.cg-hint {
+  min-height: 1.2em;
+  font-size: 12px;
+  color: var(--cg-ink-3);
+}
+.cg-hint.is-writing { color: var(--cg-red); }
+
+/* ---------- Pass or story ----------
+   Two radio buttons drawn as a segmented control, each with a little
+   rectangle the shape of the format it picks. */
+
+.cg-formats {
+  margin-top: 22px;
+  display: inline-flex;
+  padding: 4px;
+  border: 1px solid var(--cg-line);
+  border-radius: 999px;
+  background: var(--cg-paper);
+}
+.cg-format {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cg-ink-3);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.cg-format:hover { color: var(--cg-ink); }
+.cg-format.is-on { background: var(--cg-ink); color: var(--cg-paper); }
+.cg-format-shape { display: block; border: 1.5px solid currentColor; border-radius: 2px; opacity: 0.8; }
+.cg-format-shape-wide { width: 18px; height: 9px; }
+.cg-format-shape-tall { width: 9px; height: 15px; }
+
+/* The photo picker: the input is visually gone, the label is the button.
+   Written as .cg-field .cg-file so it outranks the caps rule for labels. */
+.cg-field .cg-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 11px 16px;
+  border: 1px solid var(--cg-ink);
+  border-radius: 10px;
+  background: var(--cg-paper);
+  color: var(--cg-ink);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;          /* it is a <label>, so undo the caps rule above */
+  text-transform: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.cg-file:hover { background: var(--cg-ink); color: var(--cg-paper); }
+.cg-file input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+.cg-file:focus-within { box-shadow: 0 0 0 3px rgba(242, 194, 48, 0.45); }
+
+/* ---------- The stage ----------
+   The cards keep their real size in layout — 1280x560 for the pass,
+   1080x1920 for the story — and the stage scales the visible one to fit
+   whatever width it has, and for the story whatever height too.
+   certificate.js sets the scale, the stage's height and .cg-scale's
+   size, since a transform does not change layout. */
+
+.cg-stage {
+  position: relative;
+  width: 100%;
+  height: 560px;
+  margin-top: 16px;
+  overflow: hidden;
+}
+.cg-scale {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1280px;
+  height: 560px;
+  transform: translateX(-50%);
+  /* Scaling about the top centre keeps the card centred at any scale
+     (the translate is half the card's own width, so it centres too). */
+  transform-origin: top center;
+}
+
+/* ---------- Buttons ---------- */
+
+.cg-actions {
+  margin-top: 18px;
+  scroll-margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+}
+.cg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 22px;
+  border: 1px solid var(--cg-ink);
+  border-radius: 999px;
+  background: var(--cg-paper);
+  color: var(--cg-ink);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+}
+.cg-btn:hover { background: var(--cg-ink); color: var(--cg-paper); }
+.cg-btn-primary {
+  background: var(--cg-yellow);
+  border-color: var(--cg-yellow);
+  color: var(--cg-ink);
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(29, 42, 68, 0.16);
+}
+.cg-btn-primary:hover { background: var(--cg-ink); border-color: var(--cg-ink); color: var(--cg-yellow); transform: translateY(-1px); }
+.cg-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.cg-btn:disabled:hover { background: var(--cg-paper); color: var(--cg-ink); }
+.cg-btn-primary:disabled:hover { background: var(--cg-yellow); color: var(--cg-ink); }
+.cg-btn.is-busy { cursor: progress; }
+
+.cg-status {
+  margin: 0;
+  flex-basis: 100%;
+  font-size: 13px;
+  color: var(--cg-ink-3);
+}
+.cg-status.is-error { color: var(--cg-red); }
+
+/* ---------- Narrow ---------- */
+
+@media (max-width: 640px) {
+  .cg { padding: 22px 16px 44px; }
+  .cg-form { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .cg-btn { flex: 1 1 auto; }
+  .cg-formats { display: flex; }
+  .cg-format { flex: 1; justify-content: center; }
+}
+
+/* ---------- Print ----------
+   Only the card prints, at its real size, on a sheet its own shape —
+   which is what "Save as PDF" in the print dialog produces. */
+
+/* The sheet is the pass's shape; certificate.js swaps in the story's
+   when that is what is showing. */
+@page { size: 1280px 560px; margin: 0; }
+@media print {
+  body { background: #fff; }
+  .cg-head, .cg-intro, .cg-form, .cg-formats, .cg-actions { display: none !important; }
+  .cg { max-width: none; padding: 0; margin: 0; }
+  .cg-stage { height: auto !important; margin: 0; overflow: visible; }
+  .cg-scale { position: static; width: auto !important; height: auto !important; transform: none !important; }
+  .bpBus, .bpCloud, .bpCreator, .bpWave, .svBus, .svCloud { animation: none; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

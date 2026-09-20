@@ -1,4 +1,4 @@
-/* Analytics, shared by all five pages.
+/* Analytics, shared by all six pages.
 
    Every other behaviour in this funnel is duplicated per page rather than
    shared, because a shared file costs each page an extra request. This one

@@ -582,9 +582,23 @@ its 1080x1920 story version in `#story`, styled inline, ZERO to HERO with
 five stops, a passenger name, a certificate code, a QR back to the landing
 page and the founders' signatures. The Pass / Story toggle shows one at a
 time; both carry `data-f` hooks on the personal fields, and `certificate.js`
-writes every field into both, so the two never disagree. The photo frames
-are circles (a profile picture drops straight in) rather than the delivered
-rectangles; that and the hooks are the only edits to the cards.
+writes every field into both, so the two never disagree. Three edits to
+the cards as delivered: the photo frames are circles (a profile picture
+drops straight in) rather than rectangles; the "CREATOR CLASS" pill and the
+Hindi "क्रिएटर पास" came off both headers — one pass is enough; and the
+creator on the road comes in three.
+
+**The creator on the road.** The delivered illustration is a woman in a
+saffron kurta. The form offers her, a man in a teal kurta (short hair, a
+trimmed beard, a watch) and a neutral figure in a yellow hoodie, red cap
+and round glasses that carries none of the cues the other two do. All
+three are drawn from the same parts — the same legs, arms, bag, camera and
+face — so they stand on the road the same way and wave the same wave. The
+woman is in both cards' markup; the other two are `<template>`s at the end
+of the page, and picking one rewrites both cards' `[data-character-svg]`.
+The templates close every element explicitly on purpose: a template is
+parsed as HTML, where a self-closing `/>` is ignored and would swallow
+whatever follows as children.
 
 **What goes on it.** Name and city are typed. The district code (`MDB`),
 the gate number and the certificate code (`KKC-26-MDB-0214`) are derived —
@@ -608,12 +622,12 @@ Where the browser can share a file (phones), a Share button appears beside
 Download; Print / Save PDF prints just the card on a sheet its own shape,
 with the `@page` size swapped by script to match the format showing.
 
-**Fonts.** The cards' five faces — IBM Plex Sans (one variable file), IBM
-Plex Mono, DM Serif Display, Kalam, Rozha One with its Devanagari slice —
-are self-hosted in `assets/fonts` like the rest of the site's type, and
-declared in `certificate.css`. That is also what makes the export quick:
-the capture embeds every `@font-face` it can see, and ten files beat the
-forty-odd unicode-range slices Google Fonts would have served.
+**Fonts.** The cards' four faces — IBM Plex Sans (one variable file), IBM
+Plex Mono, DM Serif Display, Kalam — are self-hosted in `assets/fonts` like
+the rest of the site's type, and declared in `certificate.css`. That is
+also what makes the export quick: the capture embeds every `@font-face` it
+can see, and five files beat the forty-odd unicode-range slices Google
+Fonts would have served. (Rozha One went with the Hindi.)
 
 The page loads `certificate.css`, not `base.css`: the cards set everything
 they need and the site's resets would fight them, so the page around them
@@ -631,13 +645,14 @@ edge answers the second person from Patna without a call. The page asks
 resumes.
 
 The call goes through **OpenRouter** — one `fetch` to its OpenAI-shaped
-chat endpoint, no SDK, no `package.json`. The model is
-`anthropic/claude-haiku-4.5` by default: a one-line job, ~400 tokens in
-and ~30 out, a fraction of a paisa per city. Set `OPENROUTER_MODEL` to
-any OpenRouter slug to change it.
+chat endpoint, no SDK, no `package.json`. The model is `MODEL` at the top
+of the file, `anthropic/claude-haiku-4.5`: a one-line job, ~400 tokens in
+and ~30 out, a fraction of a paisa per city. Any OpenRouter slug goes
+there; it is deliberately not an environment variable.
 
 **It needs `OPENROUTER_API_KEY` in the Vercel project's environment
-variables** (Settings > Environment Variables). Without it the function
+variables** (Settings > Environment Variables) — the only setting it
+reads. Without it the function
 still answers, with the plain default line and `Cache-Control: no-store`,
 so setting the key takes effect on the next request. A timeout (8s), a
 rate limit or an upstream error also falls back to the plain line, cached

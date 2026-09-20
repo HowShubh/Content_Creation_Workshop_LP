@@ -9,16 +9,16 @@
 
    The call goes through OpenRouter (an OpenAI-shaped chat endpoint), so
    it needs OPENROUTER_API_KEY in the Vercel project's environment
-   variables, and takes OPENROUTER_MODEL to pick a different model from
-   the default below. Plain fetch, no SDK — Node has had fetch since 18,
-   and this is the only thing in the repo that talks to a server. Without
-   a key the function still answers, with the plain default line the page
-   would have shown anyway — the pass never waits on this. */
+   variables — the only setting it reads; the model is MODEL below. Plain
+   fetch, no SDK — Node has had fetch since 18, and this is the only thing
+   in the repo that talks to a server. Without a key the function still
+   answers, with the plain default line the page would have shown anyway
+   — the pass never waits on this. */
 
 const ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 /* Haiku: a one-line job, and at ~400 tokens in and ~30 out it is a
-   fraction of a paisa per city. OPENROUTER_MODEL overrides it. */
-const DEFAULT_MODEL = 'anthropic/claude-haiku-4.5';
+   fraction of a paisa per city. Any OpenRouter slug goes here. */
+const MODEL = 'anthropic/claude-haiku-4.5';
 const TIMEOUT_MS = 8000;
 
 const SYSTEM = `You write one line for a certificate that KK Create gives students who finish its "Content Creation for Beginners" workshop. The certificate is styled as a boarding pass from ZERO to HERO, and your line sits on it in handwriting, above the student's signature block.
@@ -106,11 +106,9 @@ module.exports = async (req, res) => {
     res.status(200).json({ city, state: '', tagline: plain(city), source: 'unconfigured' });
     return;
   }
-  const model = process.env.OPENROUTER_MODEL || DEFAULT_MODEL;
-
   let text = '';
   try {
-    text = await complete(key, model, city);
+    text = await complete(key, MODEL, city);
   } catch (e) {
     /* Rate-limited, upstream down, or the timeout — the page gets the
        default line either way. Logged so it shows in Vercel's function

@@ -243,7 +243,7 @@ document.head.appendChild(pageRule);
 function showFormat(name) {
   format = name;
   Object.keys(CG.formats).forEach(k => { $(CG.formats[k].id).hidden = k !== name; });
-  document.querySelectorAll('.cg-format').forEach(b => {
+  document.querySelectorAll('[data-format]').forEach(b => {
     const on = b.dataset.format === name;
     b.classList.toggle('is-on', on);
     b.setAttribute('aria-checked', String(on));
@@ -252,10 +252,41 @@ function showFormat(name) {
   pageRule.textContent = '@page { size: ' + f.w + 'px ' + f.h + 'px; margin: 0; }';
   fit();
 }
-document.querySelectorAll('.cg-format').forEach(b => {
+document.querySelectorAll('[data-format]').forEach(b => {
   b.addEventListener('click', () => showFormat(b.dataset.format));
 });
 showFormat('card');
+
+/* ---------- The creator on the road ----------
+   The woman is in the markup of both cards; the other two are in
+   <template>s at the end of the page. Picking one rewrites the inside of
+   both cards' character svgs, so they always match. */
+
+const characters = {};
+(function () {
+  const first = document.querySelector('[data-character-svg]');
+  if (first) characters.her = { svg: first.innerHTML, label: first.getAttribute('aria-label') };
+  document.querySelectorAll('template[data-character]').forEach(t => {
+    characters[t.dataset.character] = { svg: t.innerHTML, label: t.dataset.label };
+  });
+})();
+
+function showCharacter(name) {
+  const c = characters[name];
+  if (!c) return;
+  document.querySelectorAll('[data-character-svg]').forEach(svg => {
+    svg.innerHTML = c.svg;
+    svg.setAttribute('aria-label', c.label);
+  });
+  document.querySelectorAll('[data-character-pick]').forEach(b => {
+    const on = b.dataset.characterPick === name;
+    b.classList.toggle('is-on', on);
+    b.setAttribute('aria-checked', String(on));
+  });
+}
+document.querySelectorAll('[data-character-pick]').forEach(b => {
+  b.addEventListener('click', () => showCharacter(b.dataset.characterPick));
+});
 
 /* ---------- Customise ---------- */
 

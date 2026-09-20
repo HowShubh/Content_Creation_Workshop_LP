@@ -307,8 +307,6 @@
   --whatsapp: #25d366;
   --whatsapp-hover: #1fbb59;
   --whatsapp-ink: #0a2e18;
-  --gcal: #1a73e8;
-  --gcal-hover: #1765cc;
 
   --sans: Manrope, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --display: 'Space Grotesk', Manrope, system-ui, sans-serif;
@@ -453,7 +451,7 @@ img { max-width: 100%; }
 .btn-accent,
 .btn-lime,
 .btn-wa,
-.btn-cal,
+.btn-portal,
 .btn-outline,
 .ll-join,
 .lp-cta {
@@ -463,7 +461,7 @@ img { max-width: 100%; }
 .btn-accent::after,
 .btn-lime::after,
 .btn-wa::after,
-.btn-cal::after,
+.btn-portal::after,
 .btn-outline::after,
 .ll-join::after,
 .lp-cta::after {
@@ -485,11 +483,10 @@ img { max-width: 100%; }
 /* Outline button on cream: a white streak would be invisible. */
 .btn-outline { --sheen: rgba(var(--line-rgb), 0.07); }
 
-/* The quiet buttons hold still. One shining thing per row is the point —
-   the .ics link and the portal sign-in pill are alternatives to the main
-   action, not the action. Removing the pseudo rather than hiding it also
-   stops the animation running. */
-.btn-ics::after,
+/* The quiet button holds still. One shining thing per row is the point —
+   the portal sign-in pill is an alternative to the main action, not the
+   action. Removing the pseudo rather than hiding it also stops the
+   animation running. */
 .portal-btn::after { content: none; }
 
 /* The streak crosses in the first 85% of the loop, then waits — a
@@ -515,7 +512,7 @@ img { max-width: 100%; }
   .btn-accent::after,
   .btn-lime::after,
   .btn-wa::after,
-  .btn-cal::after,
+  .btn-portal::after,
   .btn-outline::after,
   .ll-join::after,
   .lp-cta::after { content: none; }

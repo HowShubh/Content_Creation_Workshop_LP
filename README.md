@@ -9,11 +9,15 @@ page used to be a TagMango page-builder site at
 `lp.kkcreate.in/content-creation`; it is hand-written here, and has since been
 redesigned — the words are the ones that page carried, the design is not.
 
-The workshop is **live on Sunday 20 September 2026, 12:00–4:00 PM IST, on
-Zoom**. These pages are date-dependent: the date appears in the landing page's
-hero badge, in the boarding pass, the calendar card and the stub note in both
-thank-you pages' markup, and as the calendar event in `site/ty.js`. Grep for
-`20 Sept` and `20260920` to find all of it.
+The workshop went out **live on Sunday 20 September 2026, 12:00–4:00 PM IST,
+on Zoom**. Since that day the funnel sells the **recording**: every "live",
+date and Zoom mention on `/` became "full recording, watch anytime", its
+Enroll buttons go to the recording's checkout, and the two thank-you pages
+confirm a recording that lands in the portal rather than a seat on a date —
+their calendar card, the `.ics` link and the Google Calendar builder in
+`site/ty.js` went with it. `/ccboto` was a bundle of recordings all along and
+only needed two lines reworded. The one page that still carries the date is
+`/zoomlink`, which served the day itself.
 
 Static HTML/CSS/JS — no build step, no dependencies.
 
@@ -35,21 +39,21 @@ Then open http://localhost:4321/
      │        │
      │        │ "I'll figure it out myself"
      │        ▼
-     │   /tycontent101 ─── seat confirmed
+     │   /tycontent101 ─── recording confirmed
      │        │
      │        │ offer strip: "Add it to my order"
      │        └──────────► back up to /ccboto
      │
      │ TagMango bundle checkout
      ▼
-  /tybundle ───────────── seat + bundle confirmed
+  /tybundle ───────────── recording + bundle confirmed
 ```
 
 **The offer comes first.** The workshop checkout redirects to `/ccboto`, not
 to a thank-you page, so every buyer sees the bundle once before their
 confirmation. `/tycontent101` is what declining lands on — it confirms the
-seat and carries the offer strip as the second ask, which is the only way
-back into `/ccboto`.
+recording and carries the offer strip as the second ask, which is the only
+way back into `/ccboto`.
 
 That makes `/ccboto` the page that has to work standing alone: it opens with
 "Your registration is confirmed", because for most buyers it is the first
@@ -58,10 +62,10 @@ thing they see after paying.
 Set TagMango's post-purchase redirects to `/ccboto` (workshop) and
 `/tybundle` (bundle).
 
-`/zoomlink` sits outside that flow. It is where the Zoom link appears on the
-day, and it is the venue in the calendar invite, the target of the QR code
-and of any short link — so it is reached from someone's calendar or phone,
-never by clicking through these pages.
+`/zoomlink` sits outside that flow. It is where the Zoom link appeared on
+the day, and it was the venue in the calendar invite, the target of the QR
+code and of any short link — so it is reached from someone's calendar or
+phone, never by clicking through these pages.
 
 **It was `/livelink` until 62a1fac**, and `vercel.json` redirects the old path
 permanently. That redirect is not optional housekeeping: this is the one page
@@ -72,21 +76,24 @@ same treatment, and it is worth not renaming it again.
 
 `/` is the **landing page**. Every Enroll button on it — the top bar, the
 hero, the bonuses, the certificate, the closing band and the sticky bar at the
-bottom of the screen — goes to the same TagMango
-workshop checkout, which is the only link on the page:
-`https://learn.kkcreate.in/web/checkout/6a99159a9cbde21f8b847e6b`. Change it
-in `site/index.html`; it is written out at each button rather than injected,
-so the page needs no script to be clickable.
+bottom of the screen — goes to the same TagMango checkout, which is the only
+link on the page. It is the **recording's** checkout now,
+`https://learn.kkcreate.in/web/checkout/6aaf68811a0e806ff68c4533`; the live
+seat was `…/6a99159a9cbde21f8b847e6b` until the day itself. Change it in
+`site/index.html`; it is written out at each button rather than injected, so
+the page needs no script to be clickable.
 
-**The date is on it four times over.** The top bar, the badge under the hero
-cut-out (`12:00PM IST | 20 Sept (Sunday)`), the sticky enrol bar and the line
-under the closing band all carry it, and the three facts below the hero
-button say the workshop is live, 3+ hours, on Zoom. The bar is the one that
-matters most: by the time someone reaches the FAQ, both the badge and the top
-bar's copy are long gone, and the bar is what is in front of them at the
-moment they decide. That is the same session `ty.js`, the boarding
-pass and the .ics describe, so all of it moves together — grep for `20 Sept`
-and `20260920`.
+**What is on sale is said four times over.** The top bar, the badge under the
+hero cut-out (`Full recording | Watch anytime`), the sticky enrol bar and the
+line under the closing band all carry it, and the three facts below the hero
+button say Hinglish, recording, 3+ hours, any device. Until 20 Sept those
+same four places carried the date and time and a pulsing red live dot; the
+dot went with the date, so red on this page is now only the numerals on
+paper. The bar is the one that matters most: by the time someone reaches the
+FAQ, both the badge and the top bar's copy are long gone, and the bar is what
+is in front of them at the moment they decide. The FAQ was reworded in the
+same pass — it answers when the recording arrives rather than whether there
+will be one.
 
 Every page is noindexed — see Deploying below.
 
@@ -112,7 +119,7 @@ site/
 tools/
   make-webp.py            PNG/JPG in site/assets -> WebP
   make-covers.py          normalise + convert the four bundle covers
-  make-ics.py             regenerate the calendar file
+  make-ics.py             regenerate the calendar file (linked from /zoomlink only)
   make-og.py              compose the landing page's share card
   make-qr.py              QR code for the Zoom join link
 ```
@@ -129,8 +136,8 @@ already uses (`OTO.declineUrl`, `TY.otoUrl`, the review nav). Nothing needs
 rewriting to match the host.
 
 The site is served at **contentcreation.kkcreate.in**. That hostname is
-written into `TY.zoomLinkUrl`, `TY.referralUrl`, `ZOOM_LINK_URL` in
-`tools/make-ics.py`, the canonical and `og:*` tags in `site/index.html`, and
+written into `TY.referralUrl`, `ZOOM_LINK_URL` in `tools/make-ics.py`, the
+canonical and `og:*` tags in `site/index.html`, and
 `site/sitemap.xml` — all absolute, because each of them is read somewhere the
 page's own origin is not available (a calendar entry, a share crawler, a
 pasted link). Grep for `contentcreation.kkcreate.in` if it ever moves.
@@ -219,13 +226,13 @@ page; two paper-white bands break it where the reading is longest — the
 problem, the curriculum, the FAQ — and one full-bleed lime band closes it.
 Lime (`--volt`, base.css's `--lime`) is the only action colour, so every
 Enroll button on the page is the same object; red survives as a signal, on
-the live dot and the numerals, not as a second brand colour. Headings are
+the numerals, not as a second brand colour. Headings are
 **Space Grotesk** set large, tight and ranged left, body copy is Manrope, and
 every small label — eyebrows, the facts under the hero, the module numbers,
-the date pill — is **JetBrains Mono** in caps. Nothing is centred except the
-closing band, and the hero carries one action and no eyebrow — the facts
-below the button already say live, Hinglish and Zoom, so saying it again over
-the headline was the same sentence twice. Poppins, the centred headings, the
+the recording pill — is **JetBrains Mono** in caps. Nothing is centred except
+the closing band, and the hero carries one action and no eyebrow — the facts
+below the button already say Hinglish, recording and any device, so saying it
+again over the headline was the same sentence twice. Poppins, the centred headings, the
 hand-drawn underline SVGs, the blobs and the mint-and-red accordion rows are
 all gone with the old design; so are the twelve decoration assets that only
 they used.
@@ -237,13 +244,13 @@ changes at 860px and the copy exists once, so the two cannot drift apart.
 
 **The share card.** `assets/home/og-share.jpg` is what WhatsApp, Instagram
 and Slack show when the link is pasted, which is how this page mostly travels
-— so it carries the date rather than being a bare photograph. It is composed
+— so it says what is on sale rather than being a bare photograph. It is composed
 by `tools/make-og.py` from the hero cut-out and the page's own Space Grotesk
 and JetBrains Mono, read straight out of the woff2 in `assets/fonts` so the
 card cannot drift to a different face than the page. **It carries the page's
-palette too** — navy ground, white headline, lime second line and date pill —
-so re-run it after any change to those. **Re-run it when the date changes**, and keep
-`WHEN` in step with the hero badge:
+palette too** — navy ground, white headline, lime second line and pill —
+so re-run it after any change to those. **Re-run it when the pill changes**,
+and keep `WHEN` in step with the hero badge:
 
 ```bash
 python3 tools/make-og.py
@@ -353,15 +360,16 @@ Three copies of `withPageParams` exist — one each in `home.js`, `ty.js` and
 would cost every page in the funnel an extra request. One behaviour, three
 copies; change one, change all three.
 
-Three links deliberately opt out, because nothing on the other side can read
+Two links deliberately opt out, because nothing on the other side can read
 a UTM and appending one only makes the URL longer:
 
 - **`[data-wa]` and `[data-support]`** — `chat.whatsapp.com` group invites and
   `wa.me` deep links drop every param they do not recognise, and a group
   invite is the last URL that wants tracking on it, since it gets pasted on.
-- **`[data-cal]`** — the Google Calendar link's query string *is* the event:
-  title, dates, venue. Extra params get written into the URL and read by
-  nobody.
+
+(`[data-cal]`, the Google Calendar link, was the third until the calendar
+card went: its query string *was* the event, and extra params would have been
+written into the URL and read by nobody.)
 
 The referral link is a separate case and must stay opted out. It is the
 landing page, plain — `https://contentcreation.kkcreate.in` — and inheriting
@@ -369,8 +377,8 @@ whatever brought the buyer here would credit every referred signup to the
 referrer's ad, which is the opposite of the point. A student sharing it
 passes on a clean link.
 
-The `.ics` download and the in-page `#get` / `#calendar` / `#community` jumps
-take no params either — one is a static file, the others never leave the page.
+The in-page `#get` / `#community` / `#portal` jumps take no params either —
+they never leave the page.
 
 ## The shared countdown
 
@@ -427,11 +435,23 @@ the tab order while hidden.
 ## The two thank-you pages
 
 They are the same page. `/tybundle` differs in four places: the confirmation
-pill says `· BUNDLE INCLUDED`, the boarding pass subtitle names the bundle,
-the offer strip is replaced by an "Also unlocked" list of the four recordings,
-and the portal card mentions them. Everything else — the pass, the quick
-actions, support, referral — is identical, and both load the same `ty.js`,
-which no-ops the countdown when the strip is absent.
+pill says `· BUNDLE INCLUDED`, the pass subtitle names the bundle, the offer
+strip is replaced by an "Also unlocked" list of the four recordings, and the
+portal card mentions them. Everything else — the pass, the quick actions,
+support, referral — is identical, and both load the same `ty.js`, which
+no-ops the countdown when the strip is absent.
+
+**The pass is an access pass now, not a boarding pass.** Until the live
+session it carried the date, the boarding time, a `LIVE · zoom` tag, an
+"Add to Calendar" button on the stub and a calendar card beside the WhatsApp
+one. All of that described a seat on 20 Sept; for someone buying the
+recording it was wrong the moment the session ended. The tag is a play tile
+and the word *Recording*, the grid says where (the Learning Portal) and when
+(anytime), the stub's second button opens the portal, and the calendar card
+became a portal card saying the recording lands within 24–48 hours. The
+Zoom-blue calendar button (`.btn-cal`) became the navy `.btn-portal`, the
+`.ics` pill and the desk-calendar tile went, and `--gcal` went from
+`base.css` with them.
 
 ## Deliberate changes from the design bundle
 
@@ -443,7 +463,7 @@ which no-ops the countdown when the strip is absent.
   the funnel reads as one brand and no page pays for a fifth family.
 - **The countdowns are unified at 8 minutes.** The bundle had 50 on the
   thank-you page and 15 on the offer page. See above.
-- **The boarding-pass watermark is an alpha mask.** The bundle masked the KK
+- **The pass watermark is an alpha mask.** The bundle masked the KK
   lockup by luminance, which silently degrades to a solid dark rectangle
   where that is unsupported. The asset is baked to an alpha channel instead.
 
@@ -497,34 +517,17 @@ bump the filenames rather than relying on a purge.
 
 ## Calendar
 
-Both thank-you pages offer the session two ways, because one link does not
-cover everyone:
+Until the live session, both thank-you pages offered it two ways: a Google
+Calendar template link built from `TY.event` in `site/ty.js`, and the `.ics`
+at `site/assets/content-creation-101.ics` for Apple Calendar and Outlook.
+The venue on both was `/zoomlink`, because nobody had the Zoom link on the
+day the invite was saved and that page's address never changes.
 
-- **Google** builds a Calendar template link from `TY.event` in `site/ty.js`,
-  which is where the start and end times are written as UTC (IST is UTC+5:30
-  year-round, so there is no daylight-saving case).
-- **.ics** is `site/assets/content-creation-101.ics`, which is what Apple
-  Calendar and Outlook actually want. It carries two alarms — one the day
-  before, one 30 minutes out.
-
-**The venue on both is `/zoomlink`**, not a Zoom URL. Nobody has the Zoom
-link on the day this invite is saved, and `/zoomlink`'s address never
-changes, so it is the one venue that is right the moment someone hits "add
-to calendar" and still right at noon on 20 Sept. The invite body names the
-other two routes — the WhatsApp group and the registered email.
-
-Until that page has a public URL, both fall back to naming it in prose
-rather than linking it, and the `.ics` omits its `URL:` property entirely —
-an empty one is malformed, and Outlook renders it as a dead location row.
-Set `TY.zoomLinkUrl` and `ZOOM_LINK_URL` together.
-
-The two are generated from separate places and **must be changed together**:
-edit `TY.event` / `TY.zoomLinkUrl` in `site/ty.js` and `EVENT` /
-`ZOOM_LINK_URL` in `tools/make-ics.py`, then run:
-
-```bash
-python3 tools/make-ics.py
-```
+The Google builder, `TY.event` and `TY.zoomLinkUrl` are gone from `ty.js`
+with the calendar card — a recording has no date to save. The `.ics` and
+`tools/make-ics.py` are still here because `/zoomlink` links the file; they
+describe the 20 Sept session and nothing regenerates them. Git history has
+the calendar wiring if another live cohort ever wants it back.
 
 ## The Zoom-link page (/zoomlink)
 
@@ -547,16 +550,16 @@ It has three states, driven by `LIVE` at the top of `site/zoomlink.js`:
   for `LIVE.liveMinutes`, then by a line pointing at the recording. A counter
   running backwards from zero is noise.
 
-`LIVE.startsAt` is the same instant as `TY.event.startUtc` in `ty.js`. Keep
-the two in step.
+`LIVE.startsAt` is the 20 Sept session start, the same instant the `.ics`
+carries. It no longer has a twin in `ty.js`.
 
 ## The instant-access banner (/tybundle)
 
 The bundle thank-you page is a receipt for two things bought together, and
-the boarding pass at the top only speaks to the workshop — which is still a
-month out. The bundle is watchable the moment it is paid for, so
+the pass at the top only speaks to the workshop — whose recording takes a
+day or two to land. The bundle is watchable the moment it is paid for, so
 `.access-band` sits directly under the pass and above everything that asks
-the reader to wait: the WhatsApp card, the calendar card, the four titles.
+the reader to wait: the WhatsApp card, the portal card, the four titles.
 
 It is on `/tybundle` only. `/tycontent101` is the decline path — that reader
 did not buy the bundle, and telling them they have instant access to it
@@ -633,8 +636,8 @@ alone rather than pointing it at a dead page:
 
   Until then `/zoomlink` shows where the link will be and hides the QR
   block — a QR pointing at nothing is worse than no QR. Grep for `9 AM` to
-  find every place that promise is made: `/zoomlink`, both thank-you pages,
-  `ty.js`'s calendar description and `tools/make-ics.py`.
+  find every place that promise is made: `/zoomlink` and
+  `tools/make-ics.py`.
 
 `TY.supportUrl` and `TY.lmsUrl` are carried over from the Editing 101 funnel
 and should be correct, but are worth confirming.

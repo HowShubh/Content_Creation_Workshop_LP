@@ -1,41 +1,16 @@
 /* Thank-you pages (/tycontent101 and /tybundle): link wiring with UTM
-   passthrough, the calendar links, the one-time-offer countdown and the
-   referral copy button.
+   passthrough, the one-time-offer countdown and the referral copy button.
 
    Both pages load this. Everything below no-ops when its markup is absent,
-   so /tybundle simply never starts a countdown. */
+   so /tybundle simply never starts a countdown.
+
+   Until the live session on 20 Sept 2026 this file also built the calendar
+   links — the event, the /zoomlink venue and the Google Calendar template
+   — and the pages carried a date. The workshop is sold as a recording now,
+   so all of that went with the calendar card; git history has it. */
 
 const TY = {
-  /* ---- The session itself -------------------------------------------
-     The one place the date and time are computed from. The same date is
-     also written into the markup of both pages (the boarding pass, the
-     calendar card and the stub note) — grep for "20 Sept" to find all of
-     it if the workshop ever moves. */
-  event: {
-    title: 'Content Creation for Beginners — KK Create Live Workshop',
-    // 20 Sept 2026, 12:00-16:00 IST, as UTC. IST is UTC+5:30 year-round,
-    // so there is no daylight-saving case to handle.
-    startUtc: '20260920T063000Z',
-    endUtc: '20260920T103000Z'
-  },
-
-  /* ---- The calendar venue -------------------------------------------
-     /zoomlink, as an absolute URL. Both the Google Calendar link and the
-     .ics use it as the venue: the Zoom link does not exist on the day
-     someone saves this event, and /zoomlink's address never changes, so it
-     is the one venue that is correct weeks early and still correct at noon
-     on 20 Sept.
-
-     Hard-coded rather than derived from window.location. This string is
-     copied into someone's calendar and has to survive the page being opened
-     from a preview host or from behind TagMango's redirect domain, where
-     window.location.origin is not the public site.
-
-     KEEP IN STEP WITH tools/make-ics.py (ZOOM_LINK_URL), and re-run it
-     after changing either — the .ics is a static file and cannot read this. */
-  zoomLinkUrl: 'https://contentcreation.kkcreate.in/zoomlink',
-
-  // WhatsApp community. Reminders, the Zoom link on the day, and Q&A.
+  // WhatsApp community. Updates, the recording when it lands, and Q&A.
   whatsappUrl: 'https://chat.whatsapp.com/B520exHpnr77q5Mx25x5Sk',
 
   // The Complete Creator Bundle offer page. Its own CTA goes to TagMango.
@@ -109,33 +84,6 @@ function wire(selector, url, opts) {
   });
 }
 
-/* Until /zoomlink has a public URL the venue says where the link will land
-   rather than pointing at nothing, so an invite saved today is still useful.
-   tools/make-ics.py carries the same pair of strings. */
-const ZOOM_LINK_NAME = 'the KK Create Zoom link page';
-
-function eventVenue() {
-  return TY.zoomLinkUrl || 'Zoom — join link on ' + ZOOM_LINK_NAME;
-}
-
-function eventDetails() {
-  return 'Your seat is confirmed.\n\nThe join button appears on '
-    + (TY.zoomLinkUrl || ZOOM_LINK_NAME) + ' from 9 AM IST on 20 Sept, three '
-    + 'hours before we start. We also send the link in the WhatsApp group '
-    + 'and to the email you registered with.';
-}
-
-function googleCalendarUrl(e) {
-  const p = new URLSearchParams({
-    action: 'TEMPLATE',
-    text: e.title,
-    dates: e.startUtc + '/' + e.endUtc,
-    details: eventDetails(),
-    location: eventVenue()
-  });
-  return 'https://calendar.google.com/calendar/render?' + p;
-}
-
 /* No params on the two WhatsApp links: a chat.whatsapp.com group invite and
    a wa.me deep link both drop everything they do not recognise, so there is
    nothing on the other side to read a UTM — and a group invite gets pasted
@@ -143,12 +91,9 @@ function googleCalendarUrl(e) {
 wire('[data-wa]', TY.whatsappUrl, { passParams: false });
 wire('[data-support]', TY.supportUrl, { passParams: false });
 
-// The portal is ours, so this one is worth attributing.
+// The portal is ours, so this one is worth attributing. It is the stub
+// button and the quick card on the pass as well as the sign-in pill.
 wire('[data-lms]', TY.lmsUrl);
-
-/* The Google Calendar link's query string *is* the event — title, dates,
-   venue. Extra params would be written into the URL and read by nobody. */
-wire('[data-cal]', googleCalendarUrl(TY.event), { passParams: false });
 
 wire('[data-oto]', TY.otoUrl, { newTab: false });
 

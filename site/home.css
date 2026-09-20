@@ -21,8 +21,8 @@
    pages keep the colours they were designed in. They are the funnel's
    own colours rather than the old page's: base.css's --panel navy
    taken darker for the ground, and its --lime as the one action
-   colour. Red survives as a signal — the live dot, the numerals on
-   paper — not as a second brand colour.
+   colour. Red survives as a signal — the numerals and open-state marks
+   on paper — not as a second brand colour.
 
    CONTRAST. Lime on navy and navy on lime are both well past 4.5:1.
    The two body greys (--fg-2 on night, --ink-2 on paper) clear it
@@ -52,8 +52,7 @@
   --volt: #b6ee3c;
   --volt-2: #cdf76a;
   --leaf: #628f10;        /* the lime, dark enough to read on paper */
-  --red: #ff5a52;         /* the live dot, on night */
-  --red-ink: #c02b2b;     /* the same signal, on paper */
+  --red-ink: #c02b2b;     /* the signal red, on paper */
 
   --dis: 'Space Grotesk', Manrope, system-ui, -apple-system, sans-serif;
   --ui: Manrope, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -123,11 +122,6 @@ html:has(.lp-body) { color-scheme: dark; }
   color: var(--fg-3);
 }
 .lp-paper .lp-eyebrow { color: var(--ink-3); }
-
-@keyframes lp-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
-}
 
 .lp-head {
   margin: 0;
@@ -275,14 +269,6 @@ html:has(.lp-body) { color-scheme: dark; }
   white-space: nowrap;
   color: var(--fg-2);
 }
-.lp-nav-date i {
-  width: 7px;
-  height: 7px;
-  flex: none;
-  border-radius: 50%;
-  background: var(--red);
-  animation: lp-pulse 2s ease-in-out infinite;
-}
 
 /* ===========================================================
    1. Hero
@@ -382,14 +368,6 @@ html:has(.lp-body) { color-scheme: dark; }
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--fg-3);
-}
-.lp-fact-live dt::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  flex: none;
-  border-radius: 50%;
-  background: var(--red);
 }
 .lp-fact dd {
   margin: 6px 0 0;
@@ -1267,14 +1245,6 @@ html:has(.lp-body) { color-scheme: dark; }
   text-transform: uppercase;
   color: var(--fg-2);
 }
-.lp-sticky-when i {
-  width: 6px;
-  height: 6px;
-  flex: none;
-  border-radius: 50%;
-  background: var(--red);
-  animation: lp-pulse 2s ease-in-out infinite;
-}
 
 .lp-sticky .lp-cta { flex: none; padding: 12px 24px; font-size: 15px; box-shadow: none; }
 
@@ -1414,10 +1384,9 @@ html:has(.lp-body) { color-scheme: dark; }
 
   .lp-final-meta { font-size: 10px; letter-spacing: 0.12em; }
 
-  /* At this width the bar's text column is ~147px. The date fits on one
-     line at 9px without its dot, and not with it. */
+  /* At this width the bar's text column is ~147px, which is one line
+     of the label at 9px and not at 10. */
   .lp-sticky-when { font-size: 9px; letter-spacing: 0.05em; }
-  .lp-sticky-when i { display: none; }
 
   .lp-mentor-name { padding: 56px 18px 18px; }
   .lp-stat { padding: 16px 8px 0 0; }
@@ -1433,12 +1402,11 @@ html:has(.lp-body) { color-scheme: dark; }
   .lp-sticky { padding-left: 14px; }
 }
 
-/* The marquee, the bar's live dot and the sticky bar's entrance are the
-   only motion that is not a direct response to a tap; all three stop here.
-   base.css already flattens transitions and the button sweep. */
+/* The marquee and the sticky bar's entrance are the only motion that is
+   not a direct response to a tap; both stop here. base.css already
+   flattens transitions and the button sweep. */
 @media (prefers-reduced-motion: reduce) {
   .lp-marquee-track { animation: none; }
-  .lp-nav-date i, .lp-sticky-when i { animation: none; }
   .lp-play img { transition: none; }
   .lp-sticky { transform: translate(-50%, 0); }
   .lp-track { scroll-behavior: auto; }

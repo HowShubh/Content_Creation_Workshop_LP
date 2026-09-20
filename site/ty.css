@@ -42,7 +42,7 @@
   letter-spacing: 0.1em;
 }
 
-/* ---------- Boarding pass ---------- */
+/* ---------- Access pass ---------- */
 
 .pass-band { padding-top: 30px; }
 
@@ -143,7 +143,8 @@
   width: 17px;
   height: 17px;
   border-radius: 4px;
-  background: #2d8cff;
+  background: var(--panel);
+  color: var(--lime);
   display: inline-grid;
   place-items: center;
   flex: none;
@@ -248,7 +249,7 @@
   line-height: 1.5;
 }
 
-/* ---------- WhatsApp / calendar buttons ---------- */
+/* ---------- WhatsApp / portal buttons ---------- */
 
 .btn-wa {
   background: var(--whatsapp);
@@ -259,41 +260,27 @@
 }
 .btn-wa:hover { background: var(--whatsapp-hover); color: var(--whatsapp-ink); }
 
-.btn-cal {
-  background: var(--gcal);
+/* Navy, like the portal sign-in pill further down: the portal is the
+   funnel's own door, and this is the same door from the pass. */
+.btn-portal {
+  background: var(--panel);
   color: #fff;
   padding: 11px 14px;
   font-size: 13px;
   font-weight: 500;
-  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.35);
+  box-shadow: 0 1px 3px rgba(13, 69, 110, 0.35);
 }
-.btn-cal:hover { background: var(--gcal-hover); color: #fff; }
+.btn-portal:hover { background: var(--panel-hover); color: #fff; }
 
 .btn-pill { border-radius: 999px; padding: 8px 16px; font-size: 12.5px; flex: none; }
-
-/* The calendar card offers both: the Google template link, and the file
-   Apple Calendar and Outlook actually want. */
-.quick-actions { display: flex; align-items: center; gap: 8px; flex: none; }
-
-.btn-ics {
-  border: 1px solid rgba(var(--line-rgb), 0.2);
-  background: var(--surface);
-  color: var(--text-2);
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  padding: 8px 12px;
-}
-.btn-ics:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ---------- Quick actions ---------- */
 
 /* ---------- Instant access banner (/tybundle only) ----------
 
    The bundle is the one thing on this page that can be used today; the
-   workshop, the WhatsApp group and the calendar card are all about a date
-   a month out. So it sits above them and says so in one line.
+   workshop recording takes a day or two to land, and the two cards below
+   are about waiting for it. So it sits above them and says so in one line.
 
    Mint rather than the red wash the "Also unlocked" band uses further
    down: that band is a list of what came with the purchase, this is a
@@ -397,29 +384,11 @@
 }
 .quick-text span { font-size: 11.5px; color: var(--text-3); }
 
-/* Torn-off desk-calendar tile: blue header bar over the date. */
-.cal-tile {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: #fff;
-  border: 1px solid rgba(20, 19, 16, 0.12);
-  flex: none;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 1px 2px rgba(20, 19, 16, 0.12);
-}
-.cal-tile-bar { height: 8px; background: var(--gcal); }
-.cal-tile-day {
-  flex: 1;
-  display: grid;
-  place-items: center;
-  font-family: var(--display);
-  font-size: 12px;
-  font-weight: 700;
-  color: #1a1a1a;
-  line-height: 1;
+/* The portal card's tile: the play glyph on navy, as on the pass. */
+.quick-icon--portal {
+  background: var(--panel);
+  color: var(--lime);
+  box-shadow: 0 1px 3px rgba(13, 69, 110, 0.35);
 }
 
 /* ---------- One-time-offer strip (/tycontent101 only) ---------- */
@@ -645,8 +614,9 @@
   line-height: 1.6;
 }
 
-/* What is actually waiting in the portal. The Zoom link is first because on
-   the day it is the only line that matters. */
+/* What is actually waiting in the portal. The recording is first because
+   it is the thing that was bought; the certificate and, on /tybundle, the
+   four bundle recordings follow. */
 .portal-list {
   list-style: none;
   margin: 0;
@@ -766,7 +736,5 @@
 
   .oto-strip-buy { width: 100%; justify-content: space-between; }
   .quick-card { flex-wrap: wrap; }
-  .quick-actions { width: 100%; }
-  .quick-actions .btn-cal { flex: 1; }
   .strip .btn, .strip-card .btn { width: 100%; }
 }

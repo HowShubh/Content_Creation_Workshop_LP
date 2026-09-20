@@ -4,9 +4,9 @@
     python3 tools/make-og.py
 
 This is the picture WhatsApp, Instagram and Slack show when someone pastes
-the link, so it has to carry the date without anyone opening the page. Re-run
-it whenever HEADLINE or WHEN changes, and keep WHEN in step with the hero
-badge in site/index.html.
+the link, so it has to say what is on sale without anyone opening the page.
+Re-run it whenever HEADLINE or WHEN changes, and keep WHEN in step with the
+hero badge in site/index.html.
 
 1200x630 is the size every platform crops from. It is drawn at 2x and
 downscaled, because PIL has no antialiasing of its own — circles and text
@@ -29,13 +29,13 @@ HOME = os.path.join(ROOT, 'site', 'assets', 'home')
 OUT = os.path.join(HOME, 'og-share.jpg')
 
 HEADLINE = ('Content Creation', 'For Beginners')
-WHEN = '12:00PM IST  |  20 Sept (Sunday)'
+WHEN = 'Full recording  |  Watch anytime'
 
 # The page's own tokens. Flat values rather than alpha, because PIL has no
 # compositing here: each is the page's rgba() already resolved over --night.
 NIGHT = (7, 26, 41)          # --night, the ground
 FG = (238, 246, 251)         # --fg, the headline
-VOLT = (182, 238, 60)        # --volt, the second line and the date pill
+VOLT = (182, 238, 60)        # --volt, the second line and the pill
 INK = (8, 32, 47)            # the type on the pill, as on the button
 ARCH = (38, 64, 44)          # the lime arch: --volt at 18%
 RING = (39, 57, 70)          # the dashed ring: --fg at 14%

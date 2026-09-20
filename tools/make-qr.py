@@ -8,7 +8,7 @@ size, including on a slide.
 """
 import os, sys
 
-URL = ''  # <- the Zoom join link, same as LIVE.joinUrl
+URL = 'https://us06web.zoom.us/webinar/register/WN_kFmb-5dKTYOCAW5H9ZOImQ'  # <- the Zoom join link, same as LIVE.joinUrl
 
 if not URL:
     sys.exit('Set URL at the top of this file first (same as LIVE.joinUrl).')

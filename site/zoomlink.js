@@ -12,10 +12,10 @@ const LIVE = {
      dead button, and hides the QR block — a QR code pointing at nothing is
      worse than no QR code. Fill this in, run `python3 tools/make-qr.py`,
      and both switch on. */
-  joinUrl: '',
+  joinUrl: 'https://us06web.zoom.us/webinar/register/WN_kFmb-5dKTYOCAW5H9ZOImQ',
 
   // Set true once tools/make-qr.py has written assets/live-qr.svg.
-  hasQr: false,
+  hasQr: true,
 
   /* The WhatsApp group. The link is sent there as well as appearing on this
      page, so the waiting panel names it — and while this is empty the button

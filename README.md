@@ -19,9 +19,9 @@ their calendar card, the `.ics` link and the Google Calendar builder in
 only needed two lines reworded. The one page that still carries the date is
 `/zoomlink`, which served the day itself.
 
-Static HTML/CSS/JS — no build step. The one dependency in `package.json`
-is for the one Vercel function, `api/tagline.js`; the pages themselves
-have none.
+Static HTML/CSS/JS — no build step, no dependencies. The one piece of
+server code, `api/tagline.js`, is a Vercel function that uses Node's own
+`fetch` and needs nothing installed.
 
 ## Run locally
 
@@ -30,8 +30,9 @@ python3 -m http.server 4321 --directory site
 ```
 
 Then open http://localhost:4321/. That serves the pages only; `/api/tagline`
-is a Vercel function and needs `vercel dev` (plus the key — see The Creator
-Pass). Without it `/certificate` still works and just shows the plain line.
+is a Vercel function and needs `vercel dev` (plus `OPENROUTER_API_KEY` —
+see The Creator Pass). Without it `/certificate` still works and just shows
+the plain line.
 
 ## The funnel
 
@@ -125,8 +126,7 @@ site/
   zoomlink/               the join-link page for the day
   certificate/            the Creator Pass — both cards, see below
 api/
-  tagline.js              Vercel function: the city's line, via Claude
-package.json              the SDK for that function; nothing else
+  tagline.js              Vercel function: the city's line, via OpenRouter
   robots.txt / sitemap.xml  crawler rules — see Deploying
   assets/                 fonts, logo, bundle covers, the .ics
   assets/home/            everything the landing page draws
@@ -624,26 +624,27 @@ is set in the cards' own palette. It carries the noindex meta and
 
 `api/tagline.js` is a Vercel function that writes the handwritten line —
 *"From the land of Mithila painting, Madhubani's next storyteller."* — for
-whatever city is typed, plus the state it is in. One Claude call
-(`claude-opus-5`, low effort, ~100 tokens) per city, and only per city:
-the response carries `s-maxage` of a month, so Vercel's edge answers the
-second person from Patna without a call. The page asks 700ms after the
-last keystroke in the city field and aborts if typing resumes.
+whatever city is typed, plus the state it is in. One model call per city,
+and only per city: the response carries `s-maxage` of a month, so Vercel's
+edge answers the second person from Patna without a call. The page asks
+700ms after the last keystroke in the city field and aborts if typing
+resumes.
 
-**It needs `ANTHROPIC_API_KEY` in the Vercel project's environment
+The call goes through **OpenRouter** — one `fetch` to its OpenAI-shaped
+chat endpoint, no SDK, no `package.json`. The model is
+`anthropic/claude-haiku-4.5` by default: a one-line job, ~400 tokens in
+and ~30 out, a fraction of a paisa per city. Set `OPENROUTER_MODEL` to
+any OpenRouter slug to change it.
+
+**It needs `OPENROUTER_API_KEY` in the Vercel project's environment
 variables** (Settings > Environment Variables). Without it the function
 still answers, with the plain default line and `Cache-Control: no-store`,
-so setting the key takes effect on the next request. A refusal, a timeout
-or a rate limit also falls back to the plain line, cached for a minute
-only. Input is a place name or a 400; output is checked for the shape asked
-for (one line, ends in "storyteller", under 90 characters) or replaced.
-The function opts into Anthropic's server-side refusal fallback
-(`fallbacks: "default"`), which re-runs a declined request on another model
-rather than returning the refusal.
-
-`package.json` exists for this function's `@anthropic-ai/sdk` and nothing
-else; it has no scripts, so Vercel installs and does not build. The
-function runs on Vercel's default Node runtime.
+so setting the key takes effect on the next request. A timeout (8s), a
+rate limit or an upstream error also falls back to the plain line, cached
+for a minute only. Input is a place name or a 400; output is checked for
+the shape asked for (one line, ends in "storyteller", under 90
+characters) or replaced. The function runs on Vercel's default Node
+runtime.
 
 ## The instant-access banner (/tybundle)
 

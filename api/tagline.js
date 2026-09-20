@@ -3,17 +3,23 @@
    The one line of handwriting on the Creator Pass — "From the land of
    Mithila painting, Madhubani's next storyteller." — written for whatever
    city the student types on /certificate, plus the state it is in for
-   the "Madhubani, Bihar" line on the story version. One Claude call per
+   the "Madhubani, Bihar" line on the story version. One model call per
    city, and only per city: the response is cached at Vercel's edge for a
    month, so the second person from Patna costs nothing.
 
-   Needs ANTHROPIC_API_KEY in the Vercel project's environment variables.
-   Without it the function still answers, with the plain default line the
-   page would have shown anyway — the pass never waits on this. */
+   The call goes through OpenRouter (an OpenAI-shaped chat endpoint), so
+   it needs OPENROUTER_API_KEY in the Vercel project's environment
+   variables, and takes OPENROUTER_MODEL to pick a different model from
+   the default below. Plain fetch, no SDK — Node has had fetch since 18,
+   and this is the only thing in the repo that talks to a server. Without
+   a key the function still answers, with the plain default line the page
+   would have shown anyway — the pass never waits on this. */
 
-const Anthropic = require('@anthropic-ai/sdk');
-
-const MODEL = 'claude-opus-5';
+const ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
+/* Haiku: a one-line job, and at ~400 tokens in and ~30 out it is a
+   fraction of a paisa per city. OPENROUTER_MODEL overrides it. */
+const DEFAULT_MODEL = 'anthropic/claude-haiku-4.5';
+const TIMEOUT_MS = 8000;
 
 const SYSTEM = `You write one line for a certificate that KK Create gives students who finish its "Content Creation for Beginners" workshop. The certificate is styled as a boarding pass from ZERO to HERO, and your line sits on it in handwriting, above the student's signature block.
 
@@ -39,6 +45,42 @@ const plain = city => city + "'s next storyteller.";
 
 const titleCase = s => s.toLowerCase().replace(/(^|[\s'-])(\p{L})/gu, (m, sep, ch) => sep + ch.toUpperCase());
 
+/* One chat completion, as text. Throws on anything but a clean answer;
+   the caller turns every throw into the default line. */
+async function complete(key, model, city) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
+  try {
+    const r = await fetch(ENDPOINT, {
+      method: 'POST',
+      signal: ctrl.signal,
+      headers: {
+        'Authorization': 'Bearer ' + key,
+        'Content-Type': 'application/json',
+        // Optional on OpenRouter's side; they credit the app on their site.
+        'HTTP-Referer': 'https://contentcreation.kkcreate.in',
+        'X-Title': 'KK Create Creator Pass'
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: 100,   // two short lines; a hard reason to go this low
+        messages: [
+          { role: 'system', content: SYSTEM },
+          { role: 'user', content: city }
+        ]
+      })
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    const choice = data && data.choices && data.choices[0];
+    const content = choice && choice.message && choice.message.content;
+    if (typeof content !== 'string') throw new Error('no content in reply');
+    return content;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
@@ -55,7 +97,7 @@ module.exports = async (req, res) => {
   }
   const city = titleCase(raw.replace(/\s+/g, ' '));
 
-  const key = process.env.ANTHROPIC_API_KEY;
+  const key = process.env.OPENROUTER_API_KEY;
   if (!key) {
     /* Not an error the page can do anything about — answer with the
        default and do not cache it, so setting the key takes effect on
@@ -64,32 +106,16 @@ module.exports = async (req, res) => {
     res.status(200).json({ city, state: '', tagline: plain(city), source: 'unconfigured' });
     return;
   }
-
-  const client = new Anthropic({ apiKey: key, timeout: 8000, maxRetries: 1 });
+  const model = process.env.OPENROUTER_MODEL || DEFAULT_MODEL;
 
   let text = '';
   try {
-    const response = await client.beta.messages.create({
-      model: MODEL,
-      max_tokens: 100,   // one line; a hard reason to go this low
-      output_config: { effort: 'low' },
-      betas: ['server-side-fallback-2026-07-01'],
-      fallbacks: 'default',
-      system: SYSTEM,
-      messages: [{ role: 'user', content: city }]
-    });
-
-    if (response.stop_reason !== 'refusal') {
-      for (const block of response.content) {
-        if (block.type === 'text') text += block.text;
-      }
-    }
+    text = await complete(key, model, city);
   } catch (e) {
-    /* Rate-limited, upstream down, or the 8s timeout — the page gets the
+    /* Rate-limited, upstream down, or the timeout — the page gets the
        default line either way. Logged so it shows in Vercel's function
-       logs, with the class rather than the message so a key never leaks. */
-    console.error('tagline: ' + (e && e.constructor && e.constructor.name) + ' for ' + city
-      + (e instanceof Anthropic.APIError ? ' (' + e.status + ')' : ''));
+       logs; the message is the status or the abort, never the key. */
+    console.error('tagline: ' + (e && e.name === 'AbortError' ? 'timeout' : (e && e.message)) + ' for ' + city);
   }
 
   /* Line one is the tagline, line two the state. Each is checked for the

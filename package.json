@@ -1,8 +1,0 @@
-{
-  "name": "content-creation-workshop-lp",
-  "private": true,
-  "description": "The site itself is static and has no dependencies; this is here for the one Vercel function, api/tagline.js.",
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.127.0"
-  }
-}
